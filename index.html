@@ -301,10 +301,19 @@ footer .gen{font-family:var(--mono)}
 .cp-nowlab{fill:var(--amber);font:10px var(--mono)}
 .cp-ring{fill:none;stroke-width:1.6}
 
-.prism-banner{position:sticky;top:0;z-index:120;display:flex;align-items:center;gap:14px;
-  padding:9px clamp(16px,2vw,28px);background:linear-gradient(90deg,#2a5fa8,#3d7fc0 55%,#5fa8d8);
+.prism-wrap{position:sticky;top:0;z-index:120}
+.prism-banner{position:relative;display:flex;align-items:center;gap:14px;
+  padding:9px 46px 9px clamp(16px,2vw,28px);background:linear-gradient(90deg,#2a5fa8,#3d7fc0 55%,#5fa8d8);
   color:#fff;text-decoration:none;box-shadow:0 2px 12px rgba(5,15,30,.45)}
-.prism-banner:hover{filter:brightness(1.07)}
+.prism-banner:hover{filter:brightness(1.07);text-decoration:none}
+.pb-hide{position:absolute;top:50%;right:10px;transform:translateY(-50%);z-index:121;
+  width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.4);
+  background:rgba(255,255,255,.12);color:#fff;font-size:15px;line-height:1;cursor:pointer;padding:0}
+.pb-hide:hover{background:rgba(255,255,255,.28)}
+.pb-show{position:fixed;top:8px;right:10px;z-index:121;border:1px solid rgba(255,255,255,.35);
+  border-radius:16px;padding:4px 11px;font-size:12px;color:#fff;cursor:pointer;
+  background:linear-gradient(90deg,#2a5fa8,#4f96cc);box-shadow:0 2px 10px rgba(5,15,30,.4)}
+.pb-show:hover{filter:brightness(1.12)}
 .prism-banner .pb-icon{width:42px;height:42px;flex:none;border-radius:10px;font-size:23px;line-height:1;
   background:rgba(255,255,255,.17);display:flex;align-items:center;justify-content:center}
 .prism-banner .pb-text{display:flex;flex-direction:column;gap:1px;min-width:0}
@@ -319,16 +328,37 @@ footer .gen{font-family:var(--mono)}
 </style>
 </head>
 <body>
-<a class="prism-banner" href="https://mirae-consulting-group.github.io/PRISM-Dashboard/" target="_blank" rel="noopener"
-   title="PRISM Dashboard — North Korea Nuclear Proliferation Risk Monitor">
-  <span class="pb-icon" aria-hidden="true">⚛</span>
-  <span class="pb-text">
-    <span class="pb-title"><b>PRISM</b> Dashboard</span>
-    <span class="pb-line">North Korea Nuclear Proliferation Risk Monitor</span>
-    <span class="pb-line dim">2004–2025 · 23 factors · Proliferation Risk Integrated Scoring Model</span>
-  </span>
-  <span class="pb-go">열기 ↗</span>
-</a>
+<div class="prism-wrap" id="prism-wrap">
+  <a class="prism-banner" href="https://mirae-consulting-group.github.io/PRISM-Dashboard/" target="_blank" rel="noopener"
+     title="PRISM Dashboard — North Korea Nuclear Proliferation Risk Monitor">
+    <span class="pb-icon" aria-hidden="true">⚛</span>
+    <span class="pb-text">
+      <span class="pb-title"><b>PRISM</b> Dashboard</span>
+      <span class="pb-line">North Korea Nuclear Proliferation Risk Monitor</span>
+      <span class="pb-line dim">2004–2025 · 23 factors · Proliferation Risk Integrated Scoring Model</span>
+    </span>
+    <span class="pb-go">열기 ↗</span>
+  </a>
+  <button class="pb-hide" id="prism-hide" title="배너 숨기기" aria-label="PRISM 배너 숨기기">×</button>
+  <button class="pb-show" id="prism-show" title="PRISM 배너 표시" aria-label="PRISM 배너 표시" hidden>⚛ PRISM</button>
+</div>
+<script>
+(function(){
+  var KEY='prismBannerHidden';
+  var banner=document.querySelector('#prism-wrap .prism-banner');
+  var hideBtn=document.getElementById('prism-hide');
+  var showBtn=document.getElementById('prism-show');
+  function apply(hide){
+    banner.hidden=hide; hideBtn.hidden=hide; showBtn.hidden=!hide;
+    try{localStorage.setItem(KEY,hide?'1':'0');}catch(e){}
+  }
+  var saved=null;
+  try{saved=localStorage.getItem(KEY);}catch(e){}
+  if(saved==='1')apply(true);
+  hideBtn.addEventListener('click',function(){apply(true);});
+  showBtn.addEventListener('click',function(){apply(false);});
+})();
+</script>
 <header class="masthead">
   <div>
     <p class="kicker">판독관 맥락지원 콘솔 · Prototype</p>
@@ -12631,7 +12661,7 @@ uSlider();render();buildNKCats();renderNK();renderNKEvents();nkModalInit();
   </script>
 </div>
 <footer>
-  <span class="gen">generated 2026-07-09 11:00</span> · 영변 프로토타입 (Phase 0~2 축소판)
+  <span class="gen">generated 2026-07-09 11:24</span> · 영변 프로토타입 (Phase 0~2 축소판)
   · ⚠ <strong>미검증</strong> 표시는 자동 추출 후 휴먼 승인 전 상태. 좌표·일부 영상 메타데이터는 공개자료 기반 추정치(데모)이며,
   설계 근거는 <em>판독관_컨텍스트_지식그래프_심층연구.md</em> §3·§5 참조.
 </footer>
