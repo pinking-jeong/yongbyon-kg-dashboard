@@ -1,0 +1,436 @@
+<meta charset="utf-8">
+<title>북한 핵조달망 — 이중 채널(직접수출 vs 관문수입)</title>
+<style>
+:root{--bg:#f5f7fa;--card:#fff;--ink:#1c2733;--muted:#6b7785;--line:#e4e8ec;--accent:#2E5A82;--ev:#D1495B}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1420;--card:#171e2b;--ink:#e8edf3;--muted:#8b98a8;--line:#26303f;--accent:#4f9cf0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Malgun Gothic',system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 22px 60px}
+h1{font-size:26px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:22px}
+.stats{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0 26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;flex:1;min-width:150px}
+.stat b{font-size:22px;display:block}
+.stat span{color:var(--muted);font-size:12.5px}
+h2{font-size:18px;margin:30px 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:680px){.cards{grid-template-columns:1fr}}
+.ch{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.ch h3{margin:0 0 6px;font-size:15px}
+.ch .wt{font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px}
+.ch p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.crow{display:flex;align-items:center;gap:12px;margin:7px 0;font-size:13.5px}
+.cname{width:92px;flex:none;font-weight:600}
+.ctrack{flex:1;height:16px;background:var(--line);border-radius:8px;overflow:hidden}
+.cfill{height:100%;border-radius:8px}
+.cval{width:130px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
+.cpct{color:var(--muted);font-size:11.5px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:color-mix(in srgb,var(--accent) 12%,transparent);font-size:12px;color:var(--muted)}
+td.num,td.mono{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+td.mono{font-family:ui-monospace,Consolas,monospace;text-align:left;color:var(--muted)}
+tr.ev td{background:color-mix(in srgb,var(--ev) 9%,transparent)}
+.spec{font-size:10.5px;color:var(--muted);margin-left:6px;padding:1px 5px;border:1px solid var(--line);border-radius:6px}
+.chip{font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid;white-space:nowrap}
+.ori{color:var(--muted);font-size:12px}
+.note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--ev);border-radius:8px;padding:12px 16px;color:var(--muted);font-size:13px;margin-top:14px}
+.foot{margin-top:30px;color:var(--muted);font-size:12px}
+a{color:var(--accent)}
+</style>
+<div class="wrap">
+<p style="margin:0 0 6px"><a href="index.html">← 시각화 인덱스</a></p>
+<h1>이중 채널 분석 — 대북 직접수출 vs 중국 관문수입</h1>
+<p class="sub">두 증거 채널을 <b>다른 가중치</b>로 구분: 직접 신고(특이·직접관측)는 온전히, 관문 프록시(추론·자체수요 혼입)는 할인. 4개국 · 2017–2022.</p>
+
+<div class="stats">
+  <div class="stat"><b>$17.06M</b><span>대북 직접수출 신고 총액(채널 D)</span></div>
+  <div class="stat"><b>92.3%</b><span>그중 중국 비중</span></div>
+  <div class="stat"><b>$1.31M</b><span>비중국 직접수출(7.7%)</span></div>
+  <div class="stat"><b>10<span style="font-size:13px"> / 30</span></b><span>발산(신고공백↔관문유입) · 고특이성 5</span></div>
+</div>
+
+<h2>1. 가중치 모델 — 왜 채널을 다르게 다루나</h2>
+<div class="cards">
+  <div class="ch"><h3>채널 D · 대북 직접수출 신고<span class="wt" style="background:#0072B222;color:#0072B2">×1.0</span></h3>
+    <p>각국이 <b>partner=북한</b>으로 명시 신고한 수출. 직접 관측·특이도 높음 → 온전한 가중. 단, 회피 물자는 애초에 '북한행'으로 신고되지 않으므로 <b>D의 공백</b> 자체가 신호가 된다.</p></div>
+  <div class="ch"><h3>채널 C · 중국 관문수입(프록시)<span class="wt" style="background:#E69F0022;color:#E69F00">×0.3</span></h3>
+    <p>중국이 세계로부터 수입한 물량. 대북 연결은 <b>통로 가정(추론)</b>이고 중국 자체 산업·연구 수요가 혼입되어 노이즈가 큼 → 가중 할인. 절대금액은 상한 프록시.</p></div>
+</div>
+<div class="note">가중 유입확신도 = <b>1.0·log₁₀(직접+1) + 0.3·log₁₀(관문+1)</b>. 핵심 신호는 <b>발산</b>: 민감 HS인데 직접 신고 공백(D≈0)인데 관문 유입(C 큼) → 우회·환적 징후(10건, 고특이성 5건).</div>
+
+<h2>2. 대북 직접수출 국가 구성 (채널 D)</h2>
+<p class="sub"><b>중국→북한 직접수출은 제외하지 않았습니다</b> — 오히려 채널 D의 92.3%로 최대입니다(아래 회색 막대). 다만 중국 지배가 다른 나라를 가리므로, 파랑=중국 외 직접수출국(제3국 경로)으로 함께 표기합니다.</p>
+<div class="crow">
+      <div class="cname">China</div>
+      <div class="ctrack"><div class="cfill" style="width:92.3%;background:#6b7785"></div></div>
+      <div class="cval">$15.75M <span class="cpct">92.3%</span></div>
+    </div>
+<div class="crow">
+      <div class="cname">India</div>
+      <div class="ctrack"><div class="cfill" style="width:3.0%;background:#0072B2"></div></div>
+      <div class="cval">$517.5K <span class="cpct">3.0%</span></div>
+    </div>
+<div class="crow">
+      <div class="cname">Russia</div>
+      <div class="ctrack"><div class="cfill" style="width:2.8%;background:#0072B2"></div></div>
+      <div class="cval">$473.9K <span class="cpct">2.8%</span></div>
+    </div>
+<div class="crow">
+      <div class="cname">Germany</div>
+      <div class="ctrack"><div class="cfill" style="width:1.8%;background:#0072B2"></div></div>
+      <div class="cval">$314.6K <span class="cpct">1.8%</span></div>
+    </div>
+
+<h3 style="margin:22px 0 6px;font-size:15px">중국이 북한에 <u>직접 신고</u>하는 이중용도 품목 (채널 D · 중국분)</h3>
+<p class="sub">중국은 NSG 통제 이중용도 품목을 공개적으로 대북 신고합니다(대부분 광범위 HS·합법 신고이나 주목 대상). 단, 가장 민감한 5개(중수·지르칼로이·질산우라닐·기폭선·폭발렌즈)는 중국→북한 직접도 <b>$0</b> — 관문에만 나타납니다(발산). <b>행을 클릭</b>하면 연도별 무역통계 팝업이 열립니다.</p>
+<table>
+<thead><tr><th>HS</th><th>품목(특이성)</th><th>중국→북한 직접수출 신고</th></tr></thead>
+<tbody>
+<tr data-hs="8421" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">8421</td><td>원심분리기<span class="spec">중간</span></td><td class="num">$3.83M</td></tr>
+<tr data-hs="8479" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">8479</td><td>원격조작기(마스터-슬레이브형)<span class="spec">중간</span></td><td class="num">$3.23M</td></tr>
+<tr data-hs="7311" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">7311</td><td>UF₆ 실린더·용기 (특수강, 내식성, 내압)<span class="spec">중간</span></td><td class="num">$2.54M</td></tr>
+<tr data-hs="847989" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">847989</td><td>핫셀(방사선 차폐 작업실)<span class="spec">높음</span></td><td class="num">$2.10M</td></tr>
+<tr data-hs="7326" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">7326</td><td>UF₆ 실린더·용기 (특수강, 내식성, 내압)<span class="spec">중간</span></td><td class="num">$1.77M</td></tr>
+<tr data-hs="854370" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">854370</td><td>중성자발생장치 (D-T/DD 튜브)<span class="spec">높음</span></td><td class="num">$710.2K</td></tr>
+<tr data-hs="8480" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">8480</td><td>글로브박스(밀폐 취급 시스템)<span class="spec">높음</span></td><td class="num">$671.9K</td></tr>
+<tr data-hs="903180" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">903180</td><td>초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)<span class="spec">중간</span></td><td class="num">$375.7K</td></tr>
+<tr data-hs="902780" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">902780</td><td>유도결합 플라즈마 질량분석기<span class="spec">중간</span></td><td class="num">$333.2K</td></tr>
+<tr data-hs="8463" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">8463</td><td>5축 CNC 공작기계 또는 정밀 머시닝센터<span class="spec">중간</span></td><td class="num">$108.8K</td></tr>
+<tr data-hs="902230" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">902230</td><td>펄스 X선관 / 플래시 X선튜브<span class="spec">중간</span></td><td class="num">$40.5K</td></tr>
+<tr data-hs="2919" data-mode="china" tabindex="0" title="클릭: 연도별 무역통계"><td class="mono">2919</td><td>트리부틸인산(TBP)<span class="spec">중간</span></td><td class="num">$11.8K</td></tr>
+</tbody></table>
+
+<h2>3. 민감 HS 이중 채널 — 직접(D) vs 관문(C) · 발산 우선</h2>
+<p class="sub"><b>행을 클릭</b>하면 해당 품목의 연도별 직접(D)·관문(C) 무역통계 팝업이 열립니다.</p>
+<table>
+<thead><tr><th>HS</th><th>품목(특이성)</th><th>직접 D</th><th>관문 C</th><th>가중</th><th>판정</th><th>직접 원산국</th></tr></thead>
+<tbody>
+<tr class="ev" data-hs="2844" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">2844</td>
+      <td>질산우라닐(우라닐질산염)<span class="spec">높음</span></td>
+      <td class="num">—</td>
+      <td class="num">$8.82B</td>
+      <td class="num">2.98</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr class="ev" data-hs="810990" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">810990</td>
+      <td>지르칼로이 튜브 (핵연료 피복관)<span class="spec">높음</span></td>
+      <td class="num">—</td>
+      <td class="num">$120.28M</td>
+      <td class="num">2.42</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr class="ev" data-hs="284510" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">284510</td>
+      <td>중수(중수소 산화물)<span class="spec">높음</span></td>
+      <td class="num">—</td>
+      <td class="num">$77.19M</td>
+      <td class="num">2.37</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr class="ev" data-hs="360320" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">360320</td>
+      <td>기폭선(EBW) 기폭장치<span class="spec">높음</span></td>
+      <td class="num">—</td>
+      <td class="num">$417.6K</td>
+      <td class="num">1.69</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr class="ev" data-hs="360200" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">360200</td>
+      <td>폭발렌즈 / 성형폭약<span class="spec">높음</span></td>
+      <td class="num">—</td>
+      <td class="num">$120.0K</td>
+      <td class="num">1.52</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr class="ev" data-hs="903190" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">903190</td>
+      <td>색층분석·분석기기 (연료 사이클 모니터링, 동위소체 분석)<span class="spec">중간</span></td>
+      <td class="num">$6.0K</td>
+      <td class="num">$8.83B</td>
+      <td class="num">6.76</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">Germany $2.9K, India $2.2K, China $900</td>
+    </tr>
+<tr class="ev" data-hs="851290" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">851290</td>
+      <td>스파크갭 스위치 (대전류, 초고속)<span class="spec">중간</span></td>
+      <td class="num">$4.8K</td>
+      <td class="num">$3.13B</td>
+      <td class="num">6.53</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">China $4.8K</td>
+    </tr>
+<tr class="ev" data-hs="903082" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">903082</td>
+      <td>핵계측제어 시스템 (중성자검출기, 온도/압력 송신기)<span class="spec">중간</span></td>
+      <td class="num">—</td>
+      <td class="num">$2.73B</td>
+      <td class="num">2.83</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr class="ev" data-hs="903010" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">903010</td>
+      <td>감마선 분석계(고순도 게르마늄 검출기)<span class="spec">중간</span></td>
+      <td class="num">—</td>
+      <td class="num">$1.02B</td>
+      <td class="num">2.70</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr class="ev" data-hs="380110" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">380110</td>
+      <td>원자로급 흑연 (고순도 미립자)<span class="spec">중간</span></td>
+      <td class="num">—</td>
+      <td class="num">$991.81M</td>
+      <td class="num">2.70</td>
+      <td><span class="chip" style="background:#D1495B22;color:#D1495B;border-color:#D1495B55">신고공백↔관문유입(우회·환적 징후)</span></td>
+      <td class="ori">—</td>
+    </tr>
+<tr data-hs="847989" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">847989</td>
+      <td>핫셀(방사선 차폐 작업실)<span class="spec">높음</span></td>
+      <td class="num">$2.10M</td>
+      <td class="num">$44.23B</td>
+      <td class="num">9.52</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $2.10M, Germany $9.6K, Russia $75</td>
+    </tr>
+<tr data-hs="854370" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">854370</td>
+      <td>중성자발생장치 (D-T/DD 튜브)<span class="spec">높음</span></td>
+      <td class="num">$720.1K</td>
+      <td class="num">$24.76B</td>
+      <td class="num">8.98</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $710.2K, India $5.1K, Russia $4.7K</td>
+    </tr>
+<tr data-hs="8480" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">8480</td>
+      <td>글로브박스(밀폐 취급 시스템)<span class="spec">높음</span></td>
+      <td class="num">$787.2K</td>
+      <td class="num">$4.84B</td>
+      <td class="num">8.80</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $671.9K, India $115.3K</td>
+    </tr>
+<tr data-hs="8479" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">8479</td>
+      <td>원격조작기(마스터-슬레이브형)<span class="spec">중간</span></td>
+      <td class="num">$3.54M</td>
+      <td class="num">$78.02B</td>
+      <td class="num">9.82</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $3.23M, Germany $282.7K, India $27.4K</td>
+    </tr>
+<tr data-hs="8421" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">8421</td>
+      <td>원심분리기<span class="spec">중간</span></td>
+      <td class="num">$4.32M</td>
+      <td class="num">$27.94B</td>
+      <td class="num">9.77</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $3.83M, Russia $349.2K, India $122.9K</td>
+    </tr>
+<tr data-hs="7326" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">7326</td>
+      <td>UF₆ 실린더·용기 (특수강, 내식성, 내압)<span class="spec">중간</span></td>
+      <td class="num">$1.92M</td>
+      <td class="num">$11.64B</td>
+      <td class="num">9.30</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $1.77M, Russia $86.1K, India $55.5K</td>
+    </tr>
+<tr data-hs="7311" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">7311</td>
+      <td>UF₆ 실린더·용기 (특수강, 내식성, 내압)<span class="spec">중간</span></td>
+      <td class="num">$2.54M</td>
+      <td class="num">$415.00M</td>
+      <td class="num">8.99</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $2.54M</td>
+    </tr>
+<tr data-hs="903180" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">903180</td>
+      <td>초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)<span class="spec">중간</span></td>
+      <td class="num">$460.4K</td>
+      <td class="num">$29.88B</td>
+      <td class="num">8.81</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $375.7K, India $65.9K, Russia $18.9K</td>
+    </tr>
+<tr data-hs="902780" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">902780</td>
+      <td>유도결합 플라즈마 질량분석기<span class="spec">중간</span></td>
+      <td class="num">$351.7K</td>
+      <td class="num">$13.94B</td>
+      <td class="num">8.59</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $333.2K, Russia $10.2K, Germany $5.0K</td>
+    </tr>
+<tr data-hs="8463" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">8463</td>
+      <td>5축 CNC 공작기계 또는 정밀 머시닝센터<span class="spec">중간</span></td>
+      <td class="num">$108.8K</td>
+      <td class="num">$990.73M</td>
+      <td class="num">7.74</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $108.8K</td>
+    </tr>
+<tr data-hs="902230" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">902230</td>
+      <td>펄스 X선관 / 플래시 X선튜브<span class="spec">중간</span></td>
+      <td class="num">$40.5K</td>
+      <td class="num">$3.03B</td>
+      <td class="num">7.45</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $40.5K</td>
+    </tr>
+<tr data-hs="853090" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">853090</td>
+      <td>고전압 콘덴서 (펄스전력, 필름, &gt;50kV)<span class="spec">중간</span></td>
+      <td class="num">$82.0K</td>
+      <td class="num">$140.82M</td>
+      <td class="num">7.36</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">India $82.0K</td>
+    </tr>
+<tr data-hs="903089" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">903089</td>
+      <td>핵계측제어 시스템 (중성자검출기, 온도/압력 송신기)<span class="spec">중간</span></td>
+      <td class="num">$29.5K</td>
+      <td class="num">$1.37B</td>
+      <td class="num">7.21</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">India $24.0K, China $5.5K</td>
+    </tr>
+<tr data-hs="8456" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">8456</td>
+      <td>5축 CNC 공작기계 또는 정밀 머시닝센터<span class="spec">중간</span></td>
+      <td class="num">$16.6K</td>
+      <td class="num">$6.63B</td>
+      <td class="num">7.17</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $11.6K, Russia $4.6K, India $383</td>
+    </tr>
+<tr data-hs="902680" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">902680</td>
+      <td>핵계측제어 시스템 (중성자검출기, 온도/압력 송신기)<span class="spec">중간</span></td>
+      <td class="num">$12.4K</td>
+      <td class="num">$2.00B</td>
+      <td class="num">6.88</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">India $8.9K, China $2.1K, Germany $1.3K</td>
+    </tr>
+<tr data-hs="2919" data-mode="dual" tabindex="0" title="클릭: 연도별 무역통계">
+      <td class="mono">2919</td>
+      <td>트리부틸인산(TBP)<span class="spec">중간</span></td>
+      <td class="num">$16.5K</td>
+      <td class="num">$203.70M</td>
+      <td class="num">6.71</td>
+      <td><span class="chip" style="background:#E69F0022;color:#E69F00;border-color:#E69F0055">직접·관문 병존</span></td>
+      <td class="ori">China $11.8K, India $4.6K</td>
+    </tr>
+</tbody></table>
+<div class="note">관문 채널의 절대금액은 6자리 HS가 광범위 무역을 포함(예: 851290=차량 조명부품에 스파크갭이 섞임)하므로 상한 프록시다. 그래서 관문은 가중 0.3으로 할인하고, 특이성(specificity) 높은 품목의 신고공백↔관문유입을 더 강한 단서로 본다.</div>
+
+<p class="foot">출처: UN Comtrade preview(무키). 채널 D=각국→북한(flow=X, partner=408), 채널 C=중국←세계(flow=M, partner=0). (cmd,period)당 최대값으로 mot/customs 분해행 중복 제거. 산출은 <b>리드(단서)</b>이며 거래 증거가 아님 — 방어적 비확산 목적.</p>
+</div>
+<style>
+tr[data-hs]{cursor:pointer}
+tr[data-hs] td.mono{color:var(--accent);text-decoration:underline dotted;text-underline-offset:3px}
+tr[data-hs]:hover td,tr[data-hs]:focus-visible td{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+#yrpop-bd{position:fixed;inset:0;background:rgba(9,14,22,.55);display:none;z-index:50;align-items:center;justify-content:center;padding:20px}
+#yrpop-bd.on{display:flex}
+#yrpop{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;max-width:820px;width:100%;max-height:85vh;overflow:auto;padding:20px 22px;box-shadow:0 18px 50px rgba(0,0,0,.35);position:relative}
+#yrpop h4{margin:0 26px 2px 0;font-size:16px}
+#yrpop .psub{color:var(--muted);font-size:12.5px;margin:0 0 12px}
+#yrpop-x{position:absolute;top:12px;right:14px;border:0;background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px}
+#yrpop-x:hover{color:var(--ink)}
+#yrpop td.hl{font-weight:700}
+#yrpop tr.sum td{font-weight:700;border-top:2px solid var(--line);background:color-mix(in srgb,var(--line) 45%,var(--card))}
+#yrpop-body{max-height:55vh;overflow:auto}
+#yrpop-body th{position:sticky;top:0;z-index:2;background:color-mix(in srgb,var(--accent) 12%,var(--card))}
+#yrpop .pnote{color:var(--muted);font-size:11.5px;margin-top:10px}
+.yb{height:4px;background:var(--line);border-radius:2px;margin-top:3px;overflow:hidden}
+.yb i{display:block;height:100%;background:#0072B2;border-radius:2px}
+.yb.c i{background:#E69F00}
+</style>
+<div id="yrpop-bd">
+  <div id="yrpop" role="dialog" aria-modal="true" aria-labelledby="yrpop-title">
+    <button id="yrpop-x" aria-label="닫기">&times;</button>
+    <h4 id="yrpop-title"></h4>
+    <p class="psub" id="yrpop-sub"></p>
+    <div id="yrpop-body"></div>
+    <p class="pnote">출처: UN Comtrade preview(무키) · (cmd,period)당 최대값으로 mot/customs 분해행 중복 제거 · 관문 C는 6자리 HS 광범위 무역 포함(상한 프록시, 가중 ×0.3) · — = 신고 없음.</p>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+var YEARLY={"periods": [2017, 2018, 2019, 2020, 2021, 2022], "hs": {"2919": {"direct": {"China": [11850.0, 0.0, 0.0, 0.0, 0.0, 0.0], "India": [4609.782, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 40082072.0, 37325093.0, 37325050.0, 51776043.0, 37190902.0], "label": "트리부틸인산(TBP)", "spec": "중간"}, "7311": {"direct": {"China": [2470014.0, 72848.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 77370920.0, 85217612.0, 79013448.0, 83177693.0, 90216446.0], "label": "UF₆ 실린더·용기 (특수강, 내식성, 내압)", "spec": "중간"}, "7326": {"direct": {"China": [1739480.0, 13266.0, 21064.0, 106.0, 0.0, 0.0], "Russia": [22197.22, 33479.73, 30436.63, 0.0, 0.0, 0.0], "India": [39708.368, 15796.036, 0.0, 0.0, 0.0, 0.0], "Germany": [790.766, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 2481408131.0, 2412313035.0, 2100142196.0, 2418488042.0, 2229920496.0], "label": "UF₆ 실린더·용기 (특수강, 내식성, 내압)", "spec": "중간"}, "8421": {"direct": {"China": [3317631.0, 115300.0, 389824.0, 12121.0, 0.0, 0.0], "Russia": [309883.32, 29318.83, 10023.83, 0.0, 0.0, 0.0], "India": [99121.432, 23740.855, 0.0, 0.0, 0.0, 0.0], "Germany": [0.0, 12335.335, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 4744313796.0, 5737537981.0, 5448585841.0, 6082516801.0, 5922957505.0], "label": "원심분리기", "spec": "중간"}, "8456": {"direct": {"China": [11613.0, 0.0, 0.0, 0.0, 0.0, 0.0], "Russia": [4580.52, 0.0, 0.0, 0.0, 0.0, 0.0], "India": [383.166, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [1166040150.0, 1228844391.0, 927104938.0, 997357425.0, 1229719669.0, 1076758461.0], "label": "5축 CNC 공작기계 또는 정밀 머시닝센터", "spec": "중간"}, "8463": {"direct": {"China": [105706.0, 3103.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 262989793.0, 243177899.0, 129406517.0, 191641654.0, 163513883.0], "label": "5축 CNC 공작기계 또는 정밀 머시닝센터", "spec": "중간"}, "8479": {"direct": {"China": [2791950.0, 433366.0, 234.0, 2192.0, 0.0, 0.0], "Russia": [0.0, 0.0, 75.3, 0.0, 0.0, 0.0], "India": [0.0, 23552.073, 0.0, 0.0, 0.0, 3813.427], "Germany": [282728.285, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [12433397093.0, 13366389663.0, 12610093499.0, 12318790385.0, 14361252966.0, 12933028911.0], "label": "원격조작기(마스터-슬레이브형)", "spec": "중간"}, "847989": {"direct": {"China": [1679844.0, 412963.0, 234.0, 2192.0, 0.0, 0.0], "Russia": [0.0, 0.0, 75.3, 0.0, 0.0, 0.0], "Germany": [9575.049, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 9283189504.0, 8579347271.0, 8327151806.0, 9613081334.0, 8428647489.0], "label": "핫셀(방사선 차폐 작업실)", "spec": "높음"}, "8480": {"direct": {"China": [667465.0, 4430.0, 0.0, 0.0, 0.0, 0.0], "India": [96019.465, 19299.238, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 1217562480.0, 1117573897.0, 926676586.0, 863392578.0, 711415730.0], "label": "글로브박스(밀폐 취급 시스템)", "spec": "높음"}, "851290": {"direct": {"China": [4822.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 711104357.0, 652598966.0, 621475825.0, 616010936.0, 532115980.0], "label": "스파크갭 스위치 (대전류, 초고속)", "spec": "중간"}, "854370": {"direct": {"China": [700215.0, 9973.0, 0.0, 44.0, 0.0, 0.0], "Russia": [4708.06, 0.0, 0.0, 0.0, 0.0, 0.0], "India": [4828.916, 281.551, 0.0, 0.0, 0.0, 0.0]}, "conduit": [3146813198.0, 3725079071.0, 4097182917.0, 4342022887.0, 4828282266.0, 4622568304.0], "label": "중성자발생장치 (D-T/DD 튜브)", "spec": "높음"}, "902680": {"direct": {"China": [2141.0, 0.0, 0.0, 0.0, 0.0, 0.0], "Russia": [0.0, 65.33, 0.0, 0.0, 0.0, 0.0], "India": [8917.762, 0.0, 0.0, 0.0, 0.0, 0.0], "Germany": [1253.929, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 356019585.0, 390595523.0, 380610255.0, 462498652.0, 412122472.0], "label": "핵계측제어 시스템 (중성자검출기, 온도/압력 송신기)", "spec": "중간"}, "902780": {"direct": {"China": [145395.0, 18784.0, 37009.0, 58122.0, 73871.0, 0.0], "Russia": [0.0, 10158.0, 0.0, 0.0, 0.0, 0.0], "India": [0.0, 3343.569, 0.0, 0.0, 0.0, 0.0], "Germany": [5010.069, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 3443384144.0, 3447192287.0, 3548772400.0, 3501740031.0, 0.0], "label": "유도결합 플라즈마 질량분석기", "spec": "중간"}, "903089": {"direct": {"China": [4060.0, 1251.0, 145.0, 0.0, 0.0, 0.0], "India": [0.0, 24002.671, 0.0, 0.0, 0.0, 0.0]}, "conduit": [232432276.0, 231310030.0, 208677070.0, 202799620.0, 245551970.0, 252091424.0], "label": "핵계측제어 시스템 (중성자검출기, 온도/압력 송신기)", "spec": "중간"}, "903180": {"direct": {"China": [195624.0, 28029.0, 86656.0, 2400.0, 0.0, 62951.0], "Russia": [10681.84, 324.86, 7914.7, 0.0, 0.0, 0.0], "India": [61969.508, 3889.64, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 5685556747.0, 5734212470.0, 5672300517.0, 6692745996.0, 6098436075.0], "label": "초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)", "spec": "중간"}, "903190": {"direct": {"China": [900.0, 0.0, 0.0, 0.0, 0.0, 0.0], "India": [387.972, 0.0, 0.0, 0.0, 0.0, 1830.73], "Germany": [2880.648, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 1546807194.0, 1527714629.0, 1820065209.0, 2001412911.0, 1931514026.0], "label": "색층분석·분석기기 (연료 사이클 모니터링, 동위소체 분석)", "spec": "중간"}, "902230": {"direct": {"China": [0.0, 0.0, 0.0, 40544.0, 0.0, 0.0]}, "conduit": [0.0, 488507941.0, 511320298.0, 569699484.0, 713966445.0, 746549851.0], "label": "펄스 X선관 / 플래시 X선튜브", "spec": "중간"}, "853090": {"direct": {"India": [82014.891, 0.0, 0.0, 0.0, 0.0, 0.0]}, "conduit": [0.0, 28962583.0, 35803787.0, 27996453.0, 31860211.0, 16199881.0], "label": "고전압 콘덴서 (펄스전력, 필름, >50kV)", "spec": "중간"}, "284510": {"direct": {}, "conduit": [3294238.0, 4040998.0, 5969055.0, 7145817.0, 23105865.0, 33630602.0], "label": "중수(중수소 산화물)", "spec": "높음"}, "360200": {"direct": {}, "conduit": [8047.0, 0.0, 19891.0, 56632.0, 9886.0, 25537.0], "label": "폭발렌즈 / 성형폭약", "spec": "높음"}, "2844": {"direct": {}, "conduit": [0.0, 1809900746.0, 1775294705.0, 1778029222.0, 1416699035.0, 2040106021.0], "label": "질산우라닐(우라닐질산염)", "spec": "높음"}, "903010": {"direct": {}, "conduit": [0.0, 170614399.0, 192160755.0, 231365290.0, 202384287.0, 226542578.0], "label": "감마선 분석계(고순도 게르마늄 검출기)", "spec": "중간"}, "903082": {"direct": {}, "conduit": [0.0, 396974651.0, 382052040.0, 529492111.0, 776207491.0, 642619127.0], "label": "핵계측제어 시스템 (중성자검출기, 온도/압력 송신기)", "spec": "중간"}, "380110": {"direct": {}, "conduit": [0.0, 212193479.0, 177328147.0, 165391114.0, 210111453.0, 226784361.0], "label": "원자로급 흑연 (고순도 미립자)", "spec": "중간"}, "810990": {"direct": {}, "conduit": [0.0, 37260014.0, 27696216.0, 20587499.0, 34735895.0, 0.0], "label": "지르칼로이 튜브 (핵연료 피복관)", "spec": "높음"}, "360320": {"direct": {}, "conduit": [0.0, 0.0, 0.0, 0.0, 0.0, 417616.0], "label": "기폭선(EBW) 기폭장치", "spec": "높음"}}};
+function usd(v){if(!v)return"—";if(v>=1e9)return"$"+(v/1e9).toFixed(2)+"B";if(v>=1e6)return"$"+(v/1e6).toFixed(2)+"M";if(v>=1e3)return"$"+(v/1e3).toFixed(1)+"K";return"$"+Math.round(v);}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function sum(a){var t=0,i;for(i=0;i<a.length;i++)t+=a[i]||0;return t;}
+function bar(v,max,cls){var w=max>0?Math.max(v/max*100,v>0?2:0):0;return '<div class="yb '+(cls||"")+'"><i style="width:'+w.toFixed(1)+'%"></i></div>';}
+var bd=document.getElementById("yrpop-bd");
+var lastTrigger=null;
+function closePop(){
+  bd.classList.remove("on");
+  if(lastTrigger){lastTrigger.focus();lastTrigger=null;}
+}
+bd.addEventListener("click",function(e){if(e.target===bd)closePop();});
+document.getElementById("yrpop-x").addEventListener("click",closePop);
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closePop();});
+function openPop(hs,mode){
+  var d=YEARLY.hs[hs];
+  if(!d)return;
+  var P=YEARLY.periods,n=P.length,i,j;
+  var countries=Object.keys(d.direct).sort(function(a,b){return sum(d.direct[b])-sum(d.direct[a]);});
+  if(mode==="china")countries.sort(function(a,b){return (a==="China"?-1:0)-(b==="China"?-1:0);});
+  var dTot=[];
+  for(i=0;i<n;i++){var t=0;for(j=0;j<countries.length;j++)t+=d.direct[countries[j]][i]||0;dTot.push(t);}
+  var maxD=Math.max.apply(null,dTot.concat([0]));
+  var maxC=Math.max.apply(null,d.conduit.concat([0]));
+  var hl=function(name){return mode==="china"&&name==="China"?" hl":"";};
+  var head="<tr><th>연도</th>";
+  for(j=0;j<countries.length;j++)head+="<th>"+esc(countries[j])+"→북한 (D)</th>";
+  head+="<th>직접 D 합</th><th>관문 C (중국←세계)</th></tr>";
+  var rows="";
+  for(i=0;i<n;i++){
+    rows+="<tr><td>"+P[i]+"</td>";
+    for(j=0;j<countries.length;j++)
+      rows+='<td class="num'+hl(countries[j])+'">'+usd(d.direct[countries[j]][i]||0)+"</td>";
+    rows+='<td class="num">'+usd(dTot[i])+bar(dTot[i],maxD)+"</td>";
+    rows+='<td class="num">'+usd(d.conduit[i])+bar(d.conduit[i],maxC,"c")+"</td></tr>";
+  }
+  rows+='<tr class="sum"><td>합계</td>';
+  for(j=0;j<countries.length;j++)
+    rows+='<td class="num'+hl(countries[j])+'">'+usd(sum(d.direct[countries[j]]))+"</td>";
+  rows+='<td class="num">'+usd(sum(dTot))+'</td><td class="num">'+usd(sum(d.conduit))+"</td></tr>";
+  var modeTxt=mode==="china"?"채널 D · 중국분 — 중국→북한 직접수출 신고":"이중 채널 — 직접(D) vs 관문(C)";
+  document.getElementById("yrpop-title").textContent="HS "+hs+(d.label?" · "+d.label:"");
+  document.getElementById("yrpop-sub").textContent=modeTxt+(d.spec?" · 특이성 "+d.spec:"")+" · "+P[0]+"–"+P[n-1]+" 연도별";
+  document.getElementById("yrpop-body").innerHTML="<table><thead>"+head+"</thead><tbody>"+rows+"</tbody></table>";
+  bd.classList.add("on");
+  document.getElementById("yrpop-x").focus();
+}
+var trs=document.querySelectorAll("tr[data-hs]"),k;
+for(k=0;k<trs.length;k++)(function(tr){
+  function trigger(){lastTrigger=tr;openPop(tr.getAttribute("data-hs"),tr.getAttribute("data-mode"));}
+  tr.addEventListener("click",trigger);
+  tr.addEventListener("keydown",function(e){
+    if(e.key==="Enter"||e.key===" "){e.preventDefault();trigger();}
+  });
+})(trs[k]);
+})();
+</script>
