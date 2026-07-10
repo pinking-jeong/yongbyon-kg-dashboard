@@ -12349,11 +12349,39 @@ uSlider();render();buildNKCats();renderNK();renderNKEvents();nkModalInit();
     <p style="margin:0 0 8px;color:#6b7785;font-size:13px">
       <strong>이중 채널 분석</strong> — 대북 직접수출(채널 D, ×1.0)과 중국 관문수입(채널 C, ×0.3)을 다른 가중치로 구분하여 우회·환적 발산 신호를 탐지.
       출처: procurement_watch(OSINT_DPRK_Nuclear). 미러 격차는 위험지표이며 거래 증거가 아님.
+      <strong>트리아지 분석 결과</strong>는 이 발산 품목을 핵연료주기 활동축으로 소급 트리아지한 것(리드이며 증거·예측 아님).
     </p>
-    <iframe src="embed_procurement_channels.html" title="이중 채널 분석"
+    <div class="chan-subnav">
+      <a href="#" data-chan-src="embed_procurement_channels.html" class="chan-tab on">이중 채널 분석</a>
+      <a href="#" data-chan-src="embed_forensic_triage.html" class="chan-tab">트리아지 분석 결과 →</a>
+    </div>
+    <iframe id="chanFrame" src="embed_procurement_channels.html" title="이중 채널 분석"
       style="width:100%;height:82vh;border:1px solid #e4e8ec;border-radius:10px;background:#fff"
       loading="lazy"></iframe>
   </div>
+  <style>
+    [data-viewpane="channels"] .chan-subnav{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+    [data-viewpane="channels"] .chan-tab{font-size:12.5px;text-decoration:none;padding:5px 12px;border-radius:8px;
+      border:1px solid var(--line,#e4e8ec);color:var(--muted,#6b7785);background:var(--panel-2,#f5f7fa)}
+    [data-viewpane="channels"] .chan-tab.on{background:var(--teal,#2E5A82);border-color:var(--teal,#2E5A82);color:#fff;font-weight:600}
+    [data-viewpane="channels"] .chan-tab:hover{border-color:var(--cyan,#4f9cf0)}
+  </style>
+  <script>
+    (function(){
+      var pane=document.querySelector('[data-viewpane="channels"]');
+      if(!pane) return;
+      var frame=pane.querySelector('#chanFrame');
+      var tabs=pane.querySelectorAll('.chan-tab');
+      tabs.forEach(function(a){
+        a.addEventListener('click',function(e){
+          e.preventDefault();
+          var src=a.getAttribute('data-chan-src');
+          if(frame.getAttribute('src')!==src){ frame.setAttribute('src',src); }
+          tabs.forEach(function(t){ t.classList.toggle('on', t===a); });
+        });
+      });
+    })();
+  </script>
 </div>
 <style>
 [data-viewpane="prolif"] .pr-root{--pr-min:#4fb08a;--pr-elev:#f1c27b;--pr-high:#e59362;--pr-crit:#ec8c8c;
@@ -12661,7 +12689,7 @@ uSlider();render();buildNKCats();renderNK();renderNKEvents();nkModalInit();
   </script>
 </div>
 <footer>
-  <span class="gen">generated 2026-07-09 11:24</span> · 영변 프로토타입 (Phase 0~2 축소판)
+  <span class="gen">generated 2026-07-10 14:47</span> · 영변 프로토타입 (Phase 0~2 축소판)
   · ⚠ <strong>미검증</strong> 표시는 자동 추출 후 휴먼 승인 전 상태. 좌표·일부 영상 메타데이터는 공개자료 기반 추정치(데모)이며,
   설계 근거는 <em>판독관_컨텍스트_지식그래프_심층연구.md</em> §3·§5 참조.
 </footer>

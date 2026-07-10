@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>포렌식 조달 트리아지 — 분석 결과</title>
+<style>
+:root{
+  --bg:#f5f7fa; --card:#ffffff; --ink:#1c2733; --muted:#6b7785; --line:#e4e8ec;
+  --accent:#2E5A82; --accent2:#4f9cf0;
+  --escalate:#D1495B; --escalate-bg:rgba(209,73,91,.10);
+  --review:#B57A00; --review-bg:rgba(230,159,0,.13);
+  --archive:#8b98a8; --archive-bg:rgba(139,152,168,.12);
+  --ok:#0d7a5f; --ok-bg:rgba(13,122,95,.12);
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f1420; --card:#171e2b; --ink:#e8edf3; --muted:#8b98a8; --line:#26303f;
+  --accent:#4f9cf0; --accent2:#7ab6ff;
+  --escalate:#ff6b81; --escalate-bg:rgba(255,107,129,.14);
+  --review:#f0b429; --review-bg:rgba(240,180,41,.14);
+  --archive:#7d8a9a; --archive-bg:rgba(125,138,154,.14);
+  --ok:#3fcaa3; --ok-bg:rgba(63,202,163,.14);
+}}
+:root[data-theme="dark"]{
+  --bg:#0f1420; --card:#171e2b; --ink:#e8edf3; --muted:#8b98a8; --line:#26303f;
+  --accent:#4f9cf0; --accent2:#7ab6ff;
+  --escalate:#ff6b81; --escalate-bg:rgba(255,107,129,.14);
+  --review:#f0b429; --review-bg:rgba(240,180,41,.14);
+  --archive:#7d8a9a; --archive-bg:rgba(125,138,154,.14);
+  --ok:#3fcaa3; --ok-bg:rgba(63,202,163,.14);
+}
+:root[data-theme="light"]{
+  --bg:#f5f7fa; --card:#ffffff; --ink:#1c2733; --muted:#6b7785; --line:#e4e8ec;
+  --accent:#2E5A82; --accent2:#4f9cf0;
+  --escalate:#D1495B; --escalate-bg:rgba(209,73,91,.10);
+  --review:#B57A00; --review-bg:rgba(230,159,0,.13);
+  --archive:#8b98a8; --archive-bg:rgba(139,152,168,.12);
+  --ok:#0d7a5f; --ok-bg:rgba(13,122,95,.12);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic",system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 22px 70px}
+a{color:var(--accent)}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:18px}
+.back:hover{color:var(--accent)}
+h1{font-size:27px;margin:0 0 6px;font-weight:800;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:15px;margin:0 0 18px;max-width:70ch}
+.banner{background:var(--escalate-bg);border:1px solid var(--escalate);border-left-width:4px;border-radius:10px;
+  padding:14px 18px;margin-bottom:22px}
+.banner b{color:var(--escalate);font-size:15px}
+.banner p{margin:6px 0 0;font-size:13px;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 13px;color:var(--muted)}
+.chip b{color:var(--ink);font-weight:700}
+.rates{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+@media (max-width:640px){.rates{grid-template-columns:1fr}}
+.rate{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.rate b{display:block;font-size:26px;font-weight:800;color:var(--accent);line-height:1.1}
+.rate .lbl{font-size:12.5px;color:var(--ink);font-weight:600;margin-top:4px}
+.rate .desc{font-size:11.5px;color:var(--muted);margin-top:3px}
+.note{font-size:12px;color:var(--muted);margin:0 0 34px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:34px 0 6px;
+  padding-top:14px;border-top:1px solid var(--line)}
+.act{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 22px 8px;margin-bottom:22px}
+.act-head{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:4px}
+.act-head h3{margin:0;font-size:19px;font-weight:800}
+.act-head .en{color:var(--muted);font-weight:600;font-size:13px}
+.badge{font-size:11px;font-weight:700;border-radius:20px;padding:3px 11px;white-space:nowrap}
+.b-mod{background:var(--ok-bg);color:var(--ok)}
+.b-weak{background:var(--review-bg);color:var(--review)}
+.b-none{background:var(--archive-bg);color:var(--archive)}
+.meta{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+.meta b{color:var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);font-weight:700}
+td.item{white-space:normal;min-width:200px}
+td.num{font-variant-numeric:tabular-nums;color:var(--muted)}
+.spec{font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 7px}
+.s-high{background:var(--escalate-bg);color:var(--escalate)}
+.s-med{background:var(--review-bg);color:var(--review)}
+.s-low{background:var(--archive-bg);color:var(--archive)}
+.tier{font-size:10.5px;font-weight:800;border-radius:5px;padding:2px 8px;text-transform:uppercase;letter-spacing:.02em}
+.t-escalate{background:var(--escalate-bg);color:var(--escalate)}
+.t-review{background:var(--review-bg);color:var(--review)}
+.t-archive{background:var(--archive-bg);color:var(--archive)}
+.post{font-weight:700;color:var(--ink)}
+.iv{color:var(--muted);font-size:11px}
+.solo{color:var(--escalate);font-weight:700;font-size:11px}
+.tri{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.tri h4{margin:0 0 6px;font-size:12.5px;color:var(--ink)}
+.tri .line{font-size:12px;color:var(--muted);margin:2px 0}
+.tri .warn{color:var(--review)}
+.caveat{font-size:11.5px;color:var(--muted);font-style:italic;margin:10px 0 2px;padding-left:10px;border-left:2px solid var(--line)}
+.nullbox{background:var(--archive-bg);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--ink);margin:6px 0 4px}
+.nullbox b{color:var(--archive)}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:6px 0 20px}
+@media (max-width:640px){.legend{grid-template-columns:1fr}}
+.leg{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+.leg .h{font-weight:800;font-size:13px;display:flex;align-items:center;gap:8px}
+.leg .d{font-size:12px;color:var(--muted);margin-top:4px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.d-escalate{background:var(--escalate)} .d-review{background:var(--review)} .d-archive{background:var(--archive)}
+.gate{background:var(--review-bg);border:1px solid var(--review);border-radius:10px;padding:13px 16px;font-size:12.5px;
+  color:var(--ink);margin-bottom:24px}
+.gate b{color:var(--review)}
+footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-family:Consolas,monospace;font-size:11.5px}
+.toggle{position:fixed;top:14px;right:14px;background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:6px 11px;font-size:12px;color:var(--muted);cursor:pointer}
+.toggle:hover{color:var(--accent);border-color:var(--accent2)}
+</style></head>
+<body>
+<button class="toggle" id="themeToggle" title="테마 전환">◐ 테마</button>
+<div class="wrap">
+  
+  <h1>포렌식 조달 트리아지 — 분석 결과</h1>
+  <p class="sub">확정/의심 핵활동 사건 시점 이전의 이중용도 물자 조달을 소급 재구성해, 분석관이
+    먼저 들여다볼 <b>조사 우선순위 리드</b>로 등급화한다. 네 개 핵연료주기 활동축을 각각 트리아지하고,
+    지식그래프(KG) 관측과 시간교차로 코로보레이션 강도를 붙인다.</p>
+
+  <div class="banner">
+    <b>⚠ 이것은 예측이 아니다.</b>
+    <p>조달은 <b>역량(무엇을 할 수 있나)</b> 신호이지 <b>시점(언제 가동하나)</b> 신호가 아니다. 산출은
+      사후 재구성 <b>리드이며 증거가 아니다.</b> 시설 귀속·활동 시점 예측이 아니며, 신뢰도는 구조적으로
+      0.8을 넘지 못한다. 다출처 삼각측량과 인간 분석관 검토가 반드시 선행되어야 한다.</p>
+  </div>
+
+  <div class="chips">
+    <span class="chip"><b>예측 아님</b> · 사후 트리아지</span>
+    <span class="chip"><b>역량 ≠ 시점</b></span>
+    <span class="chip">신뢰도 상한 <b>0.8</b></span>
+    <span class="chip">삼각측량 강도 상한 <b>보통</b> (매체·분석)</span>
+    <span class="chip"><b>리드 ≠ 증거</b></span>
+    <span class="chip">신호 부재 <b>≠</b> 활동 부재</span>
+  </div>
+
+  <h2>정직한 기저율 — 모든 해석의 프레임</h2>
+  <div class="rates">
+    <div class="rate"><b>0.8</b><div class="lbl">신뢰도 상한</div>
+      <div class="desc">구조적 불확실성 &gt;20%. "확실"은 불가능.</div></div>
+    <div class="rate"><b>≤0.5</b><div class="lbl">사건의 선행 조달신호 보유율</div>
+      <div class="desc">확정 핵사건의 절반 이하만 선행 신호. 신호 부재 ≠ 활동 부재.</div></div>
+    <div class="rate"><b>~0.65</b><div class="lbl">조달 이상의 민수 위양성</div>
+      <div class="desc">이상 급증의 다수는 민간 무역·재고·재수출.</div></div>
+  </div>
+  <p class="note">운영 기저율은 보수적으로 <b>고정</b>한다. 실측이 덜 보수적이어도 소표본이면
+    과신 방지를 위해 운영값을 유지한다.</p>
+
+  <h2>활동축별 트리아지 결과</h2>
+  <div class="act"><div class="act-head"><h3>재처리 <span class="en">reprocessing</span></h3><span class="badge b-mod">삼각측량 보통</span></div>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>47</b>건 · 특이도 high 9 / medium 14 / low 24 (저특이도 0.5106) · <b>escalate 4 · review 7</b></p>
+<div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
+<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">2.31</td><td><span class="post">0.8</span> <span class="iv">[0.72–0.8]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">8.77</td><td><span class="post">0.7589</span> <span class="iv">[0.3415–0.7589]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">-0.08</td><td><span class="post">0.75</span> <span class="iv">[0.675–0.75]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-1.92</td><td><span class="post">0.75</span> <span class="iv">[0.675–0.75]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">1.56</td><td><span class="post">0.6891</span> <span class="iv">[0.5513–0.6891]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.11</td><td><span class="post">0.68</span> <span class="iv">[0.544–0.68]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">-0.25</td><td><span class="post">0.68</span> <span class="iv">[0.544–0.68]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">0.11</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-0.11</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.61</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">8479</td><td class="item">원격조작기(마스터-슬레이브형)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">3.66</td><td><span class="post">0.511</span> <span class="iv">[0.23–0.511]</span></td><td><span class="tier t-review">review</span></td></tr>
+</tbody></table></div>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 36건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<div class="tri">
+<h4>삼각측량 — KG 관측 시간교차</h4>
+<p class="line">코로보레이션 강도 <b class="warn">보통</b> · 같은 활동 KG 관측 2건 · 시간창 매칭 <b>1건</b> · 독립 확증 False</p>
+<div class="scroll"><table><thead><tr><th>KG 관측</th><th>시설</th><th>연도</th><th>간격</th><th>방향</th><th>신뢰</th><th>검증</th></tr></thead><tbody>
+<tr><td class="num">obs-oldwaste-2023-activity</td><td>구 폐기물 시설</td><td class="num">2023</td><td class="num">+1년</td><td>조달→관측</td><td>medium</td><td>✔</td></tr>
+</tbody></table></div>
+<p class="caveat">KG 관측은 매체·분석(ISIS·38N·IAEA 등) 기반으로 조달의 분석가 OSINT 생태계와 출처가 겹칠 수 있다(부분 순환확증). 독립 물리 확증이 아니라 생태계 내 코로보레이션이다.</p>
+<p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
+</div>
+</div>
+<div class="act"><div class="act-head"><h3>원자로 운용 <span class="en">reactor</span></h3><span class="badge b-mod">삼각측량 보통</span></div>
+<p class="meta">사건 시점(입력) <b>2024</b> · 소급 창 <b>2021~2023</b> · 리드 <b>89</b>건 · 특이도 high 4 / medium 19 / low 66 (저특이도 0.7416) · <b>escalate 0 · review 8</b></p>
+<div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
+<tr><td class="num">284510</td><td class="item">중수(중수소 산화물)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">0.99</td><td><span class="post">0.72</span> <span class="iv">[0.612–0.72]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">284510</td><td class="item">중수(중수소 산화물)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">1.41</td><td><span class="post">0.72</span> <span class="iv">[0.612–0.72]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">284510</td><td class="item">중수(중수소 산화물)</td><td class="num">2023</td><td><span class="spec s-high">high</span></td><td class="num">0.0</td><td><span class="post">0.72</span> <span class="iv">[0.612–0.72]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">810990</td><td class="item">지르칼로이 튜브 (핵연료 피복관)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">2.21</td><td><span class="post">0.7063</span> <span class="iv">[0.5297–0.7063]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">903180</td><td class="item">초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">7.65</td><td><span class="post">0.686</span> <span class="iv">[0.3087–0.686]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">380110</td><td class="item">원자로급 흑연 (고순도 미립자)</td><td class="num">2022</td><td><span class="spec s-med">medium</span></td><td class="num">1.02</td><td><span class="post">0.55</span> <span class="iv">[0.33–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">380110</td><td class="item">원자로급 흑연 (고순도 미립자)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">0.67</td><td><span class="post">0.55</span> <span class="iv">[0.33–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">380110</td><td class="item">원자로급 흑연 (고순도 미립자)</td><td class="num">2023</td><td><span class="spec s-med">medium</span></td><td class="num">-0.27</td><td><span class="post">0.55</span> <span class="iv">[0.33–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
+</tbody></table></div>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 81건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<div class="tri">
+<h4>삼각측량 — KG 관측 시간교차</h4>
+<p class="line">코로보레이션 강도 <b class="warn">보통</b> · 같은 활동 KG 관측 3건 · 시간창 매칭 <b>3건</b> · 독립 확증 False</p>
+<div class="scroll"><table><thead><tr><th>KG 관측</th><th>시설</th><th>연도</th><th>간격</th><th>방향</th><th>신뢰</th><th>검증</th></tr></thead><tbody>
+<tr><td class="num">obs-5mwe-2021-discharge</td><td>5MWe 흑연감속로</td><td class="num">2021</td><td class="num">+0년</td><td>동시</td><td>high</td><td>✔</td></tr>
+<tr><td class="num">obs-elwr-2025-nodischarge</td><td>실험용 경수로</td><td class="num">2025</td><td class="num">+2년</td><td>조달→관측</td><td>medium</td><td>—</td></tr>
+<tr><td class="num">obs-5mwe-2025-cycle7</td><td>5MWe 흑연감속로</td><td class="num">2025</td><td class="num">+2년</td><td>조달→관측</td><td>medium</td><td>—</td></tr>
+</tbody></table></div>
+<p class="caveat">KG 관측은 매체·분석(ISIS·38N·IAEA 등) 기반으로 조달의 분석가 OSINT 생태계와 출처가 겹칠 수 있다(부분 순환확증). 독립 물리 확증이 아니라 생태계 내 코로보레이션이다.</p>
+<p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
+</div>
+</div>
+<div class="act"><div class="act-head"><h3>우라늄 농축 <span class="en">enrichment</span></h3><span class="badge b-none">삼각측량 없음</span></div>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>75</b>건 · 특이도 high 0 / medium 12 / low 63 (저특이도 0.84) · <b>escalate 0 · review 0</b></p>
+<div class="nullbox"><b>정직한 null.</b> 소급 창에서 <b>review 이상 티어로 올라온 리드가 없다.</b> 고특이도(high) 리드 0건 · 상위는 저특이도 광역 품목(민수 지배). 이는 활동 부재가 <b>아니라</b>, 무료 국가집계 무역으로 이 창에서 특이 신호를 분리하지 못했음을 뜻한다 — 자립생산·은닉 공급망·중국 관문 은폐(92%)가 유력한 신호 부재 원인.</div>
+<div class="tri">
+<h4>삼각측량 — KG 관측 시간교차</h4>
+<p class="line">코로보레이션 강도 <b class="warn">없음</b> · 같은 활동 KG 관측 2건 · 시간창 매칭 <b>0건</b> · 독립 확증 False</p>
+<p class="caveat">KG 관측은 매체·분석(ISIS·38N·IAEA 등) 기반으로 조달의 분석가 OSINT 생태계와 출처가 겹칠 수 있다(부분 순환확증). 독립 물리 확증이 아니라 생태계 내 코로보레이션이다.</p>
+<p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
+</div>
+</div>
+<div class="act"><div class="act-head"><h3>핵무기화 <span class="en">weaponization</span></h3><span class="badge b-none">삼각측량 없음</span></div>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>40</b>건 · 특이도 high 7 / medium 18 / low 15 (저특이도 0.375) · <b>escalate 0 · review 8</b></p>
+<div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
+<tr><td class="num">903180</td><td class="item">초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">8.33</td><td><span class="post">0.7042</span> <span class="iv">[0.3169–0.7042]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">854370</td><td class="item">중성자발생장치 (D-T/DD 튜브)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">2.15</td><td><span class="post">0.6364</span> <span class="iv">[0.5409–0.6364]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">854370</td><td class="item">중성자발생장치 (D-T/DD 튜브)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">1.78</td><td><span class="post">0.5912</span> <span class="iv">[0.5026–0.5912]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">360200</td><td class="item">폭발렌즈 / 성형폭약</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">1.75</td><td><span class="post">0.5873</span> <span class="iv">[0.4992–0.5873]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">854370</td><td class="item">중성자발생장치 (D-T/DD 튜브)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">1.27</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">360320</td><td class="item">기폭선(EBW) 기폭장치</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.67</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">360200</td><td class="item">폭발렌즈 / 성형폭약</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">0.15</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">360200</td><td class="item">폭발렌즈 / 성형폭약</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-0.66</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
+</tbody></table></div>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 32건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<div class="tri">
+<h4>삼각측량 — KG 관측 시간교차</h4>
+<p class="line">코로보레이션 강도 <b class="warn">없음</b> · 같은 활동 KG 관측 2건 · 시간창 매칭 <b>0건</b> · 독립 확증 False</p>
+<p class="line warn">⚠ &#x27;weaponization&#x27;는 날짜 있는 관측이 없음 — 상시 평가(무날짜) 2건만 존재. 시간매칭 불가, 평가 존재 컨텍스트로만 참고(무기화 등).</p>
+<p class="line">상시 평가(무날짜, 시간매칭 불가) 2건 — 시점이 아니라 평가 존재 컨텍스트로만 참고:</p>
+<div class="scroll"><table><thead><tr><th>시설</th><th>신뢰</th></tr></thead><tbody>
+<tr><td>용덕동 핵 고폭실험시설</td><td>low</td></tr>
+<tr><td>원로리 핵탄두 제조 의심시설</td><td>low</td></tr>
+</tbody></table></div>
+<p class="caveat">KG 관측은 매체·분석(ISIS·38N·IAEA 등) 기반으로 조달의 분석가 OSINT 생태계와 출처가 겹칠 수 있다(부분 순환확증). 독립 물리 확증이 아니라 생태계 내 코로보레이션이다.</p>
+<p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
+</div>
+</div>
+
+  <h2>기저율 보정 감사 (3방향 발산)</h2><div class="act" style="margin-bottom:24px"><p class="meta" style="margin-bottom:12px">확정/의심 활동 관측과 조달 리드의 정합·부정합으로 기저율을 실측한다. <b>소표본이라 방법론 시연·보수적 보정용</b>이지 정밀 통계가 아니다.</p><div class="scroll"><table><thead><tr><th>지표</th><th>측정값(캐시·스냅샷)</th><th>운영값(보수적 고정)</th><th>채택</th></tr></thead><tbody><tr><td class="item">활동 관측 중 선행 조달신호 보유</td><td class="num">0.7143 (7건 중 5)</td><td class="num">0.5</td><td>운영값 유지</td></tr><tr><td class="item">조달 리드 중 활동 무대응(민수 위양성 대리)</td><td class="num">0.6 (40건 중 24)</td><td class="num">0.65</td><td>운영값 유지</td></tr></tbody></table></div><p class="caveat">측정 신호율이 운영값보다 높아도, 표본이 작아(N&lt;10) 과신을 막기 위해 운영값을 유지한다. 정책상 낙관 방향 이동은 금지하고, 충분한 표본이 쌓일 때만 보수적 방향으로만 조정한다.</p></div>
+
+  <h2>티어 등급 · 동반수입 게이트</h2>
+  <div class="legend">
+    <div class="leg"><div class="h"><span class="dot d-escalate"></span>escalate</div>
+      <div class="d">사후 ≥ 0.75 (상한 0.80). 대응반 에스컬레이션 + 다출처 검증.</div></div>
+    <div class="leg"><div class="h"><span class="dot d-review"></span>review</div>
+      <div class="d">사후 0.50~0.75. 분석관 검토 플래그.</div></div>
+    <div class="leg"><div class="h"><span class="dot d-archive"></span>archive</div>
+      <div class="d">사후 &lt; 0.50. 보관(조사 비우선).</div></div>
+  </div>
+  <div class="gate">
+    <b>동반수입 게이트(⚠低단독).</b> 저특이도 품목(질산·PTFE·알루미늄 등)이 같은 창에 고특이도 항목 동반
+    없이 <b>단독</b>으로 뜨면 escalate에서 <b>review로 강등</b>된다(사후확률은 불변, 티어만 조정). 저특이도
+    단독으로는 활동을 결론짓지 않는다 — 민수 무역이 지배하기 때문이다.
+  </div>
+
+  <footer>
+    분석 구성: 재처리 2023 · 원자로 운용 2024 · 우라늄 농축 2023 · 핵무기화 2023<br>
+    재생성: <code>python -m procurement_watch.report.build_forensic_html</code> ·
+    데이터: UN Comtrade(국가 집계, 무료) · OpenSanctions(RUSI Sandstone·UN 1718) · 영변 지식그래프 관측 스냅샷.
+    방법론 <code>docs/METHODOLOGY.md</code> · 플레이북 <code>docs/ANALYST_PLAYBOOK.md</code>.<br>
+    <b>산출은 조사 우선순위 리드이며 증거·예측·귀속이 아니다.</b> 방어적 비확산 목적, 전량 공개데이터.
+  </footer>
+</div>
+<script>
+(function(){
+  var t=document.getElementById('themeToggle');
+  t.addEventListener('click',function(){
+    var r=document.documentElement;
+    var cur=r.getAttribute('data-theme');
+    var next = cur==='dark' ? 'light' : (cur==='light' ? 'dark'
+      : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+    r.setAttribute('data-theme', next);
+  });
+})();
+</script>
+</body></html>
