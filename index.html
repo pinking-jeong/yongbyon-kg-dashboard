@@ -157,7 +157,8 @@ footer .gen{font-family:var(--mono)}
 .methods{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}
 .methods span{font-size:.7rem;border:1px solid var(--line);color:var(--muted);border-radius:4px;padding:1px 7px}
 .xclaim{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:12px;margin-bottom:9px;font-size:.86rem;color:var(--text)}
-.xclaim .unv{font-size:.7rem;color:var(--amber);margin-left:6px}
+/* 글자색은 amber로 덮어쓰면서 .tag.unv 의 amber 배경이 남으면 amber-on-amber 로 안 보인다 — 배경만 끈다 */
+.xclaim .unv{font-size:.7rem;color:var(--amber);background:transparent;margin-left:6px}
 .xclaim .links{margin-top:8px;font-size:.78rem;color:var(--muted)}
 .xchip{display:inline-block;font-size:.72rem;border:1px solid var(--teal);color:var(--cyan);border-radius:999px;padding:1px 9px;margin:3px 4px 0 0;cursor:pointer}
 .xchip:hover{background:var(--teal);color:#04181a}
