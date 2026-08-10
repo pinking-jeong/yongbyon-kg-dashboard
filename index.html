@@ -267,8 +267,8 @@ footer .gen{font-family:var(--mono)}
 .fc3d-limit li{margin:3px 0}
 .fc3d-limit b{color:var(--amber)}
 .fc3d-limit code{font-family:var(--mono);font-size:.92em;color:var(--faint)}
-.fcmb{max-width:1480px;margin:0 auto;padding:14px 24px 40px}
-.fcmb iframe{width:100%;height:84vh;min-height:560px;border:1px solid var(--line);border-radius:12px;background:var(--bg);display:block}
+.fcmb,.fcpm{max-width:1480px;margin:0 auto;padding:14px 24px 40px}
+.fcmb iframe,.fcpm iframe{width:100%;height:84vh;min-height:560px;border:1px solid var(--line);border-radius:12px;background:var(--bg);display:block}
 .fcnote{color:var(--faint);font-size:.76rem;margin-top:8px}
 .fclasswrap{max-width:1480px;margin:0 auto;padding:var(--space) 24px 72px}
 .fcintro{color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:10px}
@@ -11072,6 +11072,7 @@ footer .gen{font-family:var(--mono)}
   <div class="fcsub">
   <nav class="fc-subnav" role="tablist">
     <button class="fc-tab on" data-fcsub="schema" role="tab" aria-selected="true">핵시설 도메인 클래스 스키마</button>
+    <button class="fc-tab" data-fcsub="pm" role="tab" aria-selected="false">IAEA Physical Model</button>
     <button class="fc-tab" data-fcsub="mb" role="tab" aria-selected="false">물질수지 분석</button>
   </nav>
   <div data-fcpane="schema"><div class="fclasswrap">
@@ -11335,6 +11336,18 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
   </section></div>
     </div>
   </div></div>
+  <div data-fcpane="pm" hidden><div class="fcpm">
+  <p class="fcintro">
+    <b>IAEA Physical Model</b> — 이 대시보드의 공정·지표·강도 체계가 어디서 왔는지 설명한다.
+    핵물질 획득경로를 <b>12단계</b>로 나누고 각 단계를 <b>8개 지표 카테고리</b>로 기술하는 참조 틀이며,
+    강도 세 등급(strong · medium · weak)은 취향이 아니라 <b>함의 방향의 형식 정의</b>다.
+    단계를 누르면 이 연구가 그 단계를 인코딩했는지 · 흡수했는지 · 비워 뒀는지와 그 근거가 나오고,
+    카테고리를 누르면 실제로 인코딩된 지표 목록이 펼쳐진다.
+    원문은 비공개(SEN)라 공개 2차 문헌으로 재구성한 것이며, 확인하지 못한 항목은 그렇게 표시했다.
+  </p>
+  <iframe id="fcPmFrame" data-src="embed_iaea_physical_model.html" title="IAEA Physical Model 개념 해설" loading="lazy"></iframe>
+  <p class="fcnote">화면이 좁으면 <a href="embed_iaea_physical_model.html" target="_blank" rel="noopener">새 창에서 열기</a>.</p>
+</div></div>
   <div data-fcpane="mb" hidden><div class="fcmb">
   <p class="fcintro">
     <b>북한 핵연료주기 HEU·Pu 경로 물질수지</b> — <code>Material Balance.xlsx</code>(MM 정량 + BS 공정 서술) 8시트 전량을 단위공정 단위로 정리했다.
@@ -11352,7 +11365,6 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
   var root=document.querySelector('[data-viewpane="facility"] .fcsub');
   if(!root) return;
   var tabs=root.querySelectorAll('.fc-tab');
-  var frame=root.querySelector('#fcMbFrame');
   tabs.forEach(function(btn){
     btn.addEventListener('click',function(){
       var key=btn.getAttribute('data-fcsub');
@@ -11361,13 +11373,15 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
         t.classList.toggle('on',on);
         t.setAttribute('aria-selected',on?'true':'false');
       });
+      var pane=null;
       root.querySelectorAll('[data-fcpane]').forEach(function(p){
-        p.hidden=p.getAttribute('data-fcpane')!==key;
+        var on=p.getAttribute('data-fcpane')===key;
+        p.hidden=!on;
+        if(on) pane=p;
       });
-      // 260 KB 문서라 실제로 열 때 처음 한 번만 불러온다
-      if(key==='mb'&&frame&&!frame.getAttribute('src')){
-        frame.setAttribute('src',frame.getAttribute('data-src'));
-      }
+      // 임베드는 수백 KB짜리 문서라 실제로 열 때 처음 한 번만 불러온다
+      var f=pane&&pane.querySelector('iframe[data-src]');
+      if(f&&!f.getAttribute('src')) f.setAttribute('src',f.getAttribute('data-src'));
     });
   });
 })();
