@@ -1,5 +1,6 @@
+<!--forced-dark-->
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8">
+<html lang="ko" data-theme="dark"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>포렌식 조달 트리아지 — 분석 결과</title>
 <style>
@@ -87,6 +88,7 @@ td.num{font-variant-numeric:tabular-nums;color:var(--muted)}
 .post{font-weight:700;color:var(--ink)}
 .iv{color:var(--muted);font-size:11px}
 .solo{color:var(--escalate);font-weight:700;font-size:11px}
+.mb{color:var(--accent2,#4f9cf0);font-weight:800;font-size:10.5px;background:rgba(79,156,240,.12);border-radius:4px;padding:1px 6px}
 .tri{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 .tri h4{margin:0 0 6px;font-size:12.5px;color:var(--ink)}
 .tri .line{font-size:12px;color:var(--muted);margin:2px 0}
@@ -149,7 +151,7 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
 
   <h2>활동축별 트리아지 결과</h2>
   <div class="act"><div class="act-head"><h3>재처리 <span class="en">reprocessing</span></h3><span class="badge b-mod">삼각측량 보통</span></div>
-<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>47</b>건 · 특이도 high 9 / medium 14 / low 24 (저특이도 0.5106) · <b>escalate 4 · review 7</b></p>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>47</b>건 · 특이도 high 9 / medium 14 / low 24 (저특이도 0.5106) · <b>escalate 4 · review 9</b> · <span class="mb">물질수지 번들 승격 2건</span></p>
 <div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
 <tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">2.31</td><td><span class="post">0.8</span> <span class="iv">[0.72–0.8]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
 <tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">8.77</td><td><span class="post">0.7589</span> <span class="iv">[0.3415–0.7589]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
@@ -162,8 +164,10 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
 <tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-0.11</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.61</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">8479</td><td class="item">원격조작기(마스터-슬레이브형)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">3.66</td><td><span class="post">0.511</span> <span class="iv">[0.23–0.511]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2020</td><td><span class="spec s-med">medium</span></td><td class="num">-0.0</td><td><span class="post">0.35</span> <span class="mb">→ 0.6176</span><span class="iv" title="정합 역할 diluent+dissolvent+extractant"> [0.1575–0.35]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2022</td><td><span class="spec s-med">medium</span></td><td class="num">-0.06</td><td><span class="post">0.35</span> <span class="mb">→ 0.6176</span><span class="iv" title="정합 역할 diluent+dissolvent+extractant"> [0.1575–0.35]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
 </tbody></table></div>
-<p class="meta" style="margin-top:10px">그 외 <b>archive 36건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 34건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
 <div class="tri">
 <h4>삼각측량 — KG 관측 시간교차</h4>
 <p class="line">코로보레이션 강도 <b class="warn">보통</b> · 같은 활동 KG 관측 2건 · 시간창 매칭 <b>1건</b> · 독립 확증 False</p>
@@ -235,6 +239,41 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
 <p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
 </div>
 </div>
+<div class="act"><div class="act-head"><h3>우라늄 변환 <span class="en">conversion</span></h3><span class="badge b-none">삼각측량 없음</span></div>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>9</b>건 · 특이도 high 0 / medium 6 / low 3 (저특이도 0.3333) · <b>escalate 1 · review 5</b> · <span class="mb">물질수지 번들 승격 6건</span></p>
+<div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
+<tr><td class="num">280130</td><td class="item">불소(F2)</td><td class="num">2022</td><td><span class="spec s-med">medium</span></td><td class="num">3.74</td><td><span class="post">0.5164</span> <span class="mb">→ 0.7622</span><span class="iv" title="정합 역할 fluorinating+oxidizer_f"> [0.2582–0.5164]</span></td><td><span class="tier t-review">review</span> <span class="mb">→ escalate 번들</span></td></tr>
+<tr><td class="num">280130</td><td class="item">불소(F2)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">1.39</td><td><span class="post">0.3</span> <span class="mb">→ 0.5625</span><span class="iv" title="정합 역할 fluorinating+oxidizer_f"> [0.15–0.3]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+<tr><td class="num">280130</td><td class="item">불소(F2)</td><td class="num">2020</td><td><span class="spec s-med">medium</span></td><td class="num">-0.29</td><td><span class="post">0.3</span> <span class="mb">→ 0.5625</span><span class="iv" title="정합 역할 fluorinating+oxidizer_f"> [0.15–0.3]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+<tr><td class="num">281111</td><td class="item">무수 불화수소(HF)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">1.82</td><td><span class="post">0.2879</span> <span class="mb">→ 0.5482</span><span class="iv" title="정합 역할 fluorinating+oxidizer_f"> [0.1152–0.2879]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+<tr><td class="num">281111</td><td class="item">무수 불화수소(HF)</td><td class="num">2022</td><td><span class="spec s-med">medium</span></td><td class="num">1.6</td><td><span class="post">0.2625</span> <span class="mb">→ 0.5161</span><span class="iv" title="정합 역할 fluorinating+oxidizer_f"> [0.105–0.2625]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+<tr><td class="num">281111</td><td class="item">무수 불화수소(HF)</td><td class="num">2020</td><td><span class="spec s-med">medium</span></td><td class="num">0.67</td><td><span class="post">0.25</span> <span class="mb">→ 0.5</span><span class="iv" title="정합 역할 fluorinating+oxidizer_f"> [0.1–0.25]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+</tbody></table></div>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 3건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<div class="tri">
+<h4>삼각측량 — KG 관측 시간교차</h4>
+<p class="line">코로보레이션 강도 <b class="warn">없음</b> · 같은 활동 KG 관측 0건 · 시간창 매칭 <b>0건</b> · 독립 확증 False</p>
+<p class="line warn">⚠ KG에 &#x27;conversion&#x27; 활동 관측이 없어 삼각측량 파트너 없음(커버리지 공백).</p>
+<p class="caveat">KG 관측은 매체·분석(ISIS·38N·IAEA 등) 기반으로 조달의 분석가 OSINT 생태계와 출처가 겹칠 수 있다(부분 순환확증). 독립 물리 확증이 아니라 생태계 내 코로보레이션이다.</p>
+<p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
+</div>
+</div>
+<div class="act"><div class="act-head"><h3>우라늄 정련 <span class="en">milling</span></h3><span class="badge b-none">삼각측량 없음</span></div>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>9</b>건 · 특이도 high 0 / medium 0 / low 9 (저특이도 1.0) · <b>escalate 0 · review 3</b> · <span class="mb">물질수지 번들 승격 3건</span></p>
+<div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
+<tr><td class="num">282911</td><td class="item">염소산나트륨(NaClO3)</td><td class="num">2020</td><td><span class="spec s-low">low</span></td><td class="num">12.0</td><td><span class="post">0.338</span> <span class="mb">→ 0.5053</span><span class="iv" title="정합 역할 extractant+leachant+oxidant"> [0.027–0.338]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span> <span class="solo">⚠低단독</span></td></tr>
+<tr><td class="num">282911</td><td class="item">염소산나트륨(NaClO3)</td><td class="num">2021</td><td><span class="spec s-low">low</span></td><td class="num">12.0</td><td><span class="post">0.338</span> <span class="mb">→ 0.5053</span><span class="iv" title="정합 역할 extractant+leachant+oxidant"> [0.027–0.338]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span> <span class="solo">⚠低단독</span></td></tr>
+<tr><td class="num">282911</td><td class="item">염소산나트륨(NaClO3)</td><td class="num">2022</td><td><span class="spec s-low">low</span></td><td class="num">12.0</td><td><span class="post">0.338</span> <span class="mb">→ 0.5053</span><span class="iv" title="정합 역할 extractant+leachant+oxidant"> [0.027–0.338]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span> <span class="solo">⚠低단독</span></td></tr>
+</tbody></table></div>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 6건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<div class="tri">
+<h4>삼각측량 — KG 관측 시간교차</h4>
+<p class="line">코로보레이션 강도 <b class="warn">없음</b> · 같은 활동 KG 관측 0건 · 시간창 매칭 <b>0건</b> · 독립 확증 False</p>
+<p class="line warn">⚠ KG에 &#x27;milling&#x27; 활동 관측이 없어 삼각측량 파트너 없음(커버리지 공백).</p>
+<p class="caveat">KG 관측은 매체·분석(ISIS·38N·IAEA 등) 기반으로 조달의 분석가 OSINT 생태계와 출처가 겹칠 수 있다(부분 순환확증). 독립 물리 확증이 아니라 생태계 내 코로보레이션이다.</p>
+<p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
+</div>
+</div>
 
   <h2>기저율 보정 감사 (3방향 발산)</h2><div class="act" style="margin-bottom:24px"><p class="meta" style="margin-bottom:12px">확정/의심 활동 관측과 조달 리드의 정합·부정합으로 기저율을 실측한다. <b>소표본이라 방법론 시연·보수적 보정용</b>이지 정밀 통계가 아니다.</p><div class="scroll"><table><thead><tr><th>지표</th><th>측정값(캐시·스냅샷)</th><th>운영값(보수적 고정)</th><th>채택</th></tr></thead><tbody><tr><td class="item">활동 관측 중 선행 조달신호 보유</td><td class="num">0.7143 (7건 중 5)</td><td class="num">0.5</td><td>운영값 유지</td></tr><tr><td class="item">조달 리드 중 활동 무대응(민수 위양성 대리)</td><td class="num">0.6 (40건 중 24)</td><td class="num">0.65</td><td>운영값 유지</td></tr></tbody></table></div><p class="caveat">측정 신호율이 운영값보다 높아도, 표본이 작아(N&lt;10) 과신을 막기 위해 운영값을 유지한다. 정책상 낙관 방향 이동은 금지하고, 충분한 표본이 쌓일 때만 보수적 방향으로만 조정한다.</p></div>
 
@@ -254,7 +293,7 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
   </div>
 
   <footer>
-    분석 구성: 재처리 2023 · 원자로 운용 2024 · 우라늄 농축 2023 · 핵무기화 2023<br>
+    분석 구성: 재처리 2023 · 원자로 운용 2024 · 우라늄 농축 2023 · 핵무기화 2023 · 우라늄 변환 2023 · 우라늄 정련 2023<br>
     재생성: <code>python -m procurement_watch.report.build_forensic_html</code> ·
     데이터: UN Comtrade(국가 집계, 무료) · OpenSanctions(RUSI Sandstone·UN 1718) · 영변 지식그래프 관측 스냅샷.
     방법론 <code>docs/METHODOLOGY.md</code> · 플레이북 <code>docs/ANALYST_PLAYBOOK.md</code>.<br>
