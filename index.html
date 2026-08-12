@@ -18482,7 +18482,7 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
   <tr><td class="lg yy">✓✓</td><td class="lgname">확정</td><td>공개 위성분석(38N·ISIS·IAEA 등)에서 반복 확인되고 공식적으로 인지된 시설 — 다중 출처·다중 시점으로 존재가 사실상 확정.</td></tr><tr><td class="lg y">✓</td><td class="lgname">관측/등재</td><td>관측 보고가 있거나 시설 마스터에 등재된 수준 — 단일 출처·문서로 존재가 확인되나 다중 교차확증 전.</td></tr><tr><td class="lg w">△</td><td class="lgname">의심/약함</td><td>존재가 의심되거나 신호가 약함 — 단일 모달·간접 정황만 있어 추가 확증 필요 (예: 강선 농축 &quot;의심&quot;, 평산 농축 &quot;약&quot;).</td></tr><tr><td class="lg qm">?</td><td class="lgname">미확정</td><td>후보로 거론되나 확증 전 — 존재 여부가 불명확.</td></tr><tr><td class="lg ">(공백)</td><td class="lgname">없음</td><td>해당 클래스가 관측·등재되지 않음(미존재 또는 정보 없음).</td></tr>
 </table>
     </section>
-    <section class="fc3d" hidden aria-label="3D 시설 모델 (로컬 전용)">
+    <section class="fc3d" hidden aria-label="3D 시설 모델 뷰어 (로컬 전용)">
   <div class="fc3d-head">
     <span class="fc3d-tag">로컬 전용</span>
     <h4>3D 시설 모델 뷰어</h4>
@@ -18490,12 +18490,23 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
   </div>
   <p class="fc3d-desc">영변 시설을 입체로 돌려 보는 뷰어. 위 클래스의 기하·규모 항목(C001 냉각탑 60–80 m 등)을 실제 형상과 대조할 때 쓴다.
   <b>우라늄 농축·재처리 공정 영상</b>이 함께 들어 있어 공정 흐름을 시설 형상과 이어 볼 수 있다.</p>
-  <div class="fc3d-path"><code data-fc3d-path>경로 계산 중…</code></div>
-  <div class="fc3d-acts">
-    <button type="button" data-fc3d-copy="path">경로 복사</button>
-    <button type="button" data-fc3d-copy="cmd">실행 명령 복사</button>
-    <a data-fc3d-dir href="#" target="_blank" rel="noopener">폴더 목록 보기</a>
-    <span class="fc3d-ok" data-fc3d-ok hidden>복사됨</span>
+
+  <div class="fc3d-remote" data-fc3d-remote hidden>
+    <p class="fc3d-note"><b>이 페이지에서는 실행할 수 없습니다 — 로컬 전용입니다.</b>
+    웹 페이지가 로컬 실행파일을 띄우는 것은 브라우저 보안 경계상 막혀 있고, 실행에 필요한
+    자산 약 10.9 GB 는 저장소에 담겨 있지 않습니다.</p>
+    <p class="fc3d-note">쓰시려면 ① 볼트를 로컬에 두고 <code>3D model/</code> 폴더를 확보한 뒤,
+    ② 이 대시보드를 <code>file://</code> 로 열면 됩니다. 그때 이 자리에 실행 경로와 명령이 나타납니다.</p>
+  </div>
+
+  <div data-fc3d-local hidden>
+    <div class="fc3d-path"><code data-fc3d-path>경로 계산 중…</code></div>
+    <div class="fc3d-acts">
+      <button type="button" data-fc3d-copy="path">경로 복사</button>
+      <button type="button" data-fc3d-copy="cmd">실행 명령 복사</button>
+      <a data-fc3d-dir href="#" target="_blank" rel="noopener">폴더 목록 보기</a>
+      <span class="fc3d-ok" data-fc3d-ok hidden>복사됨</span>
+    </div>
   </div>
   <ul class="fc3d-limit">
     <li><b>브라우저는 이 파일을 실행하지 못한다.</b> 웹 페이지가 로컬 실행파일을 띄우는 것은 보안 경계상 막혀 있어 우회 방법이 없다. 위 경로나 명령을 복사해 실행창(Win+R)·터미널·탐색기에서 직접 실행해야 한다.</li>
@@ -18807,7 +18818,7 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
   });
 })();
 
-// 3D 시설 모델 메뉴 — file:// 로 열었을 때만 살린다.
+// 3D 시설 모델 메뉴 — 어디서 열든 메뉴는 보이고, 실행 경로는 file:// 에서만 채운다.
 (function(){
   var box=document.querySelector('[data-viewpane="facility"] .fc3d');
   if(!box) return;
@@ -18824,8 +18835,14 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
   return { url, dir, win: toWin(url) };
 };
   var p=deriveModelPath(location.href);
-  if(!p){ box.remove(); return; }   // 배포본에서는 흔적도 남기지 않는다
   box.hidden=false;
+  if(!p){
+    // 온라인(https://) — 왜 못 쓰는지와 쓰려면 무엇이 필요한지를 보인다.
+    // 절대경로는 만들지 않으므로 공개 페이지에 볼트 구조가 남지 않는다.
+    box.querySelector('[data-fc3d-remote]').hidden=false;
+    return;
+  }
+  box.querySelector('[data-fc3d-local]').hidden=false;
   box.querySelector('[data-fc3d-path]').textContent=p.win;
   var dir=box.querySelector('[data-fc3d-dir]');
   dir.setAttribute('href',p.dir+'/');
