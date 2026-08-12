@@ -262,6 +262,10 @@ footer .gen{font-family:var(--mono)}
   color:#06121a;background:var(--amber);border-radius:4px;padding:2px 7px;font-weight:700}
 .fc3d-sub{color:var(--faint);font-size:.76rem}
 .fc3d-desc{color:var(--muted);font-size:.85rem;line-height:1.65;margin-bottom:10px}
+.fc3d-root{display:block;font-size:.78rem;color:var(--muted);margin:10px 0 8px}
+.fc3d-root input{display:block;width:100%;margin-top:5px;font:inherit;font-family:var(--mono);font-size:.78rem;
+  background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.fc3d-root input:focus{outline:none;border-color:var(--cyan)}
 .fc3d-path{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:9px 12px;overflow-x:auto}
 .fc3d-path code{font-family:var(--mono);font-size:.78rem;color:var(--cyan);white-space:nowrap}
 .fc3d-acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 12px}
@@ -18496,7 +18500,20 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
     웹 페이지가 로컬 실행파일을 띄우는 것은 브라우저 보안 경계상 막혀 있고, 실행에 필요한
     자산 약 10.9 GB 는 저장소에 담겨 있지 않습니다.</p>
     <p class="fc3d-note">쓰시려면 ① 볼트를 로컬에 두고 <code>3D model/</code> 폴더를 확보한 뒤,
-    ② 이 대시보드를 <code>file://</code> 로 열면 됩니다. 그때 이 자리에 실행 경로와 명령이 나타납니다.</p>
+    ② 이 대시보드를 <code>file://</code> 로 열면 됩니다. 그때 이 자리에 실행 경로와 명령이 자동으로 채워집니다.</p>
+    <label class="fc3d-root">볼트 경로를 넣으면 여기서도 명령을 만들어 드립니다
+      <input type="text" data-fc3d-root spellcheck="false" autocomplete="off"
+             placeholder="예: D:\MyVault  또는  /Users/me/MyVault">
+    </label>
+    <div class="fc3d-path"><code data-fc3d-rpath>볼트 경로를 입력하세요</code></div>
+    <div class="fc3d-acts">
+      <button type="button" data-fc3d-rcopy="path">경로 복사</button>
+      <button type="button" data-fc3d-rcopy="cmd">실행 명령 복사</button>
+      <span class="fc3d-ok" data-fc3d-rok hidden>복사됨</span>
+    </div>
+    <p class="fc3d-note">폴더 열기 버튼은 두지 않았습니다 — 브라우저가 <code>https://</code> 페이지에서
+    로컬 폴더로 이동하는 것을 막기 때문에 눌러도 아무 일이 일어나지 않습니다. 복사한 경로를
+    탐색기 주소창이나 실행창(Win+R)에 붙여 넣으세요.</p>
   </div>
 
   <div data-fc3d-local hidden>
@@ -18836,10 +18853,52 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
 };
   var p=deriveModelPath(location.href);
   box.hidden=false;
+  // 복사 도우미 — 로컬·온라인 두 경로가 함께 쓴다.
+  function makeCopier(okEl){
+    var timer=null;
+    function done(){ okEl.hidden=false; clearTimeout(timer); timer=setTimeout(function(){ okEl.hidden=true; },1600); }
+    function fallback(text){
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.setAttribute('readonly','');
+      ta.style.cssText='position:fixed;top:-9999px';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(e){ window.prompt('복사할 내용', text); }
+      document.body.removeChild(ta);
+    }
+    return function(text){
+      // file:// 에서는 clipboard API 가 없을 수 있어 textarea 폴백을 둔다
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done,function(){ fallback(text); });
+      } else { fallback(text); }
+    };
+  }
   if(!p){
-    // 온라인(https://) — 왜 못 쓰는지와 쓰려면 무엇이 필요한지를 보인다.
-    // 절대경로는 만들지 않으므로 공개 페이지에 볼트 구조가 남지 않는다.
-    box.querySelector('[data-fc3d-remote]').hidden=false;
+    // 온라인(https://) — 실행은 못 하지만 명령은 만들어 줄 수 있다.
+    // 볼트 경로는 방문자가 직접 넣는다. 우리가 아는 경로를 심으면 공개본에 남기 때문이다.
+    var rbox=box.querySelector('[data-fc3d-remote]');
+    rbox.hidden=false;
+    var input=rbox.querySelector('[data-fc3d-root]');
+    var out=rbox.querySelector('[data-fc3d-rpath]');
+    var rcopy=makeCopier(rbox.querySelector('[data-fc3d-rok]'));
+    var KEY='fc3d-vault-root';
+    var rp='';
+    function refresh(){
+      var root=(input.value||'').trim().replace(/[\\\/]+$/,'');
+      if(!root){ rp=''; out.textContent='볼트 경로를 입력하세요'; return; }
+      // 슬래시를 쓰든 역슬래시를 쓰든 윈도 표기로 맞춘다
+      rp=root.replace(/\//g,'\\')+'\\3D model\\Yongbyon Nuclear Facility.exe';
+      out.textContent=rp;
+      try{ localStorage.setItem(KEY,root); }catch(e){}
+    }
+    try{ var saved=localStorage.getItem(KEY); if(saved) input.value=saved; }catch(e){}
+    refresh();
+    input.addEventListener('input',refresh);
+    rbox.querySelectorAll('[data-fc3d-rcopy]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(!rp){ input.focus(); return; }
+        rcopy(btn.getAttribute('data-fc3d-rcopy')==='cmd'? '& "'+rp+'"' : rp);
+      });
+    });
     return;
   }
   box.querySelector('[data-fc3d-local]').hidden=false;
@@ -18847,27 +18906,7 @@ L1-Natural  (Stage 0에서 배제)  식생 · 수역 · 기타</div>
   var dir=box.querySelector('[data-fc3d-dir]');
   dir.setAttribute('href',p.dir+'/');
   var cmd='& "'+p.win+'"';
-  var ok=box.querySelector('[data-fc3d-ok]');
-  var timer=null;
-  function copy(text){
-    var done=function(){
-      ok.hidden=false;
-      clearTimeout(timer);
-      timer=setTimeout(function(){ ok.hidden=true; },1600);
-    };
-    // file:// 에서는 clipboard API 가 없을 수 있어 textarea 폴백을 둔다
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(done,function(){ fallback(text,done); });
-    } else { fallback(text,done); }
-  }
-  function fallback(text,done){
-    var ta=document.createElement('textarea');
-    ta.value=text; ta.setAttribute('readonly','');
-    ta.style.cssText='position:fixed;top:-9999px';
-    document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); done(); }catch(e){ window.prompt('복사할 경로', text); }
-    document.body.removeChild(ta);
-  }
+  var copy=makeCopier(box.querySelector('[data-fc3d-ok]'));
   box.querySelectorAll('[data-fc3d-copy]').forEach(function(btn){
     btn.addEventListener('click',function(){
       copy(btn.getAttribute('data-fc3d-copy')==='cmd'?cmd:p.win);
