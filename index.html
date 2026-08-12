@@ -30,6 +30,17 @@ h1{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:750;letter-spacing:-.02em;ma
 .kpis dd{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--cyan)}
 .kpis .kscope{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(--teal);border:1px solid var(--line);border-radius:3px;padding:0 3px;vertical-align:middle}
 .kpis .ksub{display:block;font-family:var(--mono);font-size:.66rem;color:var(--faint);margin-top:1px}
+.basis{max-width:1480px;margin:var(--space) auto 0;width:calc(100% - 48px)}
+.basistab{width:100%;border-collapse:collapse}
+.basistab th{text-align:left;vertical-align:top;white-space:nowrap;padding:8px 16px 8px 0;
+  border-bottom:1px solid var(--line-soft);font-size:.86rem;font-weight:700;width:1%}
+.basistab th .bq{display:block;font-size:.68rem;font-weight:400;color:var(--faint);margin-top:2px}
+.basistab td{padding:8px 0;border-bottom:1px solid var(--line-soft)}
+.bchip{display:inline-block;font-size:.78rem;color:var(--muted);background:var(--panel-2);
+  border:1px solid var(--line);border-radius:999px;padding:2px 10px;margin:2px 6px 2px 0}
+.bchip b{font-family:var(--mono);color:var(--cyan);font-weight:600}
+.bsub{font-size:.76rem;color:var(--faint);margin-top:4px;line-height:1.6}
+.bsub b{font-family:var(--mono);color:var(--muted)}
 .layout{display:grid;grid-template-columns:290px minmax(0,1fr) 360px;gap:var(--space);
   max-width:1480px;margin:0 auto;padding:var(--space) 24px 72px}
 /* 서버 메뉴(검증 저장·기간 크롤)를 우측 컬럼 최상단으로 */
@@ -416,6 +427,22 @@ footer .gen{font-family:var(--mono)}
   <button data-view="ablation">방법론 검증 (Intervention Ablation)</button>
 </nav>
 <div data-viewpane="overview">
+<section class="panel basis">
+    <h2>수집 기반 현황 <span class="q">계층별 구성</span></h2>
+    <table class="basistab"><tbody><tr>
+      <th>참조계층<span class="bq">무엇을 식별하는가</span></th>
+      <td><span class="bchip">단지 <b>11</b></span><span class="bchip">시설 <b>21</b></span><span class="bchip">구성요소 <b>7</b></span><span class="bchip">공정 <b>8</b></span><span class="bchip">지표 <b>30</b></span><p class="bsub">다국어 별칭 <b>205</b>개 — <span class="bchip">로마자 <b>104</b></span><span class="bchip">한글 <b>55</b></span><span class="bchip">한자 <b>37</b></span><span class="bchip">가나 <b>5</b></span><span class="bchip">키릴 <b>4</b></span></p></td>
+    </tr><tr>
+      <th>수집 채널<span class="bq">어디서 모으는가</span></th>
+      <td><span class="bchip">연구·국제기구 <b>38</b></span><span class="bchip">일반 언론 <b>26</b></span><span class="bchip">전문 보도 <b>5</b></span><span class="bchip">집계 <b>1</b></span><p class="bsub">매체 <b>70</b>곳. 일반 언론은 전문매체 분석을 옮겨 싣는 비중이 커 계층을 갈라 센다.</p></td>
+    </tr><tr>
+      <th>증거계층<span class="bq">무엇을 모았는가</span></th>
+      <td><span class="bchip">문서 <b>967</b></span><span class="bchip">영상 <b>229</b></span><p class="bsub">언어별 — <span class="bchip">영어 <b>477</b></span><span class="bchip">한국어 <b>331</b></span><span class="bchip">일본어 <b>136</b></span><span class="bchip">러시아어 <b>23</b></span></p></td>
+    </tr><tr>
+      <th>해석계층<span class="bq">무엇을 읽어냈는가</span></th>
+      <td><span class="bchip">관측 <b>683</b></span><span class="bchip">주장 <b>771</b></span><p class="bsub">존재 <b>666</b> · 부재 <b>17</b>(비탐지를 양성으로 오인코딩하지 않는다) · 미해소 큐 <b>1393</b></p></td>
+    </tr></tbody></table>
+  </section>
 <main class="layout">
   <aside>
     <section class="panel">
