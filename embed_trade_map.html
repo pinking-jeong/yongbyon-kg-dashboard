@@ -18,6 +18,15 @@ a{color:var(--accent)}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button.on{background:var(--accent);color:#08111a}
 .seg.sm button{padding:4px 9px;font-size:11.5px;font-weight:600}
+/* 칸 수를 고정한 격자 변형 — flex 줄바꿈에 맡기면 글자 폭에 따라 4+2 로 갈라져
+   좌우가 어긋난다. 1fr 씩 나눠 칸 너비를 맞추고 안쪽 경계선만 그린다. */
+.seg.g3,.seg.g2{width:100%}
+.seg.g3{display:grid;grid-template-columns:repeat(3,1fr)}
+.seg.g2{display:grid;grid-template-columns:repeat(2,1fr)}
+.seg.g3 button,.seg.g2 button{padding:5px 4px;text-align:center;
+  border-left:1px solid var(--line);border-top:1px solid var(--line)}
+.seg.g3 button:nth-child(3n+1),.seg.g2 button:nth-child(2n+1){border-left:0}
+.seg.g3 button:nth-child(-n+3),.seg.g2 button:nth-child(-n+2){border-top:0}
 /* 목록 왼쪽 · 지도 오른쪽. 폭은 화면을 따라 줄인다 — 대시보드 탭 안에서는 iframe 이
    1120px 남짓뿐이라 고정 300px + 1150px 분기로는 두 칸이 무너져 목록이 지도 위로 쌓였다.
    minmax(0,1fr) 이라야 지도 칸이 내용 최소폭 아래로도 줄어든다. */
@@ -731,8 +740,8 @@ function sideHTML(){
     const tabs = Object.keys(D.typeKo).map(t =>
       `<button data-at="${t}"${t===actorType?' class="on"':''}>${D.typeKo[t]}</button>`).join('');
     return `<h3>우려 거래자</h3>
-      <div class="seg sm" id="atabs" style="flex-wrap:wrap">${tabs}</div>
-      <div class="seg sm" id="adesig" style="margin:6px 0">
+      <div class="seg sm g3" id="atabs">${tabs}</div>
+      <div class="seg sm g2" id="adesig" style="margin:6px 0">
         <button data-dg="0"${!actorDesig?' class="on"':''}>비지정 상위</button>
         <button data-dg="1"${actorDesig?' class="on"':''}>제재 지정</button></div>
       <input type="search" id="q" placeholder="이름 검색…">
