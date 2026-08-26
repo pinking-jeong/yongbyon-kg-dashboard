@@ -5,21 +5,14 @@
 <title>포렌식 조달 트리아지 — 분석 결과</title>
 <style>
 :root{
-  --bg:#f5f7fa; --card:#ffffff; --ink:#1c2733; --muted:#6b7785; --line:#e4e8ec;
-  --accent:#2E5A82; --accent2:#4f9cf0;
-  --escalate:#D1495B; --escalate-bg:rgba(209,73,91,.10);
-  --review:#B57A00; --review-bg:rgba(230,159,0,.13);
-  --archive:#8b98a8; --archive-bg:rgba(139,152,168,.12);
-  --ok:#0d7a5f; --ok-bg:rgba(13,122,95,.12);
-}
-@media (prefers-color-scheme: dark){:root{
+  color-scheme:dark;
   --bg:#0f1420; --card:#171e2b; --ink:#e8edf3; --muted:#8b98a8; --line:#26303f;
   --accent:#4f9cf0; --accent2:#7ab6ff;
   --escalate:#ff6b81; --escalate-bg:rgba(255,107,129,.14);
   --review:#f0b429; --review-bg:rgba(240,180,41,.14);
   --archive:#7d8a9a; --archive-bg:rgba(125,138,154,.14);
   --ok:#3fcaa3; --ok-bg:rgba(63,202,163,.14);
-}}
+}
 :root[data-theme="dark"]{
   --bg:#0f1420; --card:#171e2b; --ink:#e8edf3; --muted:#8b98a8; --line:#26303f;
   --accent:#4f9cf0; --accent2:#7ab6ff;
@@ -85,6 +78,21 @@ td.num{font-variant-numeric:tabular-nums;color:var(--muted)}
 .t-escalate{background:var(--escalate-bg);color:var(--escalate)}
 .t-review{background:var(--review-bg);color:var(--review)}
 .t-archive{background:var(--archive-bg);color:var(--archive)}
+.acc{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:18px 0;overflow:hidden}
+.acc>summary{cursor:pointer;padding:13px 16px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::before{content:'▶';font-size:11px;color:var(--muted);transition:transform .15s}
+.acc[open]>summary::before{transform:rotate(90deg)}
+.acc .h2{font-size:17px;font-weight:700}
+.accbody{padding:2px 16px 16px;border-top:1px solid var(--line)}
+.accbody h4{margin:18px 0 6px;font-size:14px}
+.accbody .lede{font-size:14px}
+.pill{font-size:11px;padding:1px 8px;border-radius:999px;background:rgba(127,143,164,.16);color:var(--muted);font-weight:600}
+.formula{background:rgba(127,143,164,.10);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;margin:10px 0;font-size:12.5px;line-height:1.75}
+.tchip{font-size:11px;padding:1px 7px;border-radius:999px;font-weight:700}
+tr.up{background:rgba(230,159,0,.07)}
+.src{font-size:12px;color:var(--muted);margin-top:14px}
+
 .post{font-weight:700;color:var(--ink)}
 .iv{color:var(--muted);font-size:11px}
 .solo{color:var(--escalate);font-weight:700;font-size:11px}
@@ -151,23 +159,25 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
 
   <h2>활동축별 트리아지 결과</h2>
   <div class="act"><div class="act-head"><h3>재처리 <span class="en">reprocessing</span></h3><span class="badge b-mod">삼각측량 보통</span></div>
-<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>47</b>건 · 특이도 high 9 / medium 14 / low 24 (저특이도 0.5106) · <b>escalate 4 · review 9</b> · <span class="mb">물질수지 번들 승격 2건</span></p>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>47</b>건 · 특이도 high 9 / medium 14 / low 24 (저특이도 0.5106) · <b>escalate 5 · review 10</b> · <span class="mb">물질수지 번들 승격 2건</span></p>
 <div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
-<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">2.31</td><td><span class="post">0.8</span> <span class="iv">[0.72–0.8]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
-<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">8.77</td><td><span class="post">0.7589</span> <span class="iv">[0.3415–0.7589]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
-<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">-0.08</td><td><span class="post">0.75</span> <span class="iv">[0.675–0.75]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
-<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-1.92</td><td><span class="post">0.75</span> <span class="iv">[0.675–0.75]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
-<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">1.56</td><td><span class="post">0.6891</span> <span class="iv">[0.5513–0.6891]</span></td><td><span class="tier t-review">review</span></td></tr>
-<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.11</td><td><span class="post">0.68</span> <span class="iv">[0.544–0.68]</span></td><td><span class="tier t-review">review</span></td></tr>
-<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">-0.25</td><td><span class="post">0.68</span> <span class="iv">[0.544–0.68]</span></td><td><span class="tier t-review">review</span></td></tr>
-<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">0.11</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
-<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-0.11</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
-<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.61</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">5.44</td><td><span class="post">0.8</span> <span class="iv">[0.72–0.8]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">12.0</td><td><span class="post">0.8</span> <span class="iv">[0.36–0.8]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">2.76</td><td><span class="post">0.7966</span> <span class="iv">[0.6373–0.7966]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">0.0</td><td><span class="post">0.75</span> <span class="iv">[0.675–0.75]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">2844</td><td class="item">질산우라닐(우라닐질산염)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-4.25</td><td><span class="post">0.75</span> <span class="iv">[0.675–0.75]</span></td><td><span class="tier t-escalate">escalate</span></td></tr>
+<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.4</td><td><span class="post">0.68</span> <span class="iv">[0.544–0.68]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">847989</td><td class="item">핫셀(방사선 차폐 작업실)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">-0.67</td><td><span class="post">0.68</span> <span class="iv">[0.544–0.68]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">0.0</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-0.2</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">8480</td><td class="item">글로브박스(밀폐 취급 시스템)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.67</td><td><span class="post">0.6</span> <span class="iv">[0.42–0.6]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">902780</td><td class="item">유도결합 플라즈마 질량분석기</td><td class="num">2020</td><td><span class="spec s-med">medium</span></td><td class="num">4.48</td><td><span class="post">0.5616</span> <span class="iv">[0.2527–0.5616]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">902780</td><td class="item">유도결합 플라즈마 질량분석기</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">3.9</td><td><span class="post">0.5271</span> <span class="iv">[0.2372–0.5271]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">8479</td><td class="item">원격조작기(마스터-슬레이브형)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">3.66</td><td><span class="post">0.511</span> <span class="iv">[0.23–0.511]</span></td><td><span class="tier t-review">review</span></td></tr>
-<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2020</td><td><span class="spec s-med">medium</span></td><td class="num">-0.0</td><td><span class="post">0.35</span> <span class="mb">→ 0.6176</span><span class="iv" title="정합 역할 diluent+dissolvent+extractant"> [0.1575–0.35]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
-<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2022</td><td><span class="spec s-med">medium</span></td><td class="num">-0.06</td><td><span class="post">0.35</span> <span class="mb">→ 0.6176</span><span class="iv" title="정합 역할 diluent+dissolvent+extractant"> [0.1575–0.35]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2020</td><td><span class="spec s-med">medium</span></td><td class="num">0.0</td><td><span class="post">0.35</span> <span class="mb">→ 0.6176</span><span class="iv" title="정합 역할 diluent+dissolvent+extractant"> [0.1575–0.35]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
+<tr><td class="num">2919</td><td class="item">트리부틸인산(TBP)</td><td class="num">2022</td><td><span class="spec s-med">medium</span></td><td class="num">-0.2</td><td><span class="post">0.35</span> <span class="mb">→ 0.6176</span><span class="iv" title="정합 역할 diluent+dissolvent+extractant"> [0.1575–0.35]</span></td><td><span class="tier t-archive">archive</span> <span class="mb">→ review 번들</span></td></tr>
 </tbody></table></div>
-<p class="meta" style="margin-top:10px">그 외 <b>archive 34건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 32건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
 <div class="tri">
 <h4>삼각측량 — KG 관측 시간교차</h4>
 <p class="line">코로보레이션 강도 <b class="warn">보통</b> · 같은 활동 KG 관측 2건 · 시간창 매칭 <b>1건</b> · 독립 확증 False</p>
@@ -214,18 +224,19 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
 </div>
 </div>
 <div class="act"><div class="act-head"><h3>핵무기화 <span class="en">weaponization</span></h3><span class="badge b-none">삼각측량 없음</span></div>
-<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>40</b>건 · 특이도 high 7 / medium 18 / low 15 (저특이도 0.375) · <b>escalate 0 · review 8</b></p>
+<p class="meta">사건 시점(입력) <b>2023</b> · 소급 창 <b>2020~2022</b> · 리드 <b>40</b>건 · 특이도 high 7 / medium 18 / low 15 (저특이도 0.375) · <b>escalate 0 · review 9</b></p>
 <div class="scroll"><table><thead><tr><th>HS</th><th>품목</th><th>연도</th><th>특이도</th><th>z</th><th>사후(구간)</th><th>티어</th></tr></thead><tbody>
-<tr><td class="num">903180</td><td class="item">초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">8.33</td><td><span class="post">0.7042</span> <span class="iv">[0.3169–0.7042]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">903180</td><td class="item">초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)</td><td class="num">2021</td><td><span class="spec s-med">medium</span></td><td class="num">9.09</td><td><span class="post">0.7219</span> <span class="iv">[0.3249–0.7219]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">854370</td><td class="item">중성자발생장치 (D-T/DD 튜브)</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">2.15</td><td><span class="post">0.6364</span> <span class="iv">[0.5409–0.6364]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">854370</td><td class="item">중성자발생장치 (D-T/DD 튜브)</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">1.78</td><td><span class="post">0.5912</span> <span class="iv">[0.5026–0.5912]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">360200</td><td class="item">폭발렌즈 / 성형폭약</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">1.75</td><td><span class="post">0.5873</span> <span class="iv">[0.4992–0.5873]</span></td><td><span class="tier t-review">review</span></td></tr>
+<tr><td class="num">903180</td><td class="item">초음파 검사 장비·탐촉자 (용접부·구조 건전성 검사)</td><td class="num">2022</td><td><span class="spec s-med">medium</span></td><td class="num">4.72</td><td><span class="post">0.5741</span> <span class="iv">[0.2583–0.5741]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">854370</td><td class="item">중성자발생장치 (D-T/DD 튜브)</td><td class="num">2020</td><td><span class="spec s-high">high</span></td><td class="num">1.27</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">360320</td><td class="item">기폭선(EBW) 기폭장치</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">-0.67</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">360200</td><td class="item">폭발렌즈 / 성형폭약</td><td class="num">2022</td><td><span class="spec s-high">high</span></td><td class="num">0.15</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
 <tr><td class="num">360200</td><td class="item">폭발렌즈 / 성형폭약</td><td class="num">2021</td><td><span class="spec s-high">high</span></td><td class="num">-0.66</td><td><span class="post">0.55</span> <span class="iv">[0.4675–0.55]</span></td><td><span class="tier t-review">review</span></td></tr>
 </tbody></table></div>
-<p class="meta" style="margin-top:10px">그 외 <b>archive 32건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
+<p class="meta" style="margin-top:10px">그 외 <b>archive 31건</b>(사후확률 &lt;0.5). 표는 review 이상만 표시.</p>
 <div class="tri">
 <h4>삼각측량 — KG 관측 시간교차</h4>
 <p class="line">코로보레이션 강도 <b class="warn">없음</b> · 같은 활동 KG 관측 2건 · 시간창 매칭 <b>0건</b> · 독립 확증 False</p>
@@ -274,8 +285,21 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
 <p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
 </div>
 </div>
+<div class="act"><div class="act-head"><h3>제재회피 물자 (MSMT) <span class="en">sanctions_evasion</span></h3><span class="badge b-none">삼각측량 없음</span></div>
+<p class="meta">사건 시점(입력) <b>2024</b> · 소급 창 <b>2021~2023</b> · 리드 <b>27</b>건 · 특이도 high 0 / medium 6 / low 21 (저특이도 0.7778) · <b>escalate 0 · review 0</b></p>
+<div class="nullbox"><b>정직한 null.</b> 소급 창에서 <b>review 이상 티어로 올라온 리드가 없다.</b> 고특이도(high) 리드 0건 · 상위는 저특이도 광역 품목(민수 지배). 이는 활동 부재가 <b>아니라</b>, 무료 국가집계 무역으로 이 창에서 특이 신호를 분리하지 못했음을 뜻한다 — 자립생산·은닉 공급망·중국 관문 은폐(92%)가 유력한 신호 부재 원인.</div>
+<div class="tri">
+<h4>삼각측량 — KG 관측 시간교차</h4>
+<p class="line">코로보레이션 강도 <b class="warn">없음</b> · 같은 활동 KG 관측 0건 · 시간창 매칭 <b>0건</b> · 독립 확증 False</p>
+<p class="line warn">⚠ KG에 &#x27;sanctions_evasion&#x27; 활동 관측이 없어 삼각측량 파트너 없음(커버리지 공백).</p>
+<p class="caveat">KG 관측은 매체·분석(ISIS·38N·IAEA 등) 기반으로 조달의 분석가 OSINT 생태계와 출처가 겹칠 수 있다(부분 순환확증). 독립 물리 확증이 아니라 생태계 내 코로보레이션이다.</p>
+<p class="caveat">시간 일치는 상관이며 인과·시설 귀속이 아니다. 조달=역량 신호이지 활동 시점 신호가 아니다.</p>
+</div>
+</div>
 
-  <h2>기저율 보정 감사 (3방향 발산)</h2><div class="act" style="margin-bottom:24px"><p class="meta" style="margin-bottom:12px">확정/의심 활동 관측과 조달 리드의 정합·부정합으로 기저율을 실측한다. <b>소표본이라 방법론 시연·보수적 보정용</b>이지 정밀 통계가 아니다.</p><div class="scroll"><table><thead><tr><th>지표</th><th>측정값(캐시·스냅샷)</th><th>운영값(보수적 고정)</th><th>채택</th></tr></thead><tbody><tr><td class="item">활동 관측 중 선행 조달신호 보유</td><td class="num">0.7143 (7건 중 5)</td><td class="num">0.5</td><td>운영값 유지</td></tr><tr><td class="item">조달 리드 중 활동 무대응(민수 위양성 대리)</td><td class="num">0.6 (40건 중 24)</td><td class="num">0.65</td><td>운영값 유지</td></tr></tbody></table></div><p class="caveat">측정 신호율이 운영값보다 높아도, 표본이 작아(N&lt;10) 과신을 막기 위해 운영값을 유지한다. 정책상 낙관 방향 이동은 금지하고, 충분한 표본이 쌓일 때만 보수적 방향으로만 조정한다.</p></div>
+  <h2>기저율 보정 감사 (3방향 발산)</h2><div class="act" style="margin-bottom:24px"><p class="meta" style="margin-bottom:12px">확정/의심 활동 관측과 조달 리드의 정합·부정합으로 기저율을 실측한다. <b>소표본이라 방법론 시연·보수적 보정용</b>이지 정밀 통계가 아니다.</p><div class="scroll"><table><thead><tr><th>지표</th><th>측정값(캐시·스냅샷)</th><th>운영값(보수적 고정)</th><th>채택</th></tr></thead><tbody><tr><td class="item">활동 관측 중 선행 조달신호 보유</td><td class="num">0.7143 (7건 중 5)</td><td class="num">0.5</td><td>운영값 유지</td></tr><tr><td class="item">조달 리드 중 활동 무대응(민수 위양성 대리)</td><td class="num">0.6522 (46건 중 30)</td><td class="num">0.65</td><td>운영값 유지</td></tr></tbody></table></div><p class="caveat">측정 신호율이 운영값보다 높아도, 표본이 작아(N&lt;10) 과신을 막기 위해 운영값을 유지한다. 정책상 낙관 방향 이동은 금지하고, 충분한 표본이 쌓일 때만 보수적 방향으로만 조정한다.</p></div>
+
+  <details id="bundle" class="acc"><summary><span class="h2">공정 시약 번들 정합 — 베이지안 트리아지 확장</span><span class="pill">티어 상승 11건</span></summary><div class="accbody"><p class="lede">기존 트리아지는 품목을 <b>따로</b> 채점했다 — 사후 = 사전 × 이상우도비, 상한 0.80. 이 방식에서는 저특이도 상품 시약이 무력하다. 질산은 사전확률 0.03(99% 민수), MIBK 는 0.06 이라 단독으로는 사실상 신호가 없다.</p><p>물질수지는 새 증거원을 준다. 공정은 시약을 <b>특정 역할 세트로 함께</b> 쓴다. PUREX 재처리는 질산(용해)·TBP(추출)·MIBK/케로신(희석)을 O/A비 1.25, TBP 30% 로 동반 소비한다. 그 역할 세트가 한 소급 창에서 같이 관측되면 개별 약신호의 합보다 강한 증거다. 반대로 상품 하나만 있으면 번들 증거는 없다. 기존 동반수입 게이트가 &lsquo;아무 고특이도나 있으면&rsquo;이었다면, 이것은 &lsquo;그 공정의 역할이 채워지면&rsquo;으로 정밀화한 것이다.</p><div class="formula">사후 = 베이즈(사전, min(16, 이상LR × 번들LR)) → 상한 0.80<br>번들LR = 1 + 3·(역할 커버리지)² · 특이도가중 &nbsp;·&nbsp; coherent(≥2시약·≥2역할)일 때만 &nbsp;·&nbsp; 상한 3.0<br>저특이도만의 번들은 특이도가중 0.35 로 감쇠 — 상품 세트 단독 과발화를 막는다.<br>표의 z 는 12.0 에서 잘린다(z_thresh 3 의 4배). 여러 해가 나란히 12.0 이면 값이 같은 게 아니라 천장에 닿은 것이다.</div><h4>우라늄 변환·불소화 시약 번들 <span class="pill">번들LR 3.0</span> <span class="pill">conversion</span></h4><table><thead><tr><th>HS</th><th>시약</th><th>역할</th><th>연도</th><th>특이도</th><th>z</th><th>사후 (개별→번들)</th><th>티어</th></tr></thead><tbody><tr class="up"><td class="mono">280130</td><td>불소(F2)</td><td>oxidizer_f</td><td class="num">2020</td><td>중간</td><td class="num">-0.29</td><td class="num">0.3 → <b>0.5625</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr class="up"><td class="mono">280130</td><td>불소(F2)</td><td>oxidizer_f</td><td class="num">2021</td><td>중간</td><td class="num">1.39</td><td class="num">0.3 → <b>0.5625</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr class="up"><td class="mono">280130</td><td>불소(F2)</td><td>oxidizer_f</td><td class="num">2022</td><td>중간</td><td class="num">3.74</td><td class="num">0.5164 → <b>0.7622</b></td><td><span class="tchip t-review">검토</span> → <span class="tchip t-escalate">격상</span></td></tr><tr class="up"><td class="mono">281111</td><td>무수 불화수소(HF)</td><td>fluorinating</td><td class="num">2020</td><td>중간</td><td class="num">0.67</td><td class="num">0.25 → <b>0.5</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr class="up"><td class="mono">281111</td><td>무수 불화수소(HF)</td><td>fluorinating</td><td class="num">2021</td><td>중간</td><td class="num">1.82</td><td class="num">0.2879 → <b>0.5482</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr class="up"><td class="mono">281111</td><td>무수 불화수소(HF)</td><td>fluorinating</td><td class="num">2022</td><td>중간</td><td class="num">1.6</td><td class="num">0.2625 → <b>0.5161</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr><td class="mono">2814</td><td>암모니아(ADU/AUC 침전)</td><td>precipitant</td><td class="num">2020</td><td>낮음</td><td class="num">1.54</td><td class="num">0.0409 → <b>0.1137</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2814</td><td>암모니아(ADU/AUC 침전)</td><td>precipitant</td><td class="num">2021</td><td>낮음</td><td class="num">4.64</td><td class="num">0.1143 → <b>0.2788</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2814</td><td>암모니아(ADU/AUC 침전)</td><td>precipitant</td><td class="num">2022</td><td>낮음</td><td class="num">-1.51</td><td class="num">0.04 → <b>0.1111</b></td><td><span class="tchip t-archive">보관</span></td></tr></tbody></table><h4>연료 피복·가공 번들 <span class="pill">번들LR 1.0</span> <span class="pill">fabrication</span></h4><table><thead><tr><th>HS</th><th>시약</th><th>역할</th><th>연도</th><th>특이도</th><th>z</th><th>사후 (개별→번들)</th><th>티어</th></tr></thead><tbody><tr><td class="mono">810990</td><td>지르칼로이 피복관</td><td>cladding_alt</td><td class="num">2021</td><td>높음</td><td class="num">2.21</td><td class="num">0.7063 → <b>0.7063</b></td><td><span class="tchip t-review">검토</span></td></tr></tbody></table><h4>우라늄 정련·산침출 시약 번들 <span class="pill">번들LR 2.05</span> <span class="pill">milling</span></h4><table><thead><tr><th>HS</th><th>시약</th><th>역할</th><th>연도</th><th>특이도</th><th>z</th><th>사후 (개별→번들)</th><th>티어</th></tr></thead><tbody><tr><td class="mono">2807</td><td>황산(H2SO4)</td><td>leachant</td><td class="num">2020</td><td>낮음</td><td class="num">-0.67</td><td class="num">0.03 → <b>0.0596</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2807</td><td>황산(H2SO4)</td><td>leachant</td><td class="num">2021</td><td>낮음</td><td class="num">1.2</td><td class="num">0.03 → <b>0.0596</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2807</td><td>황산(H2SO4)</td><td>leachant</td><td class="num">2022</td><td>낮음</td><td class="num">-0.2</td><td class="num">0.03 → <b>0.0596</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr class="up"><td class="mono">282911</td><td>염소산나트륨(NaClO3)</td><td>oxidant</td><td class="num">2020</td><td>낮음</td><td class="num">12.0</td><td class="num">0.338 → <b>0.5053</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr class="up"><td class="mono">282911</td><td>염소산나트륨(NaClO3)</td><td>oxidant</td><td class="num">2021</td><td>낮음</td><td class="num">12.0</td><td class="num">0.338 → <b>0.5053</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr class="up"><td class="mono">282911</td><td>염소산나트륨(NaClO3)</td><td>oxidant</td><td class="num">2022</td><td>낮음</td><td class="num">12.0</td><td class="num">0.338 → <b>0.5053</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr><td class="mono">2921</td><td>아민 용매(Alamine-336 등)</td><td>extractant</td><td class="num">2020</td><td>낮음</td><td class="num">1.15</td><td class="num">0.08 → <b>0.1513</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2921</td><td>아민 용매(Alamine-336 등)</td><td>extractant</td><td class="num">2021</td><td>낮음</td><td class="num">1.94</td><td class="num">0.1013 → <b>0.1874</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2921</td><td>아민 용매(Alamine-336 등)</td><td>extractant</td><td class="num">2022</td><td>낮음</td><td class="num">2.73</td><td class="num">0.1368 → <b>0.245</b></td><td><span class="tchip t-archive">보관</span></td></tr></tbody></table><h4>PUREX 용매추출 시약 번들 <span class="pill">번들LR 3.0</span> <span class="pill">reprocessing</span></h4><table><thead><tr><th>HS</th><th>시약</th><th>역할</th><th>연도</th><th>특이도</th><th>z</th><th>사후 (개별→번들)</th><th>티어</th></tr></thead><tbody><tr><td class="mono">2710</td><td>케로신/도데칸 희석제</td><td>diluent</td><td class="num">2021</td><td>중간</td><td class="num">-0.67</td><td class="num">0.02 → <b>0.02</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2710</td><td>케로신/도데칸 희석제</td><td>diluent</td><td class="num">2022</td><td>중간</td><td class="num">0.0</td><td class="num">0.02 → <b>0.02</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2710</td><td>케로신/도데칸 희석제</td><td>diluent</td><td class="num">2023</td><td>중간</td><td class="num">3.03</td><td class="num">0.0396 → <b>0.0396</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2808</td><td>질산(HNO3)</td><td>dissolvent</td><td class="num">2020</td><td>낮음</td><td class="num">1.27</td><td class="num">0.03 → <b>0.0849</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2808</td><td>질산(HNO3)</td><td>dissolvent</td><td class="num">2021</td><td>낮음</td><td class="num">1.19</td><td class="num">0.03 → <b>0.0849</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2808</td><td>질산(HNO3)</td><td>dissolvent</td><td class="num">2022</td><td>낮음</td><td class="num">1.94</td><td class="num">0.0385 → <b>0.1071</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2914</td><td>MIBK(헥손)</td><td>diluent_alt</td><td class="num">2020</td><td>낮음</td><td class="num">0.15</td><td class="num">0.06 → <b>0.1607</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2914</td><td>MIBK(헥손)</td><td>diluent_alt</td><td class="num">2021</td><td>낮음</td><td class="num">0.67</td><td class="num">0.06 → <b>0.1607</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr><td class="mono">2914</td><td>MIBK(헥손)</td><td>diluent_alt</td><td class="num">2022</td><td>낮음</td><td class="num">0.0</td><td class="num">0.06 → <b>0.1607</b></td><td><span class="tchip t-archive">보관</span></td></tr><tr class="up"><td class="mono">2919</td><td>TBP(트리부틸인산)</td><td>extractant</td><td class="num">2020</td><td>중간</td><td class="num">0.0</td><td class="num">0.35 → <b>0.6176</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr><tr><td class="mono">2919</td><td>TBP(트리부틸인산)</td><td>extractant</td><td class="num">2021</td><td>중간</td><td class="num">12.0</td><td class="num">0.8 → <b>0.8</b></td><td><span class="tchip t-escalate">격상</span></td></tr><tr class="up"><td class="mono">2919</td><td>TBP(트리부틸인산)</td><td>extractant</td><td class="num">2022</td><td>중간</td><td class="num">-0.2</td><td class="num">0.35 → <b>0.6176</b></td><td><span class="tchip t-archive">보관</span> → <span class="tchip t-review">검토</span></td></tr></tbody></table><h4>교차검증 (gemini 웹 + deepseek)</h4><ul><li><b>HS 코드</b> — 질산 2808·황산 2807·HF 281111·불소 280130 은 정확. 염소산나트륨은 <b>282919 가 오류라 282911 로 정정</b>(282919 = 기타 염소산염).</li><li><b>방법론 적대비평</b> — 세 실패양식을 반영했다. (1) 북한의 제한된 산업기반에서 우연 동반, (2) <b>탈동조 회피</b> — 질산 1분기·TBP 2분기로 창을 갈라 사면 단일창 번들은 못 잡는다, (3) PUREX 편중과 상한 미검정. 이에 번들LR 상한을 4.0 에서 <b>3.0</b> 으로 낮췄다.</li></ul><h4>정직한 한계</h4><ul><li><b>질량이 아니라 값</b> — Comtrade 는 USD 만 준다. 정량 화학량론(TBP:HNO₃ 몰비) 검증은 불가하고, 번들 정합은 &lsquo;역할이 함께 있었다&rsquo;까지다.</li><li><b>단일 창</b> — 한 소급 창 안의 동반만 본다. 창을 갈라 분산 구매하면 놓친다.</li><li><b>미검정 상한</b> — 번들LR 상한 3.0 은 북한 라벨(N≤2)로 검정되지 않은 보수적 상수다.</li><li><b>수집 상태(자동 확인)</b> — 원문에서 미수집이라 적었던 시약 중 <b>5종</b>은 이제 수집됐다(2710, 281111, 280130, 2807, 282911). 남은 미수집: 8104.</li><li><b>불변 원칙</b> — 조달은 역량 신호이지 시점 신호가 아니다. 산출은 트리아지 리드이며 증거가 아니다. 귀속격차로 시설 활동과 인과를 잇지 못한다.</li></ul><p class="src">번들 반영으로 티어가 오른 리드 <b>11</b>건 (검토→격상 1건, 보관→검토 10건). 이 페이지의 티어 배지는 <b>번들 반영값</b>을 쓴다. 원문 노트: <code>docs/물질수지_번들_재분석_트리아지업데이트.md</code></p></div></details>
 
   <h2>티어 등급 · 동반수입 게이트</h2>
   <div class="legend">
@@ -293,7 +317,7 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
   </div>
 
   <footer>
-    분석 구성: 재처리 2023 · 원자로 운용 2024 · 우라늄 농축 2023 · 핵무기화 2023 · 우라늄 변환 2023 · 우라늄 정련 2023<br>
+    분석 구성: 재처리 2023 · 원자로 운용 2024 · 우라늄 농축 2023 · 핵무기화 2023 · 우라늄 변환 2023 · 우라늄 정련 2023 · 제재회피 물자 (MSMT) 2024<br>
     재생성: <code>python -m procurement_watch.report.build_forensic_html</code> ·
     데이터: UN Comtrade(국가 집계, 무료) · OpenSanctions(RUSI Sandstone·UN 1718) · 영변 지식그래프 관측 스냅샷.
     방법론 <code>docs/METHODOLOGY.md</code> · 플레이북 <code>docs/ANALYST_PLAYBOOK.md</code>.<br>
@@ -306,10 +330,25 @@ code{background:rgba(127,127,127,.14);border-radius:5px;padding:1px 6px;font-fam
   t.addEventListener('click',function(){
     var r=document.documentElement;
     var cur=r.getAttribute('data-theme');
-    var next = cur==='dark' ? 'light' : (cur==='light' ? 'dark'
-      : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+    // 속성이 없으면 다크다(기본을 다크로 고정했다). OS 설정을 물으면 라이트 환경에서
+    // 첫 클릭이 'dark'를 골라 아무 변화가 없어 보인다.
+    var next = cur==='light' ? 'dark' : 'light';
     r.setAttribute('data-theme', next);
   });
+})();
+// 인덱스에서 #bundle 로 바로 들어오면 접혀 있는 채로 멈춘다 — 열고 스크롤해 준다.
+(function(){
+  function openTarget(){
+    var h = location.hash.replace('#','');
+    if (!h) return;
+    var el = document.getElementById(h);
+    if (!el) return;
+    var d = el.closest ? (el.closest('details') || (el.tagName==='DETAILS' ? el : null)) : null;
+    if (d) { d.open = true; }
+    el.scrollIntoView({block:'start'});
+  }
+  window.addEventListener('hashchange', openTarget);
+  openTarget();
 })();
 </script>
 </body></html>
