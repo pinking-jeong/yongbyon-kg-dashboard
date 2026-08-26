@@ -21199,7 +21199,10 @@ uSlider();render();buildNKCats();renderNK();renderNKEvents();nkModalInit();
   </div>
 
   <style>
-    [data-viewpane="trade"] .tr-root{max-width:1180px;margin:0 auto;padding:18px 24px 56px;color:var(--text)}
+    /* 페인은 넓게(확산위험 탭과 같은 1480px) — 세계지도·3D 그래프는 가로가 곧 해상도다.
+       카드 허브만 1180px 로 묶어 설명 줄이 지나치게 길어지지 않게 한다. */
+    [data-viewpane="trade"] .tr-root{max-width:1480px;margin:0 auto;padding:18px 24px 56px;color:var(--text)}
+    [data-viewpane="trade"] .tr-hub{max-width:1180px;margin:0 auto}
     [data-viewpane="trade"] .tr-kick{font-family:var(--mono);font-size:.66rem;letter-spacing:.24em;
       color:var(--amber);text-transform:uppercase;margin-bottom:6px}
     [data-viewpane="trade"] .tr-intro h2{font-size:1.15rem;font-weight:750;letter-spacing:-.01em;margin:0 0 4px}

@@ -18,8 +18,12 @@ a{color:var(--accent)}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button.on{background:var(--accent);color:#08111a}
 .seg.sm button{padding:4px 9px;font-size:11.5px;font-weight:600}
-.layout{display:grid;grid-template-columns:300px 1fr;gap:12px;align-items:start}
-@media(max-width:1150px){.layout{grid-template-columns:1fr}}
+/* 목록 왼쪽 · 지도 오른쪽. 폭은 화면을 따라 줄인다 — 대시보드 탭 안에서는 iframe 이
+   1120px 남짓뿐이라 고정 300px + 1150px 분기로는 두 칸이 무너져 목록이 지도 위로 쌓였다.
+   minmax(0,1fr) 이라야 지도 칸이 내용 최소폭 아래로도 줄어든다. */
+.layout{display:grid;grid-template-columns:clamp(200px,19vw,262px) minmax(0,1fr);
+        gap:12px;align-items:start}
+@media(max-width:760px){.layout{grid-template-columns:1fr}}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 12px}
 .panel h3{margin:0 0 7px;font-size:12.5px;color:var(--muted);font-weight:700;
           letter-spacing:.02em;text-transform:uppercase}
@@ -43,16 +47,21 @@ input[type=range]{width:180px;accent-color:var(--accent)}
       font-size:11px;color:var(--muted)}
 .wleg .b{display:flex;flex-direction:column;align-items:center;gap:3px}
 .wleg .b i{display:block;width:26px;background:#9fb0c4;border-radius:2px}
-.list{max-height:430px;overflow:auto;margin:0 -4px}
-.row{display:flex;gap:6px;align-items:center;padding:4px 6px;border-radius:6px;
-     cursor:pointer;font-size:12.3px}
+.list{max-height:clamp(320px,46vh,520px);overflow:auto;margin:0 -4px}
+/* 좁은 칸에서는 배지·금액만 둘째 줄로 내려간다. flex 줄바꿈은 grow 전에 기본 크기로
+   판정되므로, 자리가 있으면 예전처럼 한 줄로 남는다. */
+.row{display:flex;flex-wrap:wrap;gap:1px 6px;align-items:center;padding:4px 6px;
+     border-radius:6px;cursor:pointer;font-size:12.3px}
 .row:hover{background:#1e2735}
 .row.on{background:#24425c}
-.row .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row .rk{font-variant-numeric:tabular-nums;color:var(--muted);font-size:11px;flex:0 0 auto}
-.row{flex-wrap:nowrap;white-space:nowrap}
+.row .nm{flex:1 1 0;min-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 배지와 금액을 한 덩어리로 묶는다 — 낱개로 두면 좁은 칸에서 셋째 줄까지 흘러내린다.
+   한 항목이라 통째로 첫 줄에 남거나 통째로 둘째 줄로 간다(항상 1~2줄). */
+.row .meta{display:flex;gap:6px;align-items:center;margin-left:auto;flex:0 1 auto}
+.row .rk{font-variant-numeric:tabular-nums;color:var(--muted);font-size:11px;
+  flex:0 0 auto;white-space:nowrap}
 .row .hs{font-variant-numeric:tabular-nums;font-size:11.5px;color:#cfe0f0;
-  flex:0 0 52px;font-weight:700}
+  flex:0 0 46px;font-weight:700;white-space:nowrap}
 
 .badge{font-size:9.5px;padding:0 4px;border-radius:4px;flex:0 0 auto}
 .dg{background:#5a2230;color:#ffb3bf}
@@ -699,18 +708,22 @@ function cmdListHTML(){
     return `<div class="row${selCmd===i?' on':''}" data-c="${i}">
       <span class="hs">${esc(c.c)}</span>
       <span class="nm" title="${esc(c.l)}">${esc(c.l)}</span>
-      ${fb}${tg}${why}<span class="rk">${usd(tot[i])}</span></div>`;
+      <span class="meta">${fb}${tg}${why}<span class="rk">${usd(tot[i])}</span></span></div>`;
   }).join('');
   // 핵연료주기 시설 칩 — 어느 공정에 쓰이는 품목인지로 걸러 본다
+  // 칩은 축약명으로 — 좁은 목록 칸에서 전체 이름을 쓰면 칩 하나가 한 줄을 다 먹는다.
+  // 전체 이름과 시설명은 title 로 남겨 마우스를 얹으면 보인다.
   const chips = ['<button data-f="all"' + (selFac==null?' class="on"':'') + '>전체</button>']
     .concat((D.facilities||[]).map(f =>
-      `<button data-f="${f.id}"${selFac===f.id?' class="on"':''} title="${esc(f.site||'')}">${esc(f.ko)}</button>`))
+      `<button data-f="${f.id}"${selFac===f.id?' class="on"':''} `
+      + `title="${esc(f.ko)}${f.site?' · '+esc(f.site):''}">`
+      + `${esc(FAC_SHORT[f.id]||f.ko)}</button>`))
     .concat([`<button data-f="msmt"${selFac==='msmt'?' class="on"':''}>제재회피</button>`])
     .join('');
   return `<div class="facs">${chips}</div>`
     + `<div class="row${selCmd===null?' on':''}" data-c="all">
             <span class="nm"><b>전체 품목</b></span>
-            <span class="rk">${idx.length}종</span></div>` + rows;
+            <span class="meta"><span class="rk">${idx.length}종</span></span></div>` + rows;
 }
 
 function sideHTML(){
@@ -770,7 +783,7 @@ function pathHTML(){
     const top = nx.slice(0,6).map(l => {
       const other = l[0]===a.j ? l[1] : l[0];
       return `<div class="row" style="cursor:default"><span class="nm">${esc((D.countries[other]||{}).n||other)}</span>`
-           + `<span class="rk">${l[2]}건${l[3]?` · 지정 ${l[3]}`:''}</span></div>`;
+           + `<span class="meta"><span class="rk">${l[2]}건${l[3]?` · 지정 ${l[3]}`:''}</span></span></div>`;
     }).join('');
     box.innerHTML = `<h3 style="margin-top:10px">${esc(a.l)} — 조달망 역할</h3>`
       + `<div class="empty">등록 엔티티 <b>${r.d+r.u}</b>개 (지정 <b>${r.d}</b> · 비지정 ${r.u})`
@@ -799,8 +812,7 @@ function pathHTML(){
       return `<div class="row" style="cursor:default">`
            + `<i class="dot" style="background:${D.typeColors[x.t]||'#888'}"></i>`
            + `<span class="nm" title="${esc(x.l)}">${esc(x.l)}</span>`
-           + (x.dg?'<span class="badge dg">지정</span>':'')
-           + `<span class="rk">${esc(where)}</span></div>`;
+           + `<span class="meta">` + (x.dg?'<span class="badge dg">지정</span>':'') + `<span class="rk">${esc(where)}</span></span></div>`;
     }).join('');
     if (nb.n > (nb.top||[]).length)
       h += `<div class="empty">외 ${nb.n - nb.top.length}개</div>`;
@@ -814,8 +826,7 @@ function pathHTML(){
       return `<div class="row" style="cursor:default">`
            + `<i class="dot" style="background:${D.typeColors[x.t]||'#888'}"></i>`
            + `<span class="nm" title="${esc(x.l)}">${i?'↳ ':''}${esc(x.l)}</span>`
-           + (x.dg?'<span class="badge dg">지정</span>':'')
-           + `<span class="rk">${esc(where)}</span></div>`;
+           + `<span class="meta">` + (x.dg?'<span class="badge dg">지정</span>':'') + `<span class="rk">${esc(where)}</span></span></div>`;
     }).join('');
     h += `<h3 style="margin-top:10px">지정 대상까지 ${p.hops}홉 <span style="color:#FFD166">(금색 선)</span></h3>` + chain;
   } else if (p){
@@ -836,8 +847,7 @@ function actorList(){
     return `<div class="row${a.id===selActor?' on':''}" data-id="${esc(a.id)}">
       <i class="dot" style="background:${D.typeColors[a.t]||'#888'}"></i>
       <span class="nm" title="${esc(a.l)}">${esc(a.l)}</span>
-      ${a.dg?'<span class="badge dg">지정</span>':''}
-      <span class="rk">${a.dg ? esc(where) : a.r.toFixed(3)}</span></div>`;
+      <span class="meta">${a.dg?'<span class="badge dg">지정</span>':''}<span class="rk">${a.dg ? esc(where) : a.r.toFixed(3)}</span></span></div>`;
   }).join('') || '<div class="empty">해당 유형·구분에 항목이 없습니다.</div>';
   box.querySelectorAll('.row').forEach(el => el.onclick = () => {
     selActor = el.dataset.id; actorList(); pathHTML(); draw();
