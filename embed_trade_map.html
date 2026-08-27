@@ -3,7 +3,7 @@
 <title>북한 핵조달망 — 물자 이동 세계지도</title>
 <style>
 :root{--bg:#0f1420;--card:#171e2b;--ink:#e8edf3;--muted:#8b98a8;--line:#26303f;
-      --accent:#5AD1FF;--land:#1d2a3d;--sea:#080d15;--case:#050910}
+      --accent:#5AD1FF;--land:#2a3d55;--sea:#080d15;--case:#050910}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
      font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif}
@@ -38,7 +38,7 @@ a{color:var(--accent)}
           letter-spacing:.02em;text-transform:uppercase}
 .mapbox{background:var(--sea);border:1px solid var(--line);border-radius:11px;overflow:hidden}
 svg{display:block;width:100%;height:auto;touch-action:none}
-.land{fill:var(--land);stroke:#31445e;stroke-width:.4;vector-effect:non-scaling-stroke}
+.land{fill:var(--land);stroke:#3d5878;stroke-width:.55;vector-effect:non-scaling-stroke;stroke-linejoin:round}
 .case{fill:none;stroke:var(--case);stroke-linecap:round}
 .flow{fill:none;stroke-linecap:round;transition:opacity .12s}
 .node{stroke:#050910;stroke-width:1.2;vector-effect:non-scaling-stroke}
@@ -204,15 +204,28 @@ const gLand = document.createElementNS(NS,'g'), gCase = document.createElementNS
 const gFlow = document.createElementNS(NS,'g'), gHead = document.createElementNS(NS,'g');
 const gNode = document.createElementNS(NS,'g'), gLab = document.createElementNS(NS,'g');
 svg.append(gLand, gCase, gFlow, gHead, gNode, gLab);
+/* 육지 폴리곤.
+
+   정거원통도법에서 날짜변경선을 넘는 링(러시아 축치·피지·남극 등 4개)을 그냥 이으면
+   지도를 가로지르는 줄이 생긴다 — 경도 179°와 −179°가 화면 양 끝으로 갈라지기 때문이다.
+   그래서 인접 점의 경도가 180° 넘게 튀면 거기서 부분경로를 끊어 양 끝에 조각으로 그린다.
+
+   위도는 걸러내지 않는다. 예전에는 LAT_BOT 아래 점을 건너뛰었는데, 링 중간을 빼면
+   앞뒤 점이 곧장 이어져 없던 현(弦)이 그려진다(남극권 8개 링에서 그랬다).
+   뷰박스 밖은 SVG 가 알아서 자른다. */
 for (const ring of D.polygons){
-  let d = '';
+  const parts = [];
+  let cur = [], prev = null;
   for (const p of ring){
-    if (p[1] < LAT_BOT - 6) continue;
-    d += (d ? 'L' : 'M') + px(p[0]).toFixed(1) + ' ' + py(p[1]).toFixed(1);
+    if (prev !== null && Math.abs(p[0] - prev) > 180){ parts.push(cur); cur = []; }
+    cur.push(px(p[0]).toFixed(1) + ' ' + py(p[1]).toFixed(1));
+    prev = p[0];
   }
-  if (d.length < 12) continue;
+  parts.push(cur);
+  const d = parts.filter(s => s.length > 2).map(s => 'M' + s.join('L') + 'Z').join('');
+  if (!d) continue;
   const el = document.createElementNS(NS,'path');
-  el.setAttribute('d', d + 'Z'); el.setAttribute('class','land');
+  el.setAttribute('d', d); el.setAttribute('class','land');
   gLand.appendChild(el);
 }
 
