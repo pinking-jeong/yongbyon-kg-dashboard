@@ -228,6 +228,17 @@ footer .gen{font-family:var(--mono)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 .kgwrap{max-width:1480px;margin:0 auto;padding:var(--space) 24px 72px}
+/* 상·하위 강조 — 위는 따뜻한 색, 아래는 차가운 색. 캔버스와 범례가 같은 값을 쓴다 */
+.kgwrap{--kg-up:#f1c27b;--kg-down:#7ce0e8}
+.kghi{display:flex;flex-wrap:wrap;gap:11px;align-items:center;margin:2px 0 8px;font-size:.76rem;color:var(--muted)}
+.kghi i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;
+  vertical-align:-1px;border:2px solid transparent}
+.kghi .up i{border-color:var(--kg-up)}
+.kghi .down i{border-color:var(--kg-down)}
+.kghi .selm i{border-color:#eef2f8}
+.kghi .n{font-family:var(--mono);color:var(--cyan)}
+.kgwrap input[type=range]{width:96px;accent-color:var(--cyan);vertical-align:-3px}
+.kghop{font-family:var(--mono);font-size:.76rem;color:var(--cyan);min-width:12px;display:inline-block}
 .kgwrap input[type=search]{background:var(--panel-2);color:var(--text);border:1px solid var(--line);
   border-radius:7px;padding:6px 12px;font-size:.84rem;min-width:220px}
 .kgwrap input[type=search]:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
@@ -18462,6 +18473,19 @@ footer .gen{font-family:var(--mono)}
       <input type="search" id="kg-search" placeholder="노드 검색 — 이름·별칭 (Enter: 이동)" autocomplete="off">
       <span class="plain" id="kg-stat"></span>
     </div>
+    <div class="vizctl">
+      <label>강조
+        <select id="kg-hi">
+          <option value="tree">상·하위 계층</option>
+          <option value="neigh">1홉 이웃(전체 방향)</option>
+        </select>
+      </label>
+      <label title="상위로 몇 홉까지 거슬러 올라갈지">상위
+        <input type="range" id="kg-uphop" min="0" max="6" value="3"><span class="kghop" id="kg-uphopv">3</span>홉</label>
+      <label title="하위로 몇 홉까지 내려갈지">하위
+        <input type="range" id="kg-downhop" min="0" max="6" value="2"><span class="kghop" id="kg-downhopv">2</span>홉</label>
+    </div>
+    <div class="kghi" id="kg-hilegend"></div>
     <div class="kgchips" id="kg-chips"></div>
     <div class="kgbody">
       <div class="kgstage">
@@ -23825,6 +23849,43 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   var SIG_KO={modality:'탐지수단',appearance:'관측 양상',seasonality:'계절성',confirms:'확증',
     confounders:'오탐 요인',related_study:'연계 연구'};
   var CORE=['Site','Facility','Component','Process','Indicator','Keyword'];
+  // 상·하위 방향표와 탐색은 모듈(kg-view.js)의 것을 그대로 싣는다 — 구현을 두 벌 두지 않는다
+  var ORIENT={"HAS_FACILITY":"down","HAS_COMPONENT":"down","PERFORMS":"down","AT":"up","ABOUT":"up","MENTIONS":"up","OF_INDICATOR":"up","INDICATES":"up","REPORTS":"up","LOCATED_AT":"up","SUPPORTED_BY":"down","CONTRADICTED_BY":"down","EVIDENCED_BY":"down","FROM_IMAGE":"down","ASSERTED_IN":"down","PUBLISHED_BY":"down","AUTHORED_BY":"down","CONTRADICTS":"peer","SUPERSEDES":"peer","DETECTED_VIA":"peer"};
+  function hierarchyBands(startId, links, opts) {
+  var o = opts || {}, orient = o.orient || {};
+  var UP = o.upHops == null ? 3 : o.upHops, DOWN = o.downHops == null ? 2 : o.downHops;
+  var par = {}, chi = {}, i, l, d, upId, dnId;
+  for (i = 0; i < links.length; i++) {
+    l = links[i];
+    d = orient[l.type];
+    if (d !== 'down' && d !== 'up') continue;      // peer·미지정은 계층에서 뺀다
+    upId = d === 'down' ? l.s : l.t;
+    dnId = d === 'down' ? l.t : l.s;
+    (chi[upId] = chi[upId] || []).push({ id: dnId, key: i });
+    (par[dnId] = par[dnId] || []).push({ id: upId, key: i });
+  }
+  function walk(map, hops) {
+    var seen = {}, edges = {}, front = [startId], h, next, j, k, arr, e;
+    for (h = 1; h <= hops && front.length; h++) {
+      next = [];
+      for (j = 0; j < front.length; j++) {
+        arr = map[front[j]] || [];
+        for (k = 0; k < arr.length; k++) {
+          e = arr[k];
+          edges[e.key] = h;
+          if (e.id === startId || seen[e.id] !== undefined) continue;
+          seen[e.id] = h;                          // 먼저 닿은 홉이 남는다(가까운 쪽)
+          next.push(e.id);
+        }
+      }
+      front = next;
+    }
+    return { nodes: seen, edges: edges };
+  }
+  var u = walk(par, UP), w = walk(chi, DOWN);
+  return { up: u.nodes, down: w.nodes, upEdges: u.edges, downEdges: w.edges };
+}
+  var UPC='#f1c27b',DOWNC='#7ce0e8',MATCHC='#bd9ae0';
   var TYPES=Object.keys(TYPE_KO).filter(function(t){return KG.nodes.some(function(n){return n.type===t;});});
 
   var byId=new Map(); KG.nodes.forEach(function(n){byId.set(n.id,n);});
@@ -23839,6 +23900,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   var dpr=window.devicePixelRatio||1,W=0,H=0,centered=false;
   var active=new Set(CORE),V=[],L=[],adj=new Map();
   var sel=null,hov=null,matches=new Set();
+  var hiMode='tree',upHops=3,downHops=2,bands=null;
   var tx=0,ty=0,k=1,alpha=0,running=false;
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];});}
@@ -23870,10 +23932,10 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
       l.a=byId.get(l.s); l.b=byId.get(l.t);
       adj.get(l.s).add(l.t); adj.get(l.t).add(l.s);
     });
-    if(sel&&!adj.has(sel.id)){sel=null;}
+    if(sel&&!adj.has(sel.id)){sel=null;bands=null;}
     document.getElementById('kg-stat').textContent=
       '표시: 노드 '+V.length+' · 관계 '+L.length+' / 전체 '+KG.nodes.length+' · '+KG.links.length;
-    drawChips(); reheat(0.9);
+    drawChips(); recomputeBands(); reheat(0.9);
   }
 
   function drawChips(){
@@ -23892,6 +23954,29 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     });
   }
 
+  // 보이는 링크(L)로만 계산한다 — 꺼 둔 레이어를 통해 몰래 이어지면 화면과 어긋난다.
+  // 색인이 draw() 의 L 순회와 같아야 간선을 방향별로 칠할 수 있다.
+  function recomputeBands(){
+    bands=(sel&&hiMode==='tree')
+      ? hierarchyBands(sel.id,L,{orient:ORIENT,upHops:upHops,downHops:downHops})
+      : null;
+    drawLegend();
+  }
+  function drawLegend(){
+    var el=document.getElementById('kg-hilegend'); if(!el)return;
+    if(!sel){el.innerHTML='<span>노드를 클릭하면 상위·하위를 갈라 강조합니다.</span>';return;}
+    if(hiMode==='neigh'){          // 예전 동작 — 방향 없이 1홉 이웃 전부
+      el.innerHTML='<span class="selm"><i></i>선택</span>'
+        +'<span>1홉 이웃 <span class="n">'+(adj.get(sel.id)?adj.get(sel.id).size:0)+'</span></span>';
+      return;
+    }
+    var u=Object.keys(bands?bands.up:{}).length,d=Object.keys(bands?bands.down:{}).length;
+    el.innerHTML='<span class="selm"><i></i>선택</span>'
+      +'<span class="up"><i></i>상위 <span class="n">'+u+'</span> (≤'+upHops+'홉)</span>'
+      +'<span class="down"><i></i>하위 <span class="n">'+d+'</span> (≤'+downHops+'홉)</span>'
+      +(u+d===0?'<span>이 노드에는 상·하위 관계가 없습니다 — 수평 관계만 있거나 홉이 0입니다</span>':'')
+      +'<span style="color:var(--faint)">화살표 = 1홉 방향 · 나머지는 흐리게</span>';
+  }
   function reheat(a){
     alpha=Math.max(alpha,a);
     if(!running){running=true;requestAnimationFrame(tick);}
@@ -23932,6 +24017,18 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     }
   }
 
+  // 상위→하위 방향 삼각형. 노드에 겹치지 않도록 끝에서 조금 물러나 그린다.
+  function arrow(px,py,qx,qy,color){
+    var dx=qx-px,dy=qy-py,len=Math.sqrt(dx*dx+dy*dy);
+    if(len<14)return;
+    var ux=dx/len,uy=dy/len,back=8,size=4.6;
+    var tx2=qx-ux*back,ty2=qy-uy*back;
+    ctx.save();ctx.globalAlpha=0.95;ctx.fillStyle=color;ctx.beginPath();
+    ctx.moveTo(tx2,ty2);
+    ctx.lineTo(tx2-ux*size+(-uy)*size*0.6,ty2-uy*size+ux*size*0.6);
+    ctx.lineTo(tx2-ux*size-(-uy)*size*0.6,ty2-uy*size-ux*size*0.6);
+    ctx.closePath();ctx.fill();ctx.restore();
+  }
   function radius(n){return Math.max(2.4,(3+Math.sqrt(n.deg||0)*1.05)*Math.min(Math.max(k,0.55),1.5));}
   function sx(n){return n.x*k+tx;} function sy(n){return n.y*k+ty;}
 
@@ -23940,28 +24037,50 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.clearRect(0,0,W,H);
     var selMode=!!sel,nb=selMode?adj.get(sel.id):null;
+    var tree=selMode&&hiMode==='tree'&&bands;
+    function bandOf(id){
+      if(!tree)return null;
+      if(bands.up[id]!==undefined)return 'up';
+      if(bands.down[id]!==undefined)return 'down';
+      return null;
+    }
+    function lit(id){return id===sel.id||(tree?bandOf(id)!==null:nb.has(id));}
     var i,l,n;
     for(i=0;i<L.length;i++){
       l=L[i];
-      var on=selMode&&(l.s===sel.id||l.t===sel.id);
-      ctx.globalAlpha=selMode?(on?0.85:0.05):(l.type==='DETECTED_VIA'?0.4:0.22);
-      ctx.strokeStyle=on?'#7ce0e8':(l.type==='DETECTED_VIA'?'#e0cf6f':l.type==='CONTRADICTS'?'#ec8c8c':'#8c97a8');
+      var eb=tree?(bands.upEdges[i]!==undefined?'up':bands.downEdges[i]!==undefined?'down':null):null;
+      var hop=tree&&eb?(eb==='up'?bands.upEdges[i]:bands.downEdges[i]):0;
+      var on=tree?eb!==null:(selMode&&(l.s===sel.id||l.t===sel.id));
+      ctx.globalAlpha=selMode?(on?0.88:0.05):(l.type==='DETECTED_VIA'?0.4:0.22);
+      ctx.strokeStyle=on
+        ?(eb==='up'?UPC:eb==='down'?DOWNC:'#7ce0e8')
+        :(l.type==='DETECTED_VIA'?'#e0cf6f':l.type==='CONTRADICTS'?'#ec8c8c':'#8c97a8');
       ctx.lineWidth=l.w==='strong'?2:l.w==='medium'?1.2:l.type==='DETECTED_VIA'?1:0.7;
       ctx.setLineDash(l.type==='DETECTED_VIA'?[4,3]:[]);
-      ctx.beginPath();ctx.moveTo(sx(l.a),sy(l.a));ctx.lineTo(sx(l.b),sy(l.b));ctx.stroke();
+      var ax=sx(l.a),ay=sy(l.a),bx=sx(l.b),by=sy(l.b);
+      ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+      // 방향 화살표는 1홉에만. 전부 그리면 수백 개가 되어 오히려 안 읽힌다.
+      if(eb&&hop===1){
+        var down=ORIENT[l.type]==='down';
+        var px=down?ax:bx,py=down?ay:by,qx=down?bx:ax,qy=down?by:ay;  // 상위→하위
+        arrow(px,py,qx,qy,eb==='up'?UPC:DOWNC);
+      }
     }
     ctx.setLineDash([]);
     var labelAll=document.getElementById('kg-labels').checked||V.length<=85||k>=1.7;
     for(i=0;i<V.length;i++){
       n=V[i];
-      var dim=selMode&&n!==sel&&!nb.has(n.id);
+      var bv=bandOf(n.id);
+      var dim=selMode&&n!==sel&&!lit(n.id);
       ctx.globalAlpha=dim?0.14:1;
       var r=radius(n),x=sx(n),y=sy(n);
       ctx.beginPath();ctx.arc(x,y,r,0,6.2832);
       ctx.fillStyle=COLOR[n.type]||'#8aa0b4';ctx.fill();
-      if(n===sel){ctx.strokeStyle='#eef2f8';ctx.lineWidth=2;ctx.stroke();}
-      else if(matches.has(n.id)){ctx.strokeStyle='#f1c27b';ctx.lineWidth=1.8;ctx.stroke();}
-      var showLab=labelAll||n===hov||n===sel||(selMode&&nb.has(n.id))||matches.has(n.id);
+      // 테두리 색이 상·하위를 가른다. 검색 일치는 보라 — 상위 호박과 헷갈리지 않게 뺐다.
+      if(n===sel){ctx.strokeStyle='#eef2f8';ctx.lineWidth=2.2;ctx.stroke();}
+      else if(bv){ctx.strokeStyle=bv==='up'?UPC:DOWNC;ctx.lineWidth=1.8;ctx.stroke();}
+      else if(matches.has(n.id)){ctx.strokeStyle=MATCHC;ctx.lineWidth=1.8;ctx.stroke();}
+      var showLab=labelAll||n===hov||n===sel||(selMode&&lit(n.id))||matches.has(n.id);
       if(showLab&&!dim){
         ctx.font='10px "Cascadia Code",Consolas,monospace';
         ctx.fillStyle=n===sel||n===hov?'#eef2f8':'#9aa6b6';
@@ -24012,6 +24131,26 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
       });
       h+='</table>';
     }
+    if(hiMode==='tree'&&bands&&n===sel){
+      h+='<h4>상·하위 (계층)</h4>';
+      [['up','상위',UPC,upHops],['down','하위',DOWNC,downHops]].forEach(function(g){
+        var m=bands[g[0]],ids=Object.keys(m);
+        if(!ids.length){
+          h+='<p class="kgrel"><b style="color:'+g[2]+'">'+g[1]+'</b> '
+            +'<span class="cnt">없음'+(g[3]===0?' (홉 0)':'')+'</span></p>';
+          return;
+        }
+        h+='<p class="kgrel"><b style="color:'+g[2]+'">'+g[1]+'</b> '
+          +'<span class="cnt">'+ids.length+'개 · ≤'+g[3]+'홉</span></p>';
+        ids.sort(function(a,b){return m[a]-m[b];}).slice(0,30).forEach(function(id){
+          var o=byId.get(id); if(!o)return;
+          h+='<button class="kgnb" data-go="'+esc(o.id)+'">'
+            +'<i style="background:'+(COLOR[o.type]||'#8aa0b4')+'"></i>'
+            +'<span>'+esc(clip(o.name,36))+'</span><span class="w">'+m[id]+'홉</span></button>';
+        });
+        if(ids.length>30)h+='<p class="plain">… 외 '+(ids.length-30)+'개</p>';
+      });
+    }
     var groups={};
     (adjAll.get(n.id)||[]).forEach(function(e){
       var key=e.rel.type+(e.out?'>':'<');
@@ -24039,7 +24178,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   function goTo(id){
     var n=byId.get(id); if(!n)return;
     if(!active.has(n.type)){active.add(n.type);rebuild();}
-    sel=n; matches.clear(); center(n); showDetail(n); reheat(0.06);
+    sel=n; matches.clear(); center(n); recomputeBands(); showDetail(n); reheat(0.06);
   }
 
   // ── 상호작용 ──
@@ -24078,8 +24217,8 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     canvas.classList.remove('grabbing');
     if(moved<5){
       var n=pick(e.offsetX,e.offsetY);
-      if(n){sel=n;showDetail(n);}
-      else{sel=null;showEmpty();}
+      if(n){sel=n;recomputeBands();showDetail(n);}
+      else{sel=null;recomputeBands();showEmpty();}
       draw();
     }
     dragNode=null;panning=false;
@@ -24096,6 +24235,19 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   document.getElementById('kg-preset-all').addEventListener('click',function(){active=new Set(TYPES);rebuild();});
   document.getElementById('kg-isolated').addEventListener('change',rebuild);
   document.getElementById('kg-labels').addEventListener('change',function(){draw();});
+  // 강조 방식·홉은 배치를 건드리지 않는다 — 다시 칠하기만 하면 된다(재가열 없음)
+  document.getElementById('kg-hi').addEventListener('change',function(e){
+    hiMode=e.target.value; recomputeBands(); draw();
+  });
+  [['kg-uphop','kg-uphopv','up'],['kg-downhop','kg-downhopv','down']].forEach(function(t){
+    var el=document.getElementById(t[0]),lab=document.getElementById(t[1]);
+    el.addEventListener('input',function(){
+      var v=+el.value; lab.textContent=v;
+      if(t[2]==='up')upHops=v; else downHops=v;
+      recomputeBands(); draw();
+      if(sel)showDetail(sel);          // 상세의 상·하위 목록도 같이 따라간다
+    });
+  });
 
   var search=document.getElementById('kg-search');
   function matchNodes(q){
