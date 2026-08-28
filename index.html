@@ -233,8 +233,10 @@ footer .gen{font-family:var(--mono)}
 .kghi{display:flex;flex-wrap:wrap;gap:11px;align-items:center;margin:2px 0 8px;font-size:.76rem;color:var(--muted)}
 .kghi i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;
   vertical-align:-1px;border:2px solid transparent}
-.kghi .up i{border-color:var(--kg-up)}
-.kghi .down i{border-color:var(--kg-down)}
+/* 상·하위 스와치는 이제 '선 색' 이다 — 노드 테두리는 흰색으로 통일했다 */
+.kghi i.ln{width:13px;height:3px;border:0;border-radius:2px;vertical-align:2px}
+.kghi .up i.ln{background:var(--kg-up)}
+.kghi .down i.ln{background:var(--kg-down)}
 .kghi .selm i{border-color:#eef2f8}
 .kghi .n{font-family:var(--mono);color:var(--cyan)}
 .kgwrap input[type=range]{width:96px;accent-color:var(--cyan);vertical-align:-3px}
@@ -23942,7 +23944,12 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   }
   return placed;
 }
-  var UPC='#f1c27b',DOWNC='#7ce0e8',MATCHC='#bd9ae0';
+  // UPC·DOWNC 는 **간선과 라벨 전용**이다. 노드 테두리에 쓰면 안 된다 —
+  // 두 색이 각각 Site·Facility 채움색과 완전히 같아서(거리 0) 그 타입 위에서는 테두리가
+  // 사라졌다. 검색 표시로 쓰던 보라도 Outlet 색과 같았다.
+  // 테두리는 팔레트에서 가장 멀리 떨어진 흰색 계열로 통일한다(노드색과 최소거리 104~125).
+  var UPC='#f1c27b',DOWNC='#7ce0e8';
+  var SELC='#ffffff',RINGC='#eef2f8',MATCHC='#ff2d78';
   var TYPES=Object.keys(TYPE_KO).filter(function(t){return KG.nodes.some(function(n){return n.type===t;});});
 
   var byId=new Map(); KG.nodes.forEach(function(n){byId.set(n.id,n);});
@@ -24029,10 +24036,11 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     }
     var u=Object.keys(bands?bands.up:{}).length,d=Object.keys(bands?bands.down:{}).length;
     el.innerHTML='<span class="selm"><i></i>선택</span>'
-      +'<span class="up"><i></i>상위 <span class="n">'+u+'</span> (≤'+upHops+'홉)</span>'
-      +'<span class="down"><i></i>하위 <span class="n">'+d+'</span> (≤'+downHops+'홉)</span>'
+      +'<span class="up"><i class="ln"></i>상위 <span class="n">'+u+'</span> (≤'+upHops+'홉)</span>'
+      +'<span class="down"><i class="ln"></i>하위 <span class="n">'+d+'</span> (≤'+downHops+'홉)</span>'
       +(u+d===0?'<span>이 노드에는 상·하위 관계가 없습니다 — 수평 관계만 있거나 홉이 0입니다</span>':'')
-      +'<span style="color:var(--faint)">화살표 = 1홉 방향 · 나머지는 흐리게</span>';
+      +'<span style="color:var(--faint)">테두리 흰색 = 강조 대상 · 방향은 선·화살표·라벨 색 '
+      +'· 나머지는 흐리게</span>';
   }
   function reheat(a){
     alpha=Math.max(alpha,a);
@@ -24181,8 +24189,13 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
       ctx.beginPath();ctx.arc(x,y,r,0,6.2832);
       ctx.fillStyle=COLOR[n.type]||'#8aa0b4';ctx.fill();
       // 테두리 색이 상·하위를 가른다. 검색 일치는 보라 — 상위 호박과 헷갈리지 않게 뺐다.
-      if(n===sel){ctx.strokeStyle='#eef2f8';ctx.lineWidth=2.2;ctx.stroke();}
-      else if(bv){ctx.strokeStyle=bv==='up'?UPC:DOWNC;ctx.lineWidth=1.8;ctx.stroke();}
+      if(n===sel){
+        ctx.strokeStyle=SELC;ctx.lineWidth=2.6;ctx.stroke();
+        // 바깥 링 하나 더 — 점이 작으면(반지름 2~6px) 두께 차이만으로는 선택을 못 알아본다
+        ctx.beginPath();ctx.arc(x,y,r+3.4,0,6.2832);
+        ctx.strokeStyle='rgba(255,255,255,.45)';ctx.lineWidth=1.2;ctx.stroke();
+      }
+      else if(bv){ctx.strokeStyle=RINGC;ctx.lineWidth=1.6;ctx.stroke();}
       else if(matches.has(n.id)){ctx.strokeStyle=MATCHC;ctx.lineWidth=1.8;ctx.stroke();}
       // 라벨은 여기서 그리지 않고 후보로만 모은다 — 다 모아야 겹치는지 판단할 수 있다.
       // 아무것도 선택하지 않은 상태에서도 허브는 이름이 보이는 편이 낫다(차수 24 이상).
