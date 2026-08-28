@@ -18470,6 +18470,7 @@ footer .gen{font-family:var(--mono)}
       <button class="chip" id="kg-preset-all">전체 레이어</button>
       <label><input type="checkbox" id="kg-isolated" checked> 고립 노드 숨김</label>
       <label><input type="checkbox" id="kg-labels"> 라벨 항상 표시</label>
+      <span class="plain" id="kg-lblstat"></span>
       <input type="search" id="kg-search" placeholder="노드 검색 — 이름·별칭 (Enter: 이동)" autocomplete="off">
       <span class="plain" id="kg-stat"></span>
     </div>
@@ -23885,6 +23886,62 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   var u = walk(par, UP), w = walk(chi, DOWN);
   return { up: u.nodes, down: w.nodes, upEdges: u.edges, downEdges: w.edges };
 }
+  function placeLabels(cands, W, H, opts) {
+  var o = opts || {}, LH = o.lineH || 13, PAD = o.pad || 4;
+  var budget = o.budget == null ? 400 : o.budget;
+  var CW = 64;                                  // 격자 칸 너비(라벨 폭 정도)
+  var grid = {}, placed = [], i, j;
+
+  function fits(x, y, w) {
+    if (x < 0 || y - LH < 0 || x + w > W || y > H) return false;
+    var cx0 = Math.floor(x / CW), cx1 = Math.floor((x + w) / CW);
+    var cy0 = Math.floor((y - LH) / LH), cy1 = Math.floor(y / LH);
+    for (var cx = cx0; cx <= cx1; cx++) {
+      for (var cy = cy0; cy <= cy1; cy++) {
+        var arr = grid[cx + ',' + cy];
+        if (!arr) continue;
+        for (var k = 0; k < arr.length; k++) {
+          var b = arr[k];
+          if (x < b.x + b.w && x + w > b.x && y - LH < b.y && y > b.y - LH) return false;
+        }
+      }
+    }
+    return true;
+  }
+  function take(x, y, w) {
+    var box = { x: x, y: y, w: w };
+    var cx0 = Math.floor(x / CW), cx1 = Math.floor((x + w) / CW);
+    var cy0 = Math.floor((y - LH) / LH), cy1 = Math.floor(y / LH);
+    for (var cx = cx0; cx <= cx1; cx++) {
+      for (var cy = cy0; cy <= cy1; cy++) {
+        var key = cx + ',' + cy;
+        (grid[key] = grid[key] || []).push(box);
+      }
+    }
+  }
+
+  // 우선순위 오름차순. 같은 우선순위는 id 로 갈라 프레임마다 순서가 바뀌지 않게 한다.
+  var list = cands.slice().sort(function (a, b) {
+    return (a.prio - b.prio) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  });
+
+  for (i = 0; i < list.length && placed.length < budget; i++) {
+    var c = list[i], w = c.w, r = c.r || 4;
+    var spots = [
+      [c.x + r + PAD, c.y + 3.5],                 // 오른쪽 — 기본
+      [c.x - r - PAD - w, c.y + 3.5],             // 왼쪽
+      [c.x - w / 2, c.y - r - PAD],               // 위
+      [c.x - w / 2, c.y + r + PAD + LH - 4],      // 아래
+    ];
+    for (j = 0; j < spots.length; j++) {
+      if (!fits(spots[j][0], spots[j][1], w)) continue;
+      take(spots[j][0], spots[j][1], w);
+      placed.push({ id: c.id, tx: spots[j][0], ty: spots[j][1], w: w });
+      break;
+    }
+  }
+  return placed;
+}
   var UPC='#f1c27b',DOWNC='#7ce0e8',MATCHC='#bd9ae0';
   var TYPES=Object.keys(TYPE_KO).filter(function(t){return KG.nodes.some(function(n){return n.type===t;});});
 
@@ -24032,6 +24089,52 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   function radius(n){return Math.max(2.4,(3+Math.sqrt(n.deg||0)*1.05)*Math.min(Math.max(k,0.55),1.5));}
   function sx(n){return n.x*k+tx;} function sy(n){return n.y*k+ty;}
 
+  // 글자 폭은 노드마다 한 번만 잰다 — 매 프레임 measureText 를 2,774번 부르면 프레임이 죽는다
+  function labelText(n){
+    if(n._lt===undefined)n._lt=clip(n.name,17);
+    return n._lt;
+  }
+  function labelWidth(n){
+    if(n._lw===undefined)n._lw=ctx.measureText(labelText(n)).width;
+    return n._lw;
+  }
+  var lastLblStat='';
+  function drawLabels(cand){
+    ctx.font='10px "Cascadia Code",Consolas,monospace';
+    var i,c,pr,hop;
+    var items=[];
+    for(i=0;i<cand.length;i++){
+      c=cand[i];
+      // 우선순위(작을수록 먼저). 무엇을 포기할지가 여기서 정해진다.
+      if(c.n===sel)pr=0;
+      else if(c.n===hov)pr=1;
+      else if(matches.has(c.n.id))pr=2;
+      else if(c.bv){
+        hop=(bands.up[c.n.id]!==undefined)?bands.up[c.n.id]:bands.down[c.n.id];
+        pr=3+hop;                       // 가까운 상·하위가 먼저
+      } else pr=20;
+      pr+=1-Math.min(1,(c.n.deg||0)/300);   // 같은 등급이면 차수 큰 것부터
+      items.push({id:c.n.id,x:c.x,y:c.y,r:c.r,w:labelWidth(c.n),prio:pr});
+    }
+    var placed=placeLabels(items,W,H,{budget:220});
+    var byId2={}; for(i=0;i<cand.length;i++)byId2[cand[i].n.id]=cand[i];
+    for(i=0;i<placed.length;i++){
+      var p=placed[i],cc=byId2[p.id]; if(!cc)continue;
+      var t=labelText(cc.n);
+      // 글자 뒤에 바탕색 테두리 — 간선 위에 얹히면 안 읽힌다(겹침과 별개 문제였다)
+      ctx.lineWidth=3;ctx.strokeStyle='rgba(10,14,21,.88)';ctx.strokeText(t,p.tx,p.ty);
+      ctx.fillStyle=(cc.n===sel||cc.n===hov)?'#eef2f8'
+        :cc.bv==='up'?UPC:cc.bv==='down'?DOWNC:'#9aa6b6';
+      ctx.fillText(t,p.tx,p.ty);
+    }
+    var el=document.getElementById('kg-lblstat');
+    if(el){
+      var txt=cand.length?('라벨 '+placed.length+'/'+cand.length
+        +(placed.length<cand.length?' (겹치는 것은 생략)':'')):'';
+      if(txt!==lastLblStat){el.textContent=txt;lastLblStat=txt;}
+    }
+  }
+
   function draw(){
     if(!W)return;
     ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -24068,6 +24171,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     }
     ctx.setLineDash([]);
     var labelAll=document.getElementById('kg-labels').checked||V.length<=85||k>=1.7;
+    var cand=[];
     for(i=0;i<V.length;i++){
       n=V[i];
       var bv=bandOf(n.id);
@@ -24080,14 +24184,14 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
       if(n===sel){ctx.strokeStyle='#eef2f8';ctx.lineWidth=2.2;ctx.stroke();}
       else if(bv){ctx.strokeStyle=bv==='up'?UPC:DOWNC;ctx.lineWidth=1.8;ctx.stroke();}
       else if(matches.has(n.id)){ctx.strokeStyle=MATCHC;ctx.lineWidth=1.8;ctx.stroke();}
-      var showLab=labelAll||n===hov||n===sel||(selMode&&lit(n.id))||matches.has(n.id);
-      if(showLab&&!dim){
-        ctx.font='10px "Cascadia Code",Consolas,monospace';
-        ctx.fillStyle=n===sel||n===hov?'#eef2f8':'#9aa6b6';
-        ctx.fillText(clip(n.name,17),x+r+4,y+3.5);
-      }
+      // 라벨은 여기서 그리지 않고 후보로만 모은다 — 다 모아야 겹치는지 판단할 수 있다.
+      // 아무것도 선택하지 않은 상태에서도 허브는 이름이 보이는 편이 낫다(차수 24 이상).
+      var showLab=labelAll||n===hov||n===sel||(selMode&&lit(n.id))||matches.has(n.id)
+        ||(!selMode&&(n.deg||0)>=24);
+      if(showLab&&!dim&&x>-60&&x<W+60&&y>-30&&y<H+30)cand.push({n:n,x:x,y:y,r:r,bv:bv});
     }
     ctx.globalAlpha=1;
+    drawLabels(cand);
   }
 
   function pick(mx,my){
