@@ -23407,6 +23407,9 @@ document.querySelectorAll('[data-view]').forEach((btn)=>{
     const v=btn.dataset.view;
     document.querySelectorAll('[data-view]').forEach((b)=>b.classList.toggle('active',b===btn));
     document.querySelectorAll('[data-viewpane]').forEach((p)=>{p.hidden=p.dataset.viewpane!==v;});
+    // 숨어 있는 동안에는 폭이 0이라 가로 스크롤 위치가 먹지 않는다. 보인 **뒤에** 알린다 —
+    // 시각화 탭의 시간축 차트들이 이 신호를 받아 최신 쪽으로 다시 맞춘다.
+    window.dispatchEvent(new CustomEvent('viewpane:shown',{detail:v}));
   });
 });
 document.querySelectorAll('[data-sig]').forEach((item)=>{
@@ -23549,6 +23552,20 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
 
   // 한 화면 맞춤(스크롤 없음) 토글 — fit=가로 100%, 아니면 scrollx
   function fitCls(){var c=document.getElementById('viz-fit');return 'viz '+(c&&c.checked?'fit':'scrollx');}
+
+  // 시간축 차트는 **최신 쪽을 먼저** 보여준다 — 관측이 2000년대 초까지 거슬러 올라가서
+  // 왼쪽 끝에서 시작하면 탭을 열자마자 20년 전 화면을 보게 된다.
+  // 버킷은 첫 관측~마지막 관측으로 채워지므로 오른쪽 끝이 곧 최신이다(스크롤 최대값으로 잘린다).
+  // '한 화면 맞춤'이면 컨테이너가 .viz.fit 이라 .scrollx 에 걸리지 않고 자연히 건너뛴다.
+  function toLatest(id){
+    var sc=document.querySelector('#'+id+' .scrollx');
+    if(sc)sc.scrollLeft=sc.scrollWidth;
+  }
+  // 패널이 hidden 인 동안에는 폭이 0이라 위 스크롤이 먹지 않는다 — 탭이 열릴 때 다시 맞춘다.
+  window.addEventListener('viewpane:shown',function(e){
+    if(!e||e.detail!=='analytics')return;
+    toLatest('viz-series');toLatest('viz-heatmap');
+  });
   function drawStacked(bks,dks,grid,cm,lm,maxV,mode,scale){
     var per=scale||9, n=bks.length;
     var W=Math.max(640,54+n*(mode==='ym'?per:Math.max(per*3,30))),H=320,P={t:14,r:14,b:30,l:38};
@@ -23563,7 +23580,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     });
     s+='<line class="axis" x1="'+P.l+'" y1="'+(P.t+ph)+'" x2="'+(W-P.r)+'" y2="'+(P.t+ph)+'"/></svg>';
     var leg=dks.map(function(k){return '<span><i style="background:'+cm[k]+'"></i>'+esc(lm[k])+'</span>';}).join('');
-    document.getElementById('viz-series').innerHTML='<div class="'+fitCls()+'">'+s+'</div><div class="viz-legend">'+leg+'</div>';
+    document.getElementById('viz-series').innerHTML='<div class="'+fitCls()+'">'+s+'</div><div class="viz-legend">'+leg+'</div>';toLatest('viz-series');
   }
   function drawLines(bks,dks,grid,cm,lm,maxV,mode,scale){
     var per=scale||9, n=bks.length;
@@ -23581,7 +23598,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     bks.forEach(function(b,i){var sl=mode==='y'?(i===0||i===n-1||(+b)%5===0):(b.slice(5)==='01'&&(+b.slice(0,4))%2===0);if(sl)s+='<text class="lab" x="'+X(i)+'" y="'+(H-P.b+14)+'" text-anchor="middle">'+esc(mode==='ym'?b.slice(0,4):b)+'</text>';});
     s+='<line class="axis" x1="'+P.l+'" y1="'+(P.t+ph)+'" x2="'+(W-P.r)+'" y2="'+(P.t+ph)+'"/></svg>';
     var leg=dks.map(function(k){return '<span><i style="background:'+cm[k]+'"></i>'+esc(lm[k])+'</span>';}).join('');
-    document.getElementById('viz-series').innerHTML='<div class="'+fitCls()+'">'+s+'</div><div class="viz-legend">'+leg+'</div>';
+    document.getElementById('viz-series').innerHTML='<div class="'+fitCls()+'">'+s+'</div><div class="viz-legend">'+leg+'</div>';toLatest('viz-series');
   }
   function renderSeries(){
     var mode=document.getElementById('viz-bucket').value,dim=document.getElementById('viz-dim').value;
@@ -23609,7 +23626,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
       ck.forEach(function(c,ci){ var v=(grid[k]&&grid[k][c])||0,op=v?(0.18+0.82*v/max):0,x=lw+ci*cw,y=top+ri*ch;
         s+='<rect class="hmcell" x="'+x+'" y="'+y+'" width="'+cw+'" height="'+(ch-2)+'" fill="'+(v?'rgba(124,224,232,'+op.toFixed(2)+')':'#11161f')+'">'+(v?'<title>'+esc(lm[k])+' · '+esc(c)+': '+v+'</title>':'')+'</rect>'; }); });
     ck.forEach(function(c,ci){ if(c.slice(5)==='01'&&(+c.slice(0,4))%2===0)s+='<text class="hmlab" x="'+(lw+ci*cw)+'" y="'+(top+rows.length*ch+12)+'">'+esc(c.slice(0,4))+'</text>'; });
-    s+='</svg>'; document.getElementById('viz-heatmap').innerHTML='<div class="'+fitCls()+'">'+s+'</div>';
+    s+='</svg>'; document.getElementById('viz-heatmap').innerHTML='<div class="'+fitCls()+'">'+s+'</div>'; toLatest('viz-heatmap');
   }
   function renderDist(){
     var dim=document.getElementById('viz-dist').value,data=flt(),cnt={},lm={};
@@ -23724,12 +23741,26 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     return s;
   }
   function minIdx(data){var m=Infinity;data.forEach(function(r){var i=recIdx(r);if(i<m)m=i;});return m;}
-  // 단일 시설 보기는 공통축 유지로 좌측이 길게 빌 수 있어, 첫 관측 지점으로 초기 스크롤
-  function autoScroll(out,data,start,per){
-    var sc=out.querySelector('.viz'); if(!sc)return;
-    var x=(minIdx(data)-start)*per-60;
-    if(x>0)sc.scrollLeft=x;
+  function maxIdx(data){var m=-Infinity;data.forEach(function(r){var i=recIdx(r);if(i>m)m=i;});return m;}
+  function latestScrollLeft(lastIdx, start, per, clientWidth,
+  gutter = 64, left = 10, margin = 72) {
+  const x = gutter + left + (lastIdx - start) * per + per / 2;
+  return Math.max(0, Math.round(x - clientWidth + margin));
+}
+  // 최신 쪽을 먼저 보여준다 — 시간축이 2000년대 초까지 거슬러 올라가서 왼쪽 끝에서 시작하면
+  // 탭을 열자마자 20년 전 화면을 보게 된다.
+  // 값을 render() 때 기억해 두는 이유: 패널이 hidden 인 동안에는 clientWidth 가 0이라
+  // 스크롤이 먹지 않는다. 탭이 열릴 때 같은 값으로 다시 맞춘다.
+  var pending=null;
+  function applyScroll(){
+    if(!pending)return;
+    var sc=document.querySelector('#cp-chart .viz');
+    if(!sc||!sc.clientWidth)return;
+    sc.scrollLeft=latestScrollLeft(pending.last,pending.start,pending.per,sc.clientWidth);
   }
+  window.addEventListener('viewpane:shown',function(e){
+    if(e&&e.detail==='analytics')applyScroll();
+  });
   function render(){
     var v=sel.value,per=+document.getElementById('cp-scale').value||5;
     var out=document.getElementById('cp-chart');
@@ -23743,7 +23774,8 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     if(v!=='_all'){
       out.innerHTML='<div class="viz scrollx"><div class="cp-body">'+gutter({mini:false})
         +draw(fdata,{mini:false,start:start,per:per})+'</div></div>';
-      autoScroll(out,fdata,start,per);
+      pending={last:maxIdx(fdata),start:start,per:per};
+      applyScroll();
       return;
     }
     // 전체: 시설별 소형 다중 — 공통 시간축(전 시설 최고 관측→현재)으로 캠페인 시기를 비교
@@ -23757,6 +23789,9 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
         +'<div class="cp-body">'+gutter({mini:true})+draw(fd,{mini:true,start:start,per:per})+'</div></div>';
     }).join('');
     out.innerHTML='<div class="viz scrollx">'+html+'</div>';
+    // 소형 다중은 줄마다 시설이 다르지만 스크롤은 하나다 — 표시된 것 중 가장 최근 관측에 맞춘다
+    pending={last:maxIdx(fdata),start:start,per:per};
+    applyScroll();
     out.querySelectorAll('[data-cpfac]').forEach(function(el){
       el.addEventListener('click',function(){sel.value=el.getAttribute('data-cpfac');render();});
     });
