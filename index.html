@@ -23850,7 +23850,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     confounders:'오탐 요인',related_study:'연계 연구'};
   var CORE=['Site','Facility','Component','Process','Indicator','Keyword'];
   // 상·하위 방향표와 탐색은 모듈(kg-view.js)의 것을 그대로 싣는다 — 구현을 두 벌 두지 않는다
-  var ORIENT={"HAS_FACILITY":"down","HAS_COMPONENT":"down","PERFORMS":"down","AT":"up","ABOUT":"up","MENTIONS":"up","OF_INDICATOR":"up","INDICATES":"up","REPORTS":"up","LOCATED_AT":"up","SUPPORTED_BY":"down","CONTRADICTED_BY":"down","EVIDENCED_BY":"down","FROM_IMAGE":"down","ASSERTED_IN":"down","PUBLISHED_BY":"down","AUTHORED_BY":"down","CONTRADICTS":"peer","SUPERSEDES":"peer","DETECTED_VIA":"peer"};
+  var ORIENT={"HAS_FACILITY":"down","HAS_COMPONENT":"down","PERFORMS":"down","AT":"up","ABOUT":"up","MENTIONS":"up","OF_INDICATOR":"up","INDICATES":"up","REPORTS":"up","LOCATED_AT":"up","SUPPORTED_BY":"down","CONTRADICTED_BY":"down","EVIDENCED_BY":"down","FROM_IMAGE":"down","ASSERTED_IN":"down","PUBLISHED_BY":"down","AUTHORED_BY":"down","DETECTED_VIA":"down","CONTRADICTS":"peer","SUPERSEDES":"peer"};
   function hierarchyBands(startId, links, opts) {
   var o = opts || {}, orient = o.orient || {};
   var UP = o.upHops == null ? 3 : o.upHops, DOWN = o.downHops == null ? 2 : o.downHops;
