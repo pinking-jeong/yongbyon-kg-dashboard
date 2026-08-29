@@ -18636,6 +18636,12 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
       <span class="plain" id="kg-stat"></span>
     </div>
     <div class="vizctl">
+      <label>배치
+        <select id="kg-layout">
+          <option value="radial" selected>영변 중심 방사형</option>
+          <option value="type">타입별 링(기존)</option>
+        </select>
+      </label>
       <label>강조
         <select id="kg-hi">
           <option value="tree">상·하위 계층</option>
@@ -24145,6 +24151,125 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   }
   return placed;
 }
+  function radialAnchors(nodes, links, opts) {
+  var o = opts || {}, orient = o.orient || {}, ROOT = o.root, RING = o.ring || 120;
+  var i, j, k;
+  var ids = [], has = {};
+  for (i = 0; i < nodes.length; i++) { ids.push(nodes[i].id); has[nodes[i].id] = 1; }
+  var chi = {}, out = {};
+  for (i = 0; i < ids.length; i++) chi[ids[i]] = [];
+  for (i = 0; i < links.length; i++) {
+    var l = links[i], d = orient[l.type];
+    if (d !== 'down' && d !== 'up') continue;          // peer 는 계층이 아니다
+    if (!has[l.s] || !has[l.t]) continue;              // 꺼 둔 레이어를 통해 잇지 않는다
+    chi[d === 'down' ? l.s : l.t].push(d === 'down' ? l.t : l.s);
+  }
+  for (i = 0; i < ids.length; i++) chi[ids[i]].sort();  // 결정론 — 프레임마다 각이 튀지 않게
+
+  function layout(root, seen, a0, a1, baseR, band) {
+    // 루프 변수를 지역으로 둔다 — 바깥(성분 루프)의 i 를 덮어쓰면 성분이 통째로
+    // 건너뛰어져 앵커가 샌다. 실측에서 84노드 중 62개만 앵커를 받았다.
+    var li, lj, lk;
+    var tree = {}, depth = {}, order = [root];
+    depth[root] = 0; tree[root] = []; seen[root] = 1;
+    var front = [root];
+    while (front.length) {
+      var nx = [];
+      for (var p = 0; p < front.length; p++) {
+        var u = front[p], kids = chi[u] || [];
+        for (var q = 0; q < kids.length; q++) {
+          var v = kids[q];
+          if (seen[v]) continue;
+          seen[v] = 1; depth[v] = depth[u] + 1;
+          tree[u].push(v); tree[v] = [];
+          order.push(v); nx.push(v);
+        }
+      }
+      front = nx;
+    }
+    var wgt = {};
+    for (li = order.length - 1; li >= 0; li--) {            // 잎 수를 아래에서 위로
+      var id = order[li], ks = tree[id];
+      if (!ks.length) { wgt[id] = 1; continue; }
+      var sum = 0;
+      for (lj = 0; lj < ks.length; lj++) sum += wgt[ks[lj]];
+      wgt[id] = sum;
+    }
+    var wedge = {}; wedge[root] = [a0, a1];
+    for (li = 0; li < order.length; li++) {              // 부채꼴을 위에서 아래로
+      var nid = order[li], kk = tree[nid];
+      if (!kk.length) continue;
+      var ws = 0;
+      for (lj = 0; lj < kk.length; lj++) ws += wgt[kk[lj]];
+      var lo = wedge[nid][0], span = wedge[nid][1] - wedge[nid][0], acc = lo;
+      for (lk = 0; lk < kk.length; lk++) {
+        var frac = wgt[kk[lk]] / (ws || 1);
+        wedge[kk[lk]] = [acc, acc + span * frac];
+        acc += span * frac;
+      }
+    }
+    for (li = 0; li < order.length; li++) {
+      var oid = order[li], W = wedge[oid], ang = (W[0] + W[1]) / 2;
+      var r = baseR + RING * depth[oid];
+      out[oid] = { x: Math.cos(ang) * r, y: Math.sin(ang) * r, d: depth[oid], a: ang, b: band };
+    }
+  }
+
+  var seen = {}, maxR = 0, key;
+  if (ROOT && has[ROOT]) {
+    layout(ROOT, seen, -Math.PI, Math.PI, 0, 0);   // 0 = 영변 나무
+    for (key in out) {
+      var rr = Math.sqrt(out[key].x * out[key].x + out[key].y * out[key].y);
+      if (rr > maxR) maxR = rr;
+    }
+  }
+  var rest = [];
+  for (i = 0; i < ids.length; i++) if (!seen[ids[i]]) rest.push(ids[i]);
+  if (rest.length) {
+    var adj = {};
+    for (i = 0; i < rest.length; i++) adj[rest[i]] = [];
+    for (i = 0; i < links.length; i++) {
+      var l2 = links[i], d2 = orient[l2.type];
+      if (d2 !== 'down' && d2 !== 'up') continue;
+      if (!has[l2.s] || !has[l2.t] || seen[l2.s] || seen[l2.t]) continue;
+      adj[l2.s].push(l2.t); adj[l2.t].push(l2.s);
+    }
+    var comps = [], mark = {};
+    for (i = 0; i < rest.length; i++) {
+      if (mark[rest[i]]) continue;
+      var stack = [rest[i]], grp = [];
+      mark[rest[i]] = 1;
+      while (stack.length) {
+        var c = stack.pop(); grp.push(c);
+        var nb = adj[c] || [];
+        for (j = 0; j < nb.length; j++) if (!mark[nb[j]]) { mark[nb[j]] = 1; stack.push(nb[j]); }
+      }
+      grp.sort();
+      comps.push(grp);
+    }
+    comps.sort(function (A, B) { return B.length - A.length || (A[0] < B[0] ? -1 : 1); });
+    var acc2 = -Math.PI, base = maxR + RING;
+    for (i = 0; i < comps.length; i++) {
+      var g = comps[i];
+      var w0 = acc2, w1 = acc2 + 2 * Math.PI * (g.length / rest.length);
+      acc2 = w1;
+      var rootI = g[0], best = -1;
+      for (j = 0; j < g.length; j++) {
+        var deg = (chi[g[j]] || []).length;
+        if (deg > best) { best = deg; rootI = g[j]; }
+      }
+      layout(rootI, seen, w0, w1, base, 1);        // 1 = 바깥 띠
+      for (j = 0; j < g.length; j++) {            // 방향 때문에 못 닿은 나머지
+        if (out[g[j]]) continue;
+        var an = w0 + (w1 - w0) * ((j + 0.5) / g.length);
+        out[g[j]] = { x: Math.cos(an) * base, y: Math.sin(an) * base, d: 0, a: an, b: 1 };
+        seen[g[j]] = 1;
+      }
+    }
+  }
+  return out;
+}
+  var KG_ROOT='site-yongbyon';
   // UPC·DOWNC 는 **간선과 라벨 전용**이다. 노드 테두리에 쓰면 안 된다 —
   // 두 색이 각각 Site·Facility 채움색과 완전히 같아서(거리 0) 그 타입 위에서는 테두리가
   // 사라졌다. 검색 표시로 쓰던 보라도 Outlet 색과 같았다.
@@ -24172,16 +24297,26 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   function clip(s,n){s=String(s||'');return s.length>n?s.slice(0,n)+'…':s;}
   function rng(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x);}
 
-  // 타입별 링 앵커 — 같은 타입을 같은 방향으로 모아 계층이 읽히게 한다
-  var anchor={};
+  // 배치 두 가지. 방사형은 영변을 한가운데 두고 깊이를 반지름으로 준다(기본).
+  // 타입별 링은 예전 배치 — 같은 타입을 같은 방향으로 모은다.
+  var layoutMode='radial',seeded=false;
+  var typeAnchor={};
   TYPES.forEach(function(t,i){
     var a=(i/TYPES.length)*Math.PI*2-Math.PI/2;
-    anchor[t]={x:Math.cos(a)*270,y:Math.sin(a)*270};
+    typeAnchor[t]={x:Math.cos(a)*270,y:Math.sin(a)*270};
   });
-  KG.nodes.forEach(function(n,i){
-    var a=anchor[n.type]||{x:0,y:0};
-    n.x=a.x+(rng(i)-0.5)*180; n.y=a.y+(rng(i+9973)-0.5)*180; n.vx=0; n.vy=0;
-  });
+  var radAnchor={};                       // rebuild() 에서 보이는 것만으로 다시 잡는다
+  function anchorOf(n){
+    if(layoutMode==='radial')return radAnchor[n.id]||{x:0,y:0};
+    return typeAnchor[n.type]||{x:0,y:0};
+  }
+  function seedPositions(){
+    KG.nodes.forEach(function(n,i){
+      var a=anchorOf(n);
+      // 앵커 주변에 흩뿌린다 — 정확히 겹쳐 놓으면 반발력이 무작위 방향으로 튄다
+      n.x=a.x+(rng(i)-0.5)*90; n.y=a.y+(rng(i+9973)-0.5)*90; n.vx=0; n.vy=0;
+    });
+  }
 
   function rebuild(){
     var vis=KG.nodes.filter(function(n){return active.has(n.type);});
@@ -24200,6 +24335,10 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     if(sel&&!adj.has(sel.id)){sel=null;bands=null;}
     document.getElementById('kg-stat').textContent=
       '표시: 노드 '+V.length+' · 관계 '+L.length+' / 전체 '+KG.nodes.length+' · '+KG.links.length;
+    // 레이어를 바꾸면 보이는 것이 달라져 깊이·부채꼴도 달라진다 — 다시 잡는다
+    if(layoutMode==='radial')radAnchor=radialAnchors(V,L,{root:KG_ROOT,orient:ORIENT,ring:120});
+    // 좌표 심기는 앵커를 잡은 **뒤**여야 한다. 먼저 심으면 예전 앵커 자리에 뿌려진다.
+    if(!seeded){seedPositions();seeded=true;}
     drawChips(); recomputeBands(); reheat(0.9);
   }
 
@@ -24263,9 +24402,12 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
         f=alpha*1300/d2; if(f>1.6)f=1.6;
         n.vx+=dx*f;n.vy+=dy*f;m.vx-=dx*f;m.vy-=dy*f;
       }
-      var a=anchor[n.type]||{x:0,y:0};
-      n.vx+=((a.x-n.x)*0.014+(0-n.x)*0.003)*alpha;
-      n.vy+=((a.y-n.y)*0.014+(0-n.y)*0.003)*alpha;
+      var a=anchorOf(n);
+      // 방사형은 앵커가 이미 자리를 정하므로 원점 인력을 끈다 — 켜 두면 링을 안으로 당겨
+      // 반지름이 무너진다. 대신 앵커 인력을 조금 세게 줘 붐비는 링이 흩어지지 않게 한다.
+      var ak=layoutMode==='radial'?0.030:0.014, ok=layoutMode==='radial'?0:0.003;
+      n.vx+=((a.x-n.x)*ak+(0-n.x)*ok)*alpha;
+      n.vy+=((a.y-n.y)*ak+(0-n.y)*ok)*alpha;
     }
     for(i=0;i<L.length;i++){
       var l=L[i];
@@ -24553,6 +24695,10 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
   document.getElementById('kg-preset-all').addEventListener('click',function(){active=new Set(TYPES);rebuild();});
   document.getElementById('kg-isolated').addEventListener('change',rebuild);
   document.getElementById('kg-labels').addEventListener('change',function(){draw();});
+  document.getElementById('kg-layout').addEventListener('change',function(e){
+    layoutMode=e.target.value;
+    seeded=false; rebuild();          // 앵커를 다시 잡고 그 자리에서 처음부터 식힌다
+  });
   // 강조 방식·홉은 배치를 건드리지 않는다 — 다시 칠하기만 하면 된다(재가열 없음)
   document.getElementById('kg-hi').addEventListener('change',function(e){
     hiMode=e.target.value; recomputeBands(); draw();
