@@ -455,7 +455,7 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
   <button data-view="ablation">방법론 검증 (Intervention Ablation)</button>
 </nav>
 <div data-viewpane="overview">
-<details class="panel basis" open>
+<div class="basisband"><details class="panel basis" open>
     <summary><h2>수집 기반 현황 <span class="q">계층별 구성</span></h2></summary>
     <table class="basistab"><tbody><tr>
       <th>참조계층<span class="bq">무엇을 식별하는가</span></th>
@@ -470,7 +470,7 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
       <th>해석계층<span class="bq">무엇을 읽어냈는가</span></th>
       <td><span class="bchip">관측 <b>684</b></span><span class="bchip">주장 <b>783</b></span><p class="bsub">존재 <b>667</b> · 부재 <b>17</b>(비탐지를 양성으로 오인코딩하지 않는다) · 미해소 큐 <b>1415</b></p></td>
     </tr></tbody></table>
-  </details>
+  </details></div>
 <main class="layout">
   <aside>
     <section class="panel">
@@ -23528,6 +23528,38 @@ p.ab-note.ab-warn{background:rgba(237,161,0,.07);border-left:2px solid #e3b341;
   show(box.querySelector('.ab-op.on')||box.children[0]);
 })();
 </script>
+
+<style>
+/* 탭 레이아웃 통일 — 탭마다 만든 파일이 달라 갈렸던 폭·여백·모서리·제목 크기를 되돌린다.
+   정본: 래퍼 max-width 1480 / padding var(--space) 24px 72px · 카드 radius 12 · padding 18
+        · 절 제목 .95rem/700. 문서 맨 끝에 놓여 주입 탭의 자체 스타일을 이긴다. */
+/* 1) 탭 콘텐츠 래퍼 — 폭·좌우·상단 여백을 한 벌로 */
+[data-viewpane]>.vizwrap,[data-viewpane]>.siglayout,[data-viewpane]>.kgwrap,
+[data-viewpane]>.stockwrap,[data-viewpane]>.fcsub,[data-viewpane]>.tr-root,
+[data-viewpane]>.pr-root,[data-viewpane]>.vf,[data-viewpane]>.ab-wrap{
+  max-width:1480px;margin-left:auto;margin-right:auto;
+  padding:var(--space) 24px 72px}
+/* 개요는 수집 기반 현황만 래퍼가 없어 아래 3열 레이아웃과 좌측이 10px 어긋났다.
+   아래에 .layout 이 이어지므로 하단 여백은 0 으로 둔다(간격은 .layout 의 상단 여백). */
+[data-viewpane]>.basisband{max-width:1480px;margin:0 auto;padding:var(--space) 24px 0}
+/* 핵시설 탭은 안쪽 서브내비가 스스로 가운데를 잡고 있었다 — 바깥을 맞췄으니 중복을 끈다 */
+[data-viewpane]>.fcsub>.fc-subnav{max-width:none;margin:0 0 var(--space);padding:0}
+
+/* 2) 카드 — 모서리·패딩을 .panel(12px/18px)에 맞춘다 */
+[data-viewpane] .tr-card,[data-viewpane] .pr-refcard,[data-viewpane] .vf-card,
+[data-viewpane] .ab-card,[data-viewpane] .sigcard{border-radius:12px;padding:18px}
+
+/* 3) 절 제목 — section h2(0.95rem/700)가 정본.
+      details.basis 는 <details> 라 그 규칙에서 빠져 23px 로 튀었다(회귀 교정). */
+[data-viewpane]>.tr-root h2,[data-viewpane]>.pr-root h2,
+[data-viewpane]>.vf h2,[data-viewpane]>.ab-wrap h2,
+details.basis>summary h2{
+  font-size:.95rem;font-weight:700;letter-spacing:.02em;color:var(--text);
+  display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+/* 카드 제목은 한 단계 아래 — 색만 맞추고 크기는 각 탭 결을 남긴다 */
+[data-viewpane] .vf-card h3,[data-viewpane] .ab-card h3,
+[data-viewpane] .tr-card h3{color:var(--text)}
+</style>
 <footer>
   <span class="gen">generated </span> · 영변 프로토타입 (Phase 0~2 축소판)
   · ⚠ <strong>미검증</strong> 표시는 자동 추출 후 휴먼 승인 전 상태. 좌표·일부 영상 메타데이터는 공개자료 기반 추정치(데모)이며,
