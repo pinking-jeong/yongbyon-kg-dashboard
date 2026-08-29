@@ -263,15 +263,33 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
 .kgchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .kgchips .chip i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:0}
 .kgchips .chip.off{opacity:.38}
-.kgbody{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:var(--space);align-items:start}
+.kgbody{display:grid;grid-template-columns:minmax(0,1fr) 366px;gap:var(--space);align-items:start}
+/* 우측 사이드 탭 — 조작부가 캔버스 위 네 줄을 먹던 것을 여기로 옮겼다 */
+.kgside{display:flex;flex-direction:column;min-width:0}
+.kgtabs{display:flex;gap:6px;margin-bottom:10px}
+.kgtab{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--muted);
+  border-radius:9px;padding:7px 10px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer}
+.kgtab:hover{color:var(--text);border-color:var(--cyan)}
+.kgtab.on{background:var(--panel-2);border-color:var(--cyan);color:var(--cyan)}
+.kgpane{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;
+  max-height:calc(72vh - 44px);overflow-y:auto}
+/* 366px 폭에서는 가로로 늘어놓을 수 없다 — 세로로 쌓는다 */
+.kgside .vizctl{flex-direction:column;align-items:stretch;gap:9px;margin-bottom:12px}
+.kgside .vizctl label{justify-content:flex-start;gap:8px;white-space:nowrap}
+/* 라벨 글자는 접지 않고 입력만 늘린다 — 그러지 않으면 '배치'가 '배/치' 로 접힌다 */
+.kgside .vizctl select{flex:1;min-width:0;width:auto}
+.kgside input[type=search]{min-width:0;width:100%}
+.kgside input[type=range]{flex:1;width:auto;min-width:0}
+.kgrow{display:flex;gap:6px}
+.kgrow .chip{flex:1;text-align:center}
+.kghint{border-top:1px solid var(--line-soft);padding-top:10px;margin-top:4px;line-height:1.65}
 .kgstage{position:relative;background:#0a0e15;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 #kg-canvas{display:block;width:100%;height:72vh;cursor:grab;touch-action:none}
 #kg-canvas.grabbing{cursor:grabbing}
 #kg-tip{position:absolute;pointer-events:none;background:rgba(10,14,21,.94);border:1px solid var(--cyan);
   border-radius:7px;padding:5px 10px;font-size:.76rem;color:var(--text);max-width:300px;display:none;z-index:5}
 #kg-tip .t{color:var(--faint);font-family:var(--mono);font-size:.68rem}
-.kgdetail{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;
-  max-height:72vh;overflow-y:auto;font-size:.85rem}
+.kgdetail{font-size:.85rem}
 .kgdetail h3{font-size:1rem;font-weight:700;margin:8px 0 2px;line-height:1.45}
 .kgdetail h4{font-size:.78rem;color:var(--amber);font-weight:700;margin:14px 0 6px;letter-spacing:.04em}
 .kgdetail .typb{display:inline-block;font-size:.7rem;font-weight:700;color:#06161a;border-radius:5px;padding:1px 8px}
@@ -288,7 +306,7 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
 .kgnb:hover{border-color:var(--cyan)}
 .kgnb i{flex:none;width:8px;height:8px;border-radius:50%}
 .kgnb .w{margin-left:auto;font-family:var(--mono);font-size:.68rem;color:var(--faint)}
-@media (max-width:1180px){.kgbody{grid-template-columns:1fr}.kgdetail{max-height:46vh}}
+@media (max-width:1180px){.kgbody{grid-template-columns:1fr}.kgpane{max-height:46vh}}
 
 /* 하위탭 — 도메인 클래스 스키마 / 물질수지 분석 */
 .fcsub .fc-subnav{display:flex;gap:8px;flex-wrap:wrap;max-width:1480px;margin:0 auto;padding:16px 24px 0}
@@ -18625,49 +18643,60 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
 <div data-viewpane="kg" hidden>
   <div class="kgwrap">
   <section class="panel">
-    <h2>지식그래프 <span class="q">키워드 · Signature · 메타데이터</span></h2>
-    <div class="vizctl">
-      <button class="chip" id="kg-preset-core">핵심 레이어</button>
-      <button class="chip" id="kg-preset-all">전체 레이어</button>
-      <label><input type="checkbox" id="kg-isolated" checked> 고립 노드 숨김</label>
-      <label><input type="checkbox" id="kg-labels"> 라벨 항상 표시</label>
-      <span class="plain" id="kg-lblstat"></span>
-      <input type="search" id="kg-search" placeholder="노드 검색 — 이름·별칭 (Enter: 이동)" autocomplete="off">
-      <span class="plain" id="kg-stat"></span>
-    </div>
-    <div class="vizctl">
-      <label>배치
-        <select id="kg-layout">
-          <option value="radial" selected>영변 중심 방사형</option>
-          <option value="type">타입별 링(기존)</option>
-        </select>
-      </label>
-      <label>강조
-        <select id="kg-hi">
-          <option value="tree">상·하위 계층</option>
-          <option value="neigh">1홉 이웃(전체 방향)</option>
-        </select>
-      </label>
-      <label title="상위로 몇 홉까지 거슬러 올라갈지">상위
-        <input type="range" id="kg-uphop" min="0" max="6" value="3"><span class="kghop" id="kg-uphopv">3</span>홉</label>
-      <label title="하위로 몇 홉까지 내려갈지">하위
-        <input type="range" id="kg-downhop" min="0" max="6" value="2"><span class="kghop" id="kg-downhopv">2</span>홉</label>
-    </div>
-    <div class="kghi" id="kg-hilegend"></div>
-    <div class="kgchips" id="kg-chips"></div>
+    <h2>지식그래프 <span class="q">키워드 · Signature · 메타데이터</span> <span class="plain" id="kg-stat"></span></h2>
     <div class="kgbody">
       <div class="kgstage">
         <canvas id="kg-canvas"></canvas>
         <div id="kg-tip"></div>
       </div>
-      <aside class="kgdetail" id="kg-detail">
-        <p class="plain">노드를 클릭하면 상세 정보(메타데이터 · signature · 연결 관계)가 표시됩니다.</p>
-        <p class="plain" style="margin-top:8px">키워드(탐지수단) 노드는 징후 signature의 modality에서 합성된 계층입니다 —
-        어떤 센서·수집 수단이 어떤 징후를 커버하는지 한눈에 추적할 수 있습니다.</p>
+      <aside class="kgside">
+        <div class="kgtabs">
+          <button type="button" class="kgtab on" data-kgtab="set">설정</button>
+          <button type="button" class="kgtab" data-kgtab="detail">상세</button>
+        </div>
+        <div class="kgpane" id="kg-pane-set">
+          <div class="vizctl">
+            <div class="kgrow">
+              <button class="chip" id="kg-preset-core">핵심 레이어</button>
+              <button class="chip" id="kg-preset-all">전체 레이어</button>
+            </div>
+            <input type="search" id="kg-search" placeholder="노드 검색 — 이름·별칭 (Enter: 이동)" autocomplete="off">
+            <label><input type="checkbox" id="kg-isolated" checked> 고립 노드 숨김</label>
+            <label><input type="checkbox" id="kg-labels"> 라벨 항상 표시</label>
+            <span class="plain" id="kg-lblstat"></span>
+          </div>
+          <div class="vizctl">
+            <label>배치
+              <select id="kg-layout">
+                <option value="radial" selected>영변 중심 방사형</option>
+                <option value="type">타입별 링(기존)</option>
+              </select>
+            </label>
+            <label>강조
+              <select id="kg-hi">
+                <option value="tree">상·하위 계층</option>
+                <option value="neigh">1홉 이웃(전체 방향)</option>
+              </select>
+            </label>
+            <label title="상위로 몇 홉까지 거슬러 올라갈지">상위
+              <input type="range" id="kg-uphop" min="0" max="6" value="3"><span class="kghop" id="kg-uphopv">3</span>홉</label>
+            <label title="하위로 몇 홉까지 내려갈지">하위
+              <input type="range" id="kg-downhop" min="0" max="6" value="2"><span class="kghop" id="kg-downhopv">2</span>홉</label>
+          </div>
+          <div class="kghi" id="kg-hilegend"></div>
+          <div class="kgchips" id="kg-chips"></div>
+          <p class="plain kghint">드래그: 노드 이동/배경 팬 · 휠: 줌 · 클릭: 상세 + 이웃 강조 · 배경 클릭: 해제
+            · INDICATES 굵기 = 강도(강/중/약) · 점선 = 탐지수단(합성)</p>
+        </div>
+        <div class="kgpane" id="kg-pane-detail" hidden>
+          <div class="kgdetail" id="kg-detail">
+            <p class="plain">노드를 클릭하면 상세 정보(메타데이터 · signature · 연결 관계)가 표시됩니다.</p>
+            <p class="plain" style="margin-top:8px">키워드(탐지수단) 노드는 징후 signature의 modality에서 합성된 계층입니다 —
+            어떤 센서·수집 수단이 어떤 징후를 커버하는지 한눈에 추적할 수 있습니다.</p>
+          </div>
+        </div>
       </aside>
     </div>
-    <p class="plain" style="margin-top:10px">드래그: 노드 이동/배경 팬 · 휠: 줌 · 클릭: 상세 + 이웃 강조 · 배경 클릭: 해제
-      · INDICATES 굵기 = 강도(강/중/약) · 점선 = 탐지수단(합성)</p>
   </section>
 </div>
 </div>
@@ -24570,6 +24599,19 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     if(key==='polarity')return v==='absent'?'<span class="tag absent">부재(비탐지)</span>':'존재';
     return esc(String(v));
   }
+  // 우측 사이드 탭. 노드를 고르면 상세로 넘어간다 — 고른 뒤 탭을 또 눌러야 하면
+  // 클릭이 두 번이 된다.
+  function showKgTab(which){
+    document.querySelectorAll('[data-kgtab]').forEach(function(b){
+      b.classList.toggle('on',b.dataset.kgtab===which);
+    });
+    var set=document.getElementById('kg-pane-set'),det=document.getElementById('kg-pane-detail');
+    if(set)set.hidden=which!=='set';
+    if(det)det.hidden=which!=='detail';
+  }
+  document.querySelectorAll('[data-kgtab]').forEach(function(b){
+    b.addEventListener('click',function(){showKgTab(b.dataset.kgtab);});
+  });
   function showEmpty(){
     detail.innerHTML='<p class="plain">노드를 클릭하면 상세 정보(메타데이터 · signature · 연결 관계)가 표시됩니다.</p>';
   }
@@ -24631,6 +24673,7 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
       if(groups[key].length>25)h+='<p class="plain">… 외 '+(groups[key].length-25)+'건</p>';
     });
     detail.innerHTML=h;
+    showKgTab('detail');
     detail.querySelectorAll('[data-go]').forEach(function(b){
       b.addEventListener('click',function(){goTo(b.dataset.go);});
     });
