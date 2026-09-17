@@ -19259,9 +19259,13 @@ body>.tip .ns-muted{color:#8c97a8}
 .ns-now{display:inline;margin-left:8px;font-size:11px;font-weight:700;color:#7ce0e8;text-transform:none;letter-spacing:0;white-space:normal}
 
 /* 절 이동 */
-.ns-nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 6px;position:sticky;top:0;z-index:5;background:#0d1117;padding:6px 0}
+.ns-nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 6px;position:sticky;top:var(--top-inset,0px);z-index:5;background:#0d1117;padding:6px 0}
 .ns-nav button{font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid #283142;background:#151c26;color:#b4becc;cursor:pointer}
 .ns-nav button:hover{border-color:#7ce0e8;color:#eef2f8}
+/* 1~4 단추 = 토글: 펼쳐진 절은 밝게, 화살표는 접힘(▾)·펼침(▴) */
+.ns-nav [data-go]::after{content:' ▾';color:#8c97a8;font-size:10px}
+.ns-nav [data-go].on{border-color:#4fa6ad;background:#13303a;color:#7ce0e8}
+.ns-nav [data-go].on::after{content:' ▴';color:#7ce0e8}
 .ns-nav-sp{flex:1}
 .ns-nav .ns-nav-all{font-size:11px;font-weight:500;padding:5px 10px;color:#8c97a8}
 /* 절 이동·칩 이동의 스크롤 목표가 고정 내비게이션(약 44px) 아래로 오게 한다 */
@@ -19279,8 +19283,12 @@ body>.tip .ns-muted{color:#8c97a8}
 .ns-sum-title small{display:block;font-size:10.5px;font-weight:700;color:#8c97a8;text-transform:uppercase;letter-spacing:.6px}
 .ns-sum-teaser{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;font-size:11px;color:#b4becc}
 .ns-tz{display:inline-flex;align-items:center;gap:4px;border:1px solid #283142;background:#151c26;border-radius:999px;padding:3px 9px;white-space:nowrap}
-.ns-sum-caret{flex:none;color:#8c97a8;font-size:14px;transition:transform .15s}
-.ns-sec[open]>.ns-sum .ns-sum-caret{transform:rotate(180deg)}
+.ns-sum-caret{flex:none;display:inline-flex;align-items:center;gap:5px;color:#8c97a8;font-size:11px;font-weight:600;white-space:nowrap}
+.ns-sum-caret::before{content:'펼치기'}
+.ns-sec[open]>.ns-sum .ns-sum-caret::before{content:'접기'}
+.ns-sum-caret i{font-style:normal;font-size:14px;transition:transform .15s}
+.ns-sec[open]>.ns-sum .ns-sum-caret i{transform:rotate(180deg)}
+.ns-sum:hover .ns-sum-caret{color:#eef2f8}
 .ns-body{padding:6px 16px 18px}
 @media (max-width:620px){.ns-sum-teaser{display:none}.ns-body{padding:6px 10px 14px}}
 .ns-h3{font-size:13px;font-weight:700;color:#b4becc;text-transform:uppercase;letter-spacing:.5px;margin:22px 0 8px}
@@ -19361,6 +19369,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
 /* 차트·툴바·칩 */
 .ns-chart{background:#151c26;border:1px solid #283142;border-radius:12px;padding:12px 14px;margin:6px 0 10px;min-width:0}
 .ns-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:#b4becc;margin:0 0 8px}
+/* 도표 아래 '읽는 법' 안내 상자 (차원 계단선) */
+.ns-guide{margin:4px 0 12px;padding:10px 14px;border:1px solid #283142;border-radius:10px;background:#0f141c}
+.ns-guide .ns-p{margin:4px 0}
+.ns-dim-legend{margin:0 0 6px}
+.ns-dim-key small{color:#8c97a8;margin-left:2px}
+.ns-dim-legend .ns-key-mark{background:none;width:auto;height:auto;color:#8c97a8;font-style:normal;font-size:10px;vertical-align:0}
+.ns-dim-legend .ns-key-shade{background:#1b2433;border:1px solid #34405a}
 .ns-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-2px}
 .ns-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:6px 0;font-size:11.5px}
 .ns-seg{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
@@ -19457,13 +19472,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
 <div id=&quot;nsWrap&quot; class=&quot;ns-wrap&quot;>
   <div class=&quot;hdr-row&quot;><span class=&quot;hdr-tag&quot;>NSLG v1.1 · 코딩북 v1.2 · 논문 2026-09-05</span><span class=&quot;hdr-line&quot;></span></div>
   <h1>Nuclear Strategies</h1>
-  <p class=&quot;sub&quot;>핵전략 생애주기 게이트 모델(Nuclear Strategy Lifecycle Gate) — 표준 모델 · 7개국 34개 시점의 변화 추이 · 북한 1956–2026 사건 185건 · 판정 단위 39개 (출처: 「북한 핵전략 생애주기 게이트 모델」 연구 데이터, 2026-09-17 02:31 빌드). 아래 네 절은 제목을 누르면 접히고 펼쳐진다.</p>
+  <p class=&quot;sub&quot;>핵전략 생애주기 게이트 모델(Nuclear Strategy Lifecycle Gate) — 표준 모델 · 7개국 34개 시점의 변화 추이 · 북한 1956–2026 사건 185건 · 판정 단위 39개 (출처: 「북한 핵전략 생애주기 게이트 모델」 연구 데이터, 2026-09-17 02:31 빌드). 아래 네 절은 제목 줄이나 1~4 단추를 누를 때마다 접히고 펼쳐진다.</p>
   <div class=&quot;ns-over&quot;><button type=&quot;button&quot; class=&quot;ns-tile&quot; data-go=&quot;ns-model&quot;><span class=&quot;ns-k&quot;>표준 모델</span><span class=&quot;ns-tile-v&quot;>6단계 × 4차원</span><span class=&quot;ns-tile-s&quot;>게이트 6 · 질적 조건 13 · 설명변수 D5</span></button><button type=&quot;button&quot; class=&quot;ns-tile&quot; data-go=&quot;ns-traj&quot;><span class=&quot;ns-k&quot;>북한 판정</span><span class=&quot;ns-tile-v&quot;>39단위</span><span class=&quot;ns-tile-s&quot;>1956–2026 · 세 계층 25시점</span></button><button type=&quot;button&quot; class=&quot;ns-tile&quot; data-go=&quot;ns-traj&quot;><span class=&quot;ns-k&quot;>비교사례</span><span class=&quot;ns-tile-v&quot;>7개국</span><span class=&quot;ns-tile-s&quot;>34시점 · 같은 게이트로 판정</span></button><button type=&quot;button&quot; class=&quot;ns-tile&quot; data-go=&quot;ns-events&quot;><span class=&quot;ns-k&quot;>전환 지점</span><span class=&quot;ns-tile-v&quot;>12전이</span><span class=&quot;ns-tile-s&quot;>사건 185건 · A등급 134</span></button><button type=&quot;button&quot; class=&quot;ns-tile&quot; data-go=&quot;ns-verify&quot;><span class=&quot;ns-k&quot;>코더 신뢰도</span><span class=&quot;ns-tile-v&quot;>α 0.892</span><span class=&quot;ns-tile-s&quot;>4코더 · 사실검증 2모델</span></button></div>
   <div class=&quot;ns-chart ns-over-rib&quot;><div class=&quot;ns-k ns-k-block ns-over-k&quot;>북한 1956–2026 판정 — 세 계층의 단계 <span class=&quot;ns-now&quot;>지금(2026) 전략(대미) S3 확증보복 / 전구(대남) S4 비대칭확전 — 하이브리드</span></div><svg viewBox=&quot;0 0 1080 82&quot; role=&quot;img&quot; class=&quot;ns-ribbon&quot;><line x1=&quot;133.9&quot; y1=&quot;2&quot; x2=&quot;133.9&quot; y2=&quot;62&quot; stroke=&quot;var(--line)&quot;/><text x=&quot;133.9&quot; y=&quot;73&quot; class=&quot;lbl&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>1960</text><line x1=&quot;273.6&quot; y1=&quot;2&quot; x2=&quot;273.6&quot; y2=&quot;62&quot; stroke=&quot;var(--line)&quot;/><text x=&quot;273.6&quot; y=&quot;73&quot; class=&quot;lbl&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>1970</text><line x1=&quot;413.3&quot; y1=&quot;2&quot; x2=&quot;413.3&quot; y2=&quot;62&quot; stroke=&quot;var(--line)&quot;/><text x=&quot;413.3&quot; y=&quot;73&quot; class=&quot;lbl&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>1980</text><line x1=&quot;553&quot; y1=&quot;2&quot; x2=&quot;553&quot; y2=&quot;62&quot; stroke=&quot;var(--line)&quot;/><text x=&quot;553&quot; y=&quot;73&quot; class=&quot;lbl&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>1990</text><line x1=&quot;692.8&quot; y1=&quot;2&quot; x2=&quot;692.8&quot; y2=&quot;62&quot; stroke=&quot;var(--line)&quot;/><text x=&quot;692.8&quot; y=&quot;73&quot; class=&quot;lbl&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>2000</text><line x1=&quot;832.5&quot; y1=&quot;2&quot; x2=&quot;832.5&quot; y2=&quot;62&quot; stroke=&quot;var(--line)&quot;/><text x=&quot;832.5&quot; y=&quot;73&quot; class=&quot;lbl&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>2010</text><line x1=&quot;972.2&quot; y1=&quot;2&quot; x2=&quot;972.2&quot; y2=&quot;62&quot; stroke=&quot;var(--line)&quot;/><text x=&quot;972.2&quot; y=&quot;73&quot; class=&quot;lbl&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>2020</text><text x=&quot;58&quot; y=&quot;11&quot; class=&quot;lbl&quot; text-anchor=&quot;end&quot; dominant-baseline=&quot;middle&quot;>사전 획득</text><g class=&quot;ns-rb&quot; data-tip=&quot;&amp;lt;b&amp;gt;사전 획득 · S0 잠재·헤징&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;1956–1988&amp;lt;br&amp;gt;확신도 high&quot;><rect x=&quot;79&quot; y=&quot;2&quot; width=&quot;459.1&quot; height=&quot;18&quot; fill=&quot;var(--s0)&quot; rx=&quot;3&quot;/><text x=&quot;308.5&quot; y=&quot;11&quot; class=&quot;rb-t ink&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>S0</text></g><rect x=&quot;497.1&quot; y=&quot;9&quot; width=&quot;41.9&quot; height=&quot;4&quot; fill=&quot;var(--s1)&quot; opacity=&quot;0.6&quot;/><g class=&quot;ns-rb&quot; data-tip=&quot;&amp;lt;b&amp;gt;사전 획득 · S1 추구&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;1989–2005 · 개시 1986 (지연 3년)&amp;lt;br&amp;gt;확신도 high&quot;><rect x=&quot;540.1&quot; y=&quot;2&quot; width=&quot;235.5&quot; height=&quot;18&quot; fill=&quot;var(--s1)&quot; rx=&quot;3&quot;/><text x=&quot;657.8&quot; y=&quot;11&quot; class=&quot;rb-t ink&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>S1</text></g><text x=&quot;58&quot; y=&quot;32&quot; class=&quot;lbl&quot; text-anchor=&quot;end&quot; dominant-baseline=&quot;middle&quot;>전략(대미)</text><g class=&quot;ns-rb&quot; data-tip=&quot;&amp;lt;b&amp;gt;전략(대미) · S2 초기 획득&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;2006–2022&amp;lt;br&amp;gt;확신도 high&quot;><rect x=&quot;777.6&quot; y=&quot;23&quot; width=&quot;235.5&quot; height=&quot;18&quot; fill=&quot;var(--s2)&quot; rx=&quot;3&quot;/><text x=&quot;895.3&quot; y=&quot;32&quot; class=&quot;rb-t ink&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>S2</text></g><rect x=&quot;874.4&quot; y=&quot;30&quot; width=&quot;139.7&quot; height=&quot;4&quot; fill=&quot;var(--s3)&quot; opacity=&quot;0.6&quot;/><g class=&quot;ns-rb&quot; data-tip=&quot;&amp;lt;b&amp;gt;전략(대미) · S3 확증보복&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;2023–2026 · 개시 2013 (지연 10년)&amp;lt;br&amp;gt;확신도 high&quot;><rect x=&quot;1015.1&quot; y=&quot;23&quot; width=&quot;53.9&quot; height=&quot;18&quot; fill=&quot;var(--s3)&quot; rx=&quot;3&quot;/><text x=&quot;1042.1&quot; y=&quot;32&quot; class=&quot;rb-t dk&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>S3</text></g><text x=&quot;58&quot; y=&quot;53&quot; class=&quot;lbl&quot; text-anchor=&quot;end&quot; dominant-baseline=&quot;middle&quot;>전구(대남)</text><g class=&quot;ns-rb&quot; data-tip=&quot;&amp;lt;b&amp;gt;전구(대남) · S2 초기 획득&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;2006–2022&amp;lt;br&amp;gt;확신도 high&quot;><rect x=&quot;777.6&quot; y=&quot;44&quot; width=&quot;235.5&quot; height=&quot;18&quot; fill=&quot;var(--s2)&quot; rx=&quot;3&quot;/><text x=&quot;895.3&quot; y=&quot;53&quot; class=&quot;rb-t ink&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>S2</text></g><rect x=&quot;1000.1&quot; y=&quot;51&quot; width=&quot;14&quot; height=&quot;4&quot; fill=&quot;var(--s4)&quot; opacity=&quot;0.6&quot;/><g class=&quot;ns-rb&quot; data-tip=&quot;&amp;lt;b&amp;gt;전구(대남) · S4 비대칭확전&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;2023–2026 · 개시 2022 (지연 1년)&amp;lt;br&amp;gt;확신도 medium&quot;><rect x=&quot;1015.1&quot; y=&quot;44&quot; width=&quot;53.9&quot; height=&quot;18&quot; fill=&quot;var(--s4)&quot; rx=&quot;3&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.5&quot;/><text x=&quot;1042.1&quot; y=&quot;53&quot; class=&quot;rb-t dk&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>S4</text></g></svg><div class=&quot;ns-legend&quot;><span><i class=&quot;ns-st-S0&quot; style=&quot;background:var(--sc)&quot;></i>S0 잠재·헤징</span><span><i class=&quot;ns-st-S1&quot; style=&quot;background:var(--sc)&quot;></i>S1 추구</span><span><i class=&quot;ns-st-S2&quot; style=&quot;background:var(--sc)&quot;></i>S2 초기 획득</span><span><i class=&quot;ns-st-S3&quot; style=&quot;background:var(--sc)&quot;></i>S3 확증보복</span><span><i class=&quot;ns-st-S4&quot; style=&quot;background:var(--sc)&quot;></i>S4 비대칭확전</span><span><i class=&quot;ns-st-S5&quot; style=&quot;background:var(--sc)&quot;></i>S5 대군사·손상제한</span><span><i class=&quot;ns-st-R&quot; style=&quot;background:var(--sc)&quot;></i>R 반전·동결</span></div></div>
-  <nav class=&quot;ns-nav&quot; aria-label=&quot;절 이동&quot;><button type=&quot;button&quot; data-go=&quot;ns-model&quot;>1 표준 모델</button><button type=&quot;button&quot; data-go=&quot;ns-traj&quot;>2 변화 추이</button><button type=&quot;button&quot; data-go=&quot;ns-events&quot;>3 전환 지점·사건</button><button type=&quot;button&quot; data-go=&quot;ns-verify&quot;>4 검증·출처</button><span class=&quot;ns-nav-sp&quot;></span><button type=&quot;button&quot; class=&quot;ns-nav-all&quot; data-all=&quot;open&quot;>모두 펼치기</button><button type=&quot;button&quot; class=&quot;ns-nav-all&quot; data-all=&quot;close&quot;>모두 접기</button></nav>
+  <nav class=&quot;ns-nav&quot; aria-label=&quot;절 접기·펼치기&quot;><button type=&quot;button&quot; data-go=&quot;ns-model&quot; aria-expanded=&quot;true&quot; title=&quot;누를 때마다 접었다 편다&quot;>1 표준 모델</button><button type=&quot;button&quot; data-go=&quot;ns-traj&quot; aria-expanded=&quot;false&quot; title=&quot;누를 때마다 접었다 편다&quot;>2 변화 추이</button><button type=&quot;button&quot; data-go=&quot;ns-events&quot; aria-expanded=&quot;false&quot; title=&quot;누를 때마다 접었다 편다&quot;>3 전환 지점·사건</button><button type=&quot;button&quot; data-go=&quot;ns-verify&quot; aria-expanded=&quot;false&quot; title=&quot;누를 때마다 접었다 편다&quot;>4 검증·출처</button><span class=&quot;ns-nav-sp&quot;></span><button type=&quot;button&quot; class=&quot;ns-nav-all&quot; data-all=&quot;open&quot;>모두 펼치기</button><button type=&quot;button&quot; class=&quot;ns-nav-all&quot; data-all=&quot;close&quot;>모두 접기</button></nav>
   
 <details class=&quot;ns-sec&quot; id=&quot;ns-model&quot; open>
-  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>1</span><span class=&quot;ns-sum-title&quot;>표준 모델<small>Standard model</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;><i class=&quot;ns-st-dot ns-st-S0&quot;></i>S0 <i class=&quot;ns-st-dot ns-st-S1&quot;></i>S1 <i class=&quot;ns-st-dot ns-st-S2&quot;></i>S2 <i class=&quot;ns-st-dot ns-st-S3&quot;></i>S3 <i class=&quot;ns-st-dot ns-st-S4&quot;></i>S4 <i class=&quot;ns-st-dot ns-st-S5&quot;></i>S5 <i class=&quot;ns-st-dot ns-st-R&quot;></i>R</span><span class=&quot;ns-tz&quot;>게이트 6 · 차원 4</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;>▾</span></summary>
+  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>1</span><span class=&quot;ns-sum-title&quot;>표준 모델<small>Standard model</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;><i class=&quot;ns-st-dot ns-st-S0&quot;></i>S0 <i class=&quot;ns-st-dot ns-st-S1&quot;></i>S1 <i class=&quot;ns-st-dot ns-st-S2&quot;></i>S2 <i class=&quot;ns-st-dot ns-st-S3&quot;></i>S3 <i class=&quot;ns-st-dot ns-st-S4&quot;></i>S4 <i class=&quot;ns-st-dot ns-st-S5&quot;></i>S5 <i class=&quot;ns-st-dot ns-st-R&quot;></i>R</span><span class=&quot;ns-tz&quot;>게이트 6 · 차원 4</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;><i>▾</i></span></summary>
   <div class=&quot;ns-body&quot;><p class=&quot;sub&quot;>여섯 단계 × 네 차원의 게이트. 설계 흐름도 → 단계 사다리 → 게이트 매트릭스 → 차원 앵커 순으로 모델을 읽고, 논문 원문과 표는 각 도표 아래 접이식에 있다.</p>
   
   <h3 class=&quot;ns-h3&quot;>모델은 어떻게 만들어졌나 — 선정·설계 흐름</h3>
@@ -19507,15 +19522,21 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
 </details>
   
 <details class=&quot;ns-sec&quot; id=&quot;ns-traj&quot;>
-  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>2</span><span class=&quot;ns-sum-title&quot;>변화 추이<small>Trajectories</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;>북한 39단위</span><span class=&quot;ns-tz&quot;>7개국 34시점</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;>▾</span></summary>
+  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>2</span><span class=&quot;ns-sum-title&quot;>변화 추이<small>Trajectories</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;>북한 39단위</span><span class=&quot;ns-tz&quot;>7개국 34시점</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;><i>▾</i></span></summary>
   <div class=&quot;ns-body&quot;><p class=&quot;sub&quot;>판정은 점수가 게이트를 넘는 해에만 바뀐다. 밴드 위 빗금은 <b>개시(전환 국면)</b>에서 <b>확정</b>까지의 지연이고, 점 위에 올리면 점수·질적 조건·출처가 보인다.</p>
   <h3 class=&quot;ns-h3&quot;>북한 1956–2026 — 세 계층의 단계 판정</h3>
   <div class=&quot;ns-chart&quot; id=&quot;nsBands&quot;></div>
   <div class=&quot;ns-legend&quot; id=&quot;nsBandLegend&quot;></div>
   <p class=&quot;ns-p&quot;><b>전환 국면·표지</b>(게이트 일부만 충족한 개시 시점 — 누르면 그 해의 판정 단위로 이동) <button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;1986&quot; data-layer=&quot;pre&quot; title=&quot;D1∉[2,2](=1.0)&quot;>1986 사전 획득 · → S1 개시</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;1998&quot; data-layer=&quot;pre&quot; title=&quot;R_Freeze&quot;>1998 사전 획득 · R_Freeze</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2013&quot; data-layer=&quot;strategic&quot; title=&quot;D1∉[4,5](=3.0); qual:survivable_second_strike&quot;>2013 전략(대미) · → S3 개시</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2016&quot; data-layer=&quot;strategic&quot; title=&quot;D1∉[4,5](=3.5); qual:survivable_second_strike&quot;>2016 전략(대미) · → S3 개시</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2017&quot; data-layer=&quot;strategic&quot; title=&quot;D1∉[4,5](=3.5); qual:survivable_second_strike&quot;>2017 전략(대미) · → S3 개시</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2018&quot; data-layer=&quot;strategic&quot; title=&quot;&quot;>2018 전략(대미) · 교섭</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2019&quot; data-layer=&quot;strategic&quot; title=&quot;D1∉[4,5](=3.5); qual:survivable_second_strike&quot;>2019 전략(대미) · → S3 개시</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2021&quot; data-layer=&quot;strategic&quot; title=&quot;D1∉[4,5](=3.5); qual:survivable_second_strike&quot;>2021 전략(대미) · → S3 개시</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2022&quot; data-layer=&quot;strategic&quot; title=&quot;D1∉[4,5](=3.5); qual:survivable_second_strike&quot;>2022 전략(대미) · → S3 개시</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2018&quot; data-layer=&quot;theater&quot; title=&quot;&quot;>2018 전구(대남) · 교섭</button><button type=&quot;button&quot; class=&quot;ns-chip ns-trans&quot; data-year=&quot;2022&quot; data-layer=&quot;theater&quot; title=&quot;qual:tactical_warhead&quot;>2022 전구(대남) · → S4 개시</button></p>
   <h3 class=&quot;ns-h3&quot;>차원 점수의 계단선</h3>
-  <div class=&quot;ns-toolbar&quot;><div class=&quot;ns-seg&quot; role=&quot;group&quot; aria-label=&quot;계층&quot;><button type=&quot;button&quot; class=&quot;ns-chip on&quot; data-steps=&quot;main&quot;>사전 획득 → 전략(대미)</button><button type=&quot;button&quot; class=&quot;ns-chip&quot; data-steps=&quot;theater&quot;>전구(대남)</button></div><span class=&quot;ns-muted&quot;>▲ 표시 = 단계 개시 연도 · 음영 = 하이브리드(전략 S3 / 전구 S4)</span></div>
+  <div class=&quot;ns-toolbar&quot;><div class=&quot;ns-seg&quot; role=&quot;group&quot; aria-label=&quot;계층&quot;><button type=&quot;button&quot; class=&quot;ns-chip on&quot; data-steps=&quot;main&quot;>사전 획득 → 전략(대미)</button><button type=&quot;button&quot; class=&quot;ns-chip&quot; data-steps=&quot;theater&quot;>전구(대남)</button></div><span class=&quot;ns-muted&quot;>선 = 차원 점수(계층별 판정 단위) · ▲ = 단계 개시 연도 · 음영 = 하이브리드 — 읽는 법은 그래프 아래</span></div>
   <div class=&quot;ns-chart&quot; id=&quot;nsSteps&quot;></div>
+  <div class=&quot;ns-guide&quot; id=&quot;nsStepsGuide&quot;>
+    <div class=&quot;ns-legend ns-dim-legend&quot;><span class=&quot;ns-dim-key&quot;><i style=&quot;background:var(--d1)&quot;></i>D1 물적 능력 <small>0–5</small></span><span class=&quot;ns-dim-key&quot;><i style=&quot;background:var(--d2)&quot;></i>D2 선언·법제 <small>0–5</small></span><span class=&quot;ns-dim-key&quot;><i style=&quot;background:var(--d3)&quot;></i>D3 배치·운용·훈련 <small>0–5</small></span><span class=&quot;ns-dim-key&quot;><i style=&quot;background:var(--d4a)&quot;></i>D4a 지휘통제(법제) <small>0–4</small></span><span class=&quot;ns-dim-key&quot;><i style=&quot;background:var(--d4b)&quot;></i>D4b 지휘통제(운용 추정) <small>0–4</small></span><span class=&quot;ns-dim-key&quot;><i class=&quot;ns-key-mark&quot;>▲</i>단계 개시 연도</span><span class=&quot;ns-dim-key&quot;><i class=&quot;ns-key-shade&quot;></i>하이브리드 구간</span></div>
+    <p class=&quot;ns-p&quot;><b>읽는 법</b> 가로축은 연도, 세로축은 차원 점수(D1·D2·D3는 0–5, D4a·D4b는 0–4). 선 하나가 차원 하나이며, 북한의 판정 단위(코딩 시점) 25개마다 매긴 점수를 잇는다. 점수는 판정 시점에만 바뀌고 다음 시점까지 그대로 유지되므로 계단 모양이 된다 — 수평 구간은 '유지', 수직 구간은 '그 해에 재판정'. 같은 값의 선이 포개져 사라지지 않도록 세로로 조금씩 벌려 그렸다(값 차이가 아니다).</p>
+    <p class=&quot;ns-p&quot;><b>표지와 음영</b> 축 아래 ▲는 단계 개시(전환 국면이 시작된) 연도: 1986년 S1 개시, 2006년 S2 개시, 2013년 S3 개시, 2022년 S4 개시. 옅은 음영은 전략 S3 확증보복와 전구 S4 비대칭확전가 함께 유지되는 하이브리드 구간(2023–2026). 위 칩 '사전 획득 → 전략(대미)'은 대미 억지 계층의 판정 단위 25개, '전구(대남)'은 대남 계층의 판정 단위 14개(2004년 이후만 확대해 보인다).</p>
+    <p class=&quot;ns-p&quot;><b>단계 판정과의 관계</b> 단계는 점수가 §1 게이트의 하한을 모두 넘고 질적 조건까지 갖춘 해에만 바뀐다 — 예: S3 확증보복 게이트는 D1 ≥ 4 · D2 ≥ 1 · D3 ≥ 1 · D4a ≥ 1. 가장 최근 판정 단위(2026 전략(대미))의 점수는 D1 4 · D2 3 · D3 3 · D4a 3 · D4b 2.5이고, 각 점수가 뜻하는 상태는 §1 차원 앵커 눈금에서 본다. 그래프에 올리면 세로 안내선과 그 해의 다섯 점수가 뜨고, 아래 판정 단위 칩을 누르면 그 시점의 근거 사건과 게이트 대조가 열린다.</p>
+  </div>
   <h3 class=&quot;ns-h3&quot;>판정 단위 상세 — 점수·게이트·근거 사건</h3>
   <div class=&quot;ns-units&quot;><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1956|pre&quot; title=&quot;사전 획득 1956 · S0&quot;>1956<i class=&quot;ns-st-dot ns-st-S0&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1965|pre&quot; title=&quot;사전 획득 1965 · S0&quot;>1965<i class=&quot;ns-st-dot ns-st-S0&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1975|pre&quot; title=&quot;사전 획득 1975 · S0&quot;>1975<i class=&quot;ns-st-dot ns-st-S0&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1980|pre&quot; title=&quot;사전 획득 1980 · S0&quot;>1980<i class=&quot;ns-st-dot ns-st-S0&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1986|pre&quot; title=&quot;사전 획득 1986 · S0&quot;>1986<i class=&quot;ns-st-dot ns-st-S0&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1989|pre&quot; title=&quot;사전 획득 1989 · S1&quot;>1989<i class=&quot;ns-st-dot ns-st-S1&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1992|pre&quot; title=&quot;사전 획득 1992 · S1&quot;>1992<i class=&quot;ns-st-dot ns-st-S1&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1994|pre&quot; title=&quot;사전 획득 1994 · S1&quot;>1994<i class=&quot;ns-st-dot ns-st-S1&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;1998|pre&quot; title=&quot;사전 획득 1998 · S1&quot;>1998<i class=&quot;ns-st-dot ns-st-S1&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2003|pre&quot; title=&quot;사전 획득 2003 · S1&quot;>2003<i class=&quot;ns-st-dot ns-st-S1&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2005|pre&quot; title=&quot;사전 획득 2005 · S1&quot;>2005<i class=&quot;ns-st-dot ns-st-S1&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2006|strategic&quot; title=&quot;전략(대미) 2006 · S2&quot;>2006<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2006|theater&quot; title=&quot;전구(대남) 2006 · S2&quot;>2006<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2009|strategic&quot; title=&quot;전략(대미) 2009 · S2&quot;>2009<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2009|theater&quot; title=&quot;전구(대남) 2009 · S2&quot;>2009<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2012|strategic&quot; title=&quot;전략(대미) 2012 · S2&quot;>2012<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2012|theater&quot; title=&quot;전구(대남) 2012 · S2&quot;>2012<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2013|strategic&quot; title=&quot;전략(대미) 2013 · S2&quot;>2013<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2013|theater&quot; title=&quot;전구(대남) 2013 · S2&quot;>2013<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2016|strategic&quot; title=&quot;전략(대미) 2016 · S2&quot;>2016<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2016|theater&quot; title=&quot;전구(대남) 2016 · S2&quot;>2016<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2017|strategic&quot; title=&quot;전략(대미) 2017 · S2&quot;>2017<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2017|theater&quot; title=&quot;전구(대남) 2017 · S2&quot;>2017<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2018|strategic&quot; title=&quot;전략(대미) 2018 · S2&quot;>2018<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2018|theater&quot; title=&quot;전구(대남) 2018 · S2&quot;>2018<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2019|strategic&quot; title=&quot;전략(대미) 2019 · S2&quot;>2019<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2019|theater&quot; title=&quot;전구(대남) 2019 · S2&quot;>2019<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2021|strategic&quot; title=&quot;전략(대미) 2021 · S2&quot;>2021<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2021|theater&quot; title=&quot;전구(대남) 2021 · S2&quot;>2021<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2022|strategic&quot; title=&quot;전략(대미) 2022 · S2&quot;>2022<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2022|theater&quot; title=&quot;전구(대남) 2022 · S2&quot;>2022<i class=&quot;ns-st-dot ns-st-S2&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2023|strategic&quot; title=&quot;전략(대미) 2023 · S3&quot;>2023<i class=&quot;ns-st-dot ns-st-S3&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2023|theater&quot; title=&quot;전구(대남) 2023 · S4&quot;>2023<i class=&quot;ns-st-dot ns-st-S4&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2024|strategic&quot; title=&quot;전략(대미) 2024 · S3&quot;>2024<i class=&quot;ns-st-dot ns-st-S3&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2024|theater&quot; title=&quot;전구(대남) 2024 · S4&quot;>2024<i class=&quot;ns-st-dot ns-st-S4&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2025|strategic&quot; title=&quot;전략(대미) 2025 · S3&quot;>2025<i class=&quot;ns-st-dot ns-st-S3&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2025|theater&quot; title=&quot;전구(대남) 2025 · S4&quot;>2025<i class=&quot;ns-st-dot ns-st-S4&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2026|strategic&quot; title=&quot;전략(대미) 2026 · S3&quot;>2026<i class=&quot;ns-st-dot ns-st-S3&quot;></i></button><button type=&quot;button&quot; class=&quot;ns-chip ns-unit&quot; data-unit=&quot;2026|theater&quot; title=&quot;전구(대남) 2026 · S4&quot;>2026<i class=&quot;ns-st-dot ns-st-S4&quot;></i></button></div>
   <div class=&quot;ns-unit-detail card&quot; id=&quot;nsUnitDetail&quot;></div>
@@ -19566,7 +19587,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
 </details>
   
 <details class=&quot;ns-sec&quot; id=&quot;ns-events&quot;>
-  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>3</span><span class=&quot;ns-sum-title&quot;>전환 지점·사건<small>Singularities</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;>전이 12</span><span class=&quot;ns-tz&quot;>사건 185건</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;>▾</span></summary>
+  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>3</span><span class=&quot;ns-sum-title&quot;>전환 지점·사건<small>Singularities</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;>전이 12</span><span class=&quot;ns-tz&quot;>사건 185건</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;><i>▾</i></span></summary>
   <div class=&quot;ns-body&quot;><p class=&quot;sub&quot;>북한 판정이 움직인 12개 전이마다 트리거 사건·외부환경·메커니즘을 잇고(★ = 그 구간 판정 단위의 근거 사건), 탐색기에서 사건 185건을 차원·계층·등급·시기로 걸러 상세(출처·검증·지식그래프 연결)를 연다.</p>
   <h3 class=&quot;ns-h3&quot;>전환 지점 지도 — 연도별 사건 수 · 전이 표지 ①–12 · 북한 단계 리본</h3>
   <p class=&quot;ns-p ns-muted&quot;>막대 = 그 해의 사건 수(누르면 탐색기가 그 해만 남긴다). 금색 번호 = 전이의 개시 연도, 이어진 선 = 확정까지의 창(누르면 아래 트리거 카드가 열리고 탐색기가 그 창으로 걸러진다). 맨 아래 리본 = 북한 세 계층의 단계 — 사건이 몰린 해와 단계가 바뀐 해를 한눈에 맞춰 본다.</p>
@@ -19692,7 +19713,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
 </details>
   
 <details class=&quot;ns-sec&quot; id=&quot;ns-verify&quot;>
-  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>4</span><span class=&quot;ns-sum-title&quot;>검증·출처<small>Verification &amp;amp; sources</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;>α 0.892</span><span class=&quot;ns-tz&quot;>A등급 134/185</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;>▾</span></summary>
+  <summary class=&quot;ns-sum&quot;><span class=&quot;ns-sum-no&quot;>4</span><span class=&quot;ns-sum-title&quot;>검증·출처<small>Verification &amp;amp; sources</small></span><span class=&quot;ns-sum-teaser&quot;><span class=&quot;ns-tz&quot;>α 0.892</span><span class=&quot;ns-tz&quot;>A등급 134/185</span></span><span class=&quot;ns-sum-caret&quot; aria-hidden=&quot;true&quot;><i>▾</i></span></summary>
   <div class=&quot;ns-body&quot;><p class=&quot;sub&quot;>사건 185건의 증거등급, 4코더 신뢰도, 교차 모델 사실검증, 게이트 임계 강건성, 출처 키 해석.</p>
   <div class=&quot;ns-grid2&quot;>
     <div class=&quot;card&quot;><div class=&quot;ns-k&quot;>사건 연표 185건의 증거등급</div><svg viewBox=&quot;0 0 520 20&quot; role=&quot;img&quot; class=&quot;ns-stack&quot;><g class=&quot;ns-sb&quot; data-tip=&quot;&amp;lt;b&amp;gt;A&amp;lt;/b&amp;gt; 134 (72%)&quot;><rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;374.6&quot; height=&quot;18&quot; fill=&quot;#34d399&quot; rx=&quot;4&quot;/><text x=&quot;187.3&quot; y=&quot;9&quot; class=&quot;sb-t dk&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>A 134</text></g><g class=&quot;ns-sb&quot; data-tip=&quot;&amp;lt;b&amp;gt;B&amp;lt;/b&amp;gt; 45 (24%)&quot;><rect x=&quot;376.6&quot; y=&quot;0&quot; width=&quot;124.5&quot; height=&quot;18&quot; fill=&quot;#7ce0e8&quot;/><text x=&quot;438.9&quot; y=&quot;9&quot; class=&quot;sb-t dk&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;middle&quot;>B 45</text></g><g class=&quot;ns-sb&quot; data-tip=&quot;&amp;lt;b&amp;gt;C&amp;lt;/b&amp;gt; 4 (2%)&quot;><rect x=&quot;503.1&quot; y=&quot;0&quot; width=&quot;9.2&quot; height=&quot;18&quot; fill=&quot;#f1c27b&quot;/></g><g class=&quot;ns-sb&quot; data-tip=&quot;&amp;lt;b&amp;gt;D&amp;lt;/b&amp;gt; 2 (1%)&quot;><rect x=&quot;514.4&quot; y=&quot;0&quot; width=&quot;5.6&quot; height=&quot;18&quot; fill=&quot;#f87171&quot; rx=&quot;4&quot;/></g></svg><p class=&quot;ns-p ns-muted&quot;>A 1차자료(법령·공식 보도)·복수 학술서 일치 · B 단일 학술·정부 문서 · C 싱크탱크·언론 · D 추정·미확인. 코딩북 v1.2: 게이트 판정에 쓰인 셀 가운데 최저 등급이 판정의 등급이 된다.</p></div>
@@ -19947,25 +19968,39 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
   var stageChip = function (s) { return '<span class=&quot;ns-st ns-st-' + esc(s) + '&quot;>' + esc(s) + (STAGE_NAME[s] ? ' ' + esc(STAGE_NAME[s]) : '') + '</span>'; };
   var closest = function (el, sel) { return el &amp;&amp; el.closest ? el.closest(sel) : null; };
 
-  /* ── 접이식 절: 이동 목표의 조상 <details> 를 모두 연 뒤 스크롤한다 ── */
-  var SECS = $$('details.ns-sec');
+  /* ── 접이식 절 ──
+     스크롤은 프레임 안에서만 한다. scrollIntoView 는 부모 대시보드까지 끌어올려 절 제목이 부모의 고정 배너와
+     프레임 안 고정 내비 밑에 숨었으므로(접기 단추가 사라진 것처럼 보임), 목표 위치를 직접 계산해 내비 높이와
+     배너 겹침(--top-inset, 부모가 알려 줌)만큼 아래에 놓고, 부모에는 &quot;프레임 위쪽을 배너 아래로 보여 달라&quot;고만 요청한다. */
+  var SECS = $$('details.ns-sec'), NAV = $('.ns-nav'), NAVB = $$('.ns-nav [data-go]');
+  function topOffset() { var inset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--top-inset')) || 0; return inset + (NAV ? NAV.offsetHeight : 0) + 8; }
+  function revealFrame() { try { if (window.parent !== window) window.parent.postMessage({ type: 'dprk-watch:reveal' }, '*'); } catch (e) {} }
+  function scrollToEl(el) {
+    if (!el) return;
+    var y = el.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || 0) - topOffset();
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    revealFrame();
+  }
   var scrollTo = function (el) {
     if (!el) return;
     var d = closest(el, 'details');
     while (d) { d.open = true; d = d.parentElement ? closest(d.parentElement, 'details') : null; }
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToEl(el);
   };
-  function openSec(id, exclusive) {
-    var el = document.getElementById(id); if (!el) return;
-    if (exclusive) SECS.forEach(function (s) { s.open = s === el; }); else el.open = true;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function openSec(id) { var el = document.getElementById(id); if (!el) return; el.open = true; scrollToEl(el); }
+  /* 내비 단추 1~4 = 그 절을 접었다 폈다(토글). 단추는 절의 열림 상태를 따라간다(제목 클릭·모두 펼치기 포함). */
+  function syncNav() {
+    NAVB.forEach(function (b) { var s = document.getElementById(b.getAttribute('data-go')); var on = !!(s &amp;&amp; s.open); b.classList.toggle('on', on); b.setAttribute('aria-expanded', on ? 'true' : 'false'); });
   }
-  $$('[data-go]').forEach(function (b) { b.addEventListener('click', function () { openSec(b.getAttribute('data-go'), true); }); });
+  SECS.forEach(function (s) { s.addEventListener('toggle', syncNav); });
+  syncNav();
+  NAVB.forEach(function (b) { b.addEventListener('click', function () { var el = document.getElementById(b.getAttribute('data-go')); if (!el) return; el.open = !el.open; scrollToEl(el); }); });
+  $$('.ns-tile[data-go]').forEach(function (b) { b.addEventListener('click', function () { openSec(b.getAttribute('data-go')); }); });
   $$('[data-all]').forEach(function (b) {
     b.addEventListener('click', function () {
       var open = b.getAttribute('data-all') === 'open';
       SECS.forEach(function (s) { s.open = open; });
-      if (!open) $('.ns-nav').scrollIntoView({ block: 'start' });
+      scrollToEl(SECS[0]);
     });
   });
 
@@ -20783,8 +20818,19 @@ uSlider();render();buildNKCats();renderNK();renderNKEvents();nkModalInit();
   border:1px solid #283142;color:#b4becc;background:#151c26}
 .sp-tab:hover{border-color:#7ce0e8;color:#eef2f8}
 .sp-tab[aria-selected=true]{background:#4fa6ad;border-color:#4fa6ad;color:#06121a;font-weight:700}
+/* 부모 대시보드의 상단 고정 배너가 이 프레임을 덮는 높이(--top-inset, 부모가 postMessage 로 알려 줌)만큼 스크롤 목표를 내린다 */
+html{scroll-padding-top:calc(var(--top-inset,0px) + 8px)}
 </style>
 <script>
+(function(){
+  // 부모(dprk_watch)가 보내는 겹침 높이 → CSS 변수. 프레임 안 고정 내비(.ns-nav)와 스크롤 여백이 이 값을 쓴다.
+  window.addEventListener(&quot;message&quot;,function(ev){
+    var d=ev.data;
+    if(!d||ev.source!==window.parent||d.type!==&quot;dprk-watch:inset&quot;||typeof d.top!==&quot;number&quot;)return;
+    document.documentElement.style.setProperty(&quot;--top-inset&quot;,Math.max(0,Math.min(300,Math.round(d.top)))+&quot;px&quot;);
+  });
+  try{ if(window.parent!==window) window.parent.postMessage({type:&quot;dprk-watch:inset-request&quot;},&quot;*&quot;); }catch(e){}
+})();
 (function(){
   // 원본은 id=&quot;appWrap&quot; 이다. 클래스로 바뀔 경우까지 함께 받아 둔다.
   var wrap=document.getElementById(&quot;appWrap&quot;)||document.querySelector(&quot;.appWrap&quot;);
@@ -24722,6 +24768,39 @@ window.addEventListener('message',function(ev){
   inp.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   window.scrollTo({top:0,behavior:'smooth'});
 });
+// 보유량 프레임과 상단 고정 배너(#prism-wrap, sticky)의 겹침 처리.
+// 1) 배너가 프레임 위쪽을 덮는 높이(inset)를 프레임에 알린다 → 프레임 안 고정 내비·스크롤 목표가 그만큼 내려온다.
+// 2) 프레임이 "내 위쪽을 보이게 해 달라"(reveal)고 하면 — 절을 펼치거나 이동할 때 — 프레임 상단을 배너 바로 아래로 맞춘다.
+//    프레임 안에서 scrollIntoView 를 쓰면 부모까지 끌어올려 절 제목이 배너 밑에 숨었기 때문에, 프레임은 제 안에서만 스크롤하고 부모 이동은 이 경로로만 한다.
+(function(){
+  var fr=document.querySelector('[data-viewpane="stockpile"] iframe');
+  var wrap=document.getElementById('prism-wrap');
+  if(!fr)return;
+  var last=null,raf=0;
+  function bannerBottom(){ if(!wrap)return 0; var r=wrap.getBoundingClientRect(); return r.height>0?r.bottom:0; }
+  function send(){
+    raf=0; if(!fr.contentWindow)return;
+    var fb=fr.getBoundingClientRect(); if(!fb.height)return;
+    var inset=Math.max(0,Math.round(bannerBottom()-fb.top));
+    if(inset===last)return; last=inset;
+    fr.contentWindow.postMessage({type:'dprk-watch:inset',top:inset},'*');
+  }
+  function queue(){ if(!raf)raf=requestAnimationFrame(send); }
+  window.addEventListener('scroll',queue,{passive:true});
+  window.addEventListener('resize',queue);
+  window.addEventListener('viewpane:shown',function(){ last=null; setTimeout(queue,60); });
+  fr.addEventListener('load',function(){ last=null; queue(); });
+  window.addEventListener('message',function(ev){
+    var d=ev.data; if(!d||ev.source!==fr.contentWindow)return;
+    if(d.type==='dprk-watch:inset-request'){ last=null; queue(); return; }
+    if(d.type!=='dprk-watch:reveal')return;
+    var fb=fr.getBoundingClientRect(),bb=bannerBottom();
+    // 프레임 위쪽이 배너 밑에 숨었거나(위로 넘침) 화면 아래쪽에 치우쳐 있으면 배너 바로 아래로 맞춘다
+    if(fb.top<bb-1||fb.top>window.innerHeight*0.45) window.scrollTo({top:Math.max(0,window.pageYOffset+fb.top-bb-8),behavior:'smooth'});
+    last=null; setTimeout(queue,450); setTimeout(queue,1000);
+  });
+  queue();
+})();
 document.querySelectorAll('[data-sig]').forEach((item)=>{
   item.addEventListener('click',()=>{
     const id=item.dataset.sig;
