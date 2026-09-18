@@ -119,6 +119,19 @@ details.tlyear>summary{padding:8px 2px}
 details.tlyear>summary:hover{background:var(--panel-2)}
 details.tlyear .tly{font-family:var(--mono);font-size:.88rem;font-weight:600;color:var(--text)}
 details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
+/* 개요 우측 컬럼 패널 — 접이식. 삼각형·여백은 위 tlyear 와 같은 관용구를 쓴다.
+   제목만 남기고 접히므로 h2 의 아래 여백은 summary 가 열렸을 때만 준다. */
+details.sfold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;user-select:none}
+details.sfold>summary::-webkit-details-marker{display:none}
+details.sfold>summary::before{content:'';flex:0 0 auto;width:0;height:0;border-left:5px solid var(--muted);
+  border-top:4px solid transparent;border-bottom:4px solid transparent;transition:transform .15s}
+details.sfold[open]>summary::before{transform:rotate(90deg)}
+details.sfold>summary:hover::before{border-left-color:var(--cyan)}
+details.sfold>summary h2{margin:0}
+details.sfold[open]>summary{margin-bottom:12px}
+/* 접기 막대는 서버 메뉴(order:-2,-1)보다도 위에 둔다 */
+.sfoldbar{order:-3;display:flex;gap:8px;margin-bottom:var(--space)}
+.sfoldbar .chip{padding:3px 11px;font-size:.76rem}
 /* 활동 시계열 */
 .tsband{max-width:1480px;margin:0 auto;padding:var(--space) 24px 0}
 .tsband .panel{margin-bottom:0}
@@ -5899,8 +5912,13 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
     </details>
   </section>
   <aside>
+    <div class="sfoldbar">
+      <button class="chip" data-sfold-all="close">모두 접기</button>
+      <button class="chip" data-sfold-all="open">모두 펼치기</button>
+    </div>
     <section class="panel">
-      <h2>경합 평가 <span class="q">Q3</span></h2>
+      <details class="sfold" open data-fold="claims">
+      <summary><h2>경합 평가 <span class="q">Q3</span></h2></summary>
       <div class="vs"><div class="claim">
   <div class="who">ISIS (Albright) · 신뢰도 medium <span class="tag vbadge unv">미검증</span></div>
   2024-09 공개된 농축시설 사진은 강선 시설일 가능성이 높다
@@ -5910,9 +5928,11 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
   2024-09 공개된 농축시설 사진은 영변 UEP일 가능성이 있다
   <div class="meta">대상: 우라늄 농축공장, 김정은 우라늄 농축시설 시찰 공개 · 근거 관측 0건</div>
 </div></div>
+      </details>
     </section>
     <section class="panel">
-      <h2>출처 계보 <span class="q">Q6</span></h2>
+      <details class="sfold" open data-fold="lineage">
+      <summary><h2>출처 계보 <span class="q">Q6</span></h2></summary>
       <div class="warn">⚠ 동일 원천 영상 재해석 — <span class="img">Maxar 2025-10</span><br>
     문서 2건 / 매체 2곳: 38 North, ISIS (Albright)<br>
     <span class="plain">서로 다른 매체지만 같은 영상 기반 — 독립 검증으로 간주하지 말 것 (총람 §8-1)</span></div>
@@ -6067,9 +6087,11 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
 <p class="plain">38노스 2021-09-09 — 문서 1건 (단일 출처)</p>
 <p class="plain">위성 사진 제공사 2021-07 — 문서 1건 (단일 출처)</p>
 <p class="plain">민간업체 2021-03-12 — 문서 1건 (단일 출처)</p>
+      </details>
     </section>
     <section class="panel docs">
-      <h2>최근 문서 <span class="q">Q4</span></h2>
+      <details class="sfold" open data-fold="docs">
+      <summary><h2>최근 문서 <span class="q">Q4</span></h2></summary>
       <ul><li><time>2026-08-25</time><a href="https://rfa.org/korean/in-focus/2026/08/25/trump-kim-jong-un-north-korea-nuclear-talks/" rel="noopener">“김정은에겐 영원한 친구도, 영원한 적도 없다”</a><br><span class="out">VOA·RFA 한국어 · news</span></li>
 <li><time>2026-08-11</time><a href="http://www.koreatimes.com/article/20260810/1625039" rel="noopener">시리아, 北도움으로 만든 더티밤 원료 내준다… &quot;美·IAEA 합의&quot;</a><br><span class="out">미주 한국일보 · news</span></li>
 <li><time>2026-07-23</time><a href="https://www.38north.org/2026/07/north-koreas-nuclear-doctrine-implications-and-strategic-countermeasures-for-the-us-rok-alliance/" rel="noopener">North Korea’s Nuclear Doctrine: Implications and Strategic Countermeasures for the US-ROK Alliance - 38 North: Informed Analysis of North Korea</a><br><span class="out">38 North · imagery_analysis</span></li>
@@ -6080,9 +6102,11 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
 <li><time>2026-06-11</time><a href="https://www.yna.co.kr/view/AKR20260611088900009" rel="noopener">&quot;北, 우라늄 농축 능력 75% 확대 전망…핵무력 증강 의지 과시&quot;</a><br><span class="out">연합뉴스 북한부 · news</span></li>
 <li><time>2026-06-09</time><a href="https://www.nknews.org/2026/06/iaea-chief-voices-serious-concern-about-north-koreas-new-nuclear-facility/" rel="noopener">IAEA chief voices ‘serious concern’ about North Korea’s new nuclear facility</a><br><span class="out">NK News / NK Pro · news</span></li>
 <li><time>2026-06-08</time><a href="https://www.nknews.org/2026/06/think-tank-raises-estimate-for-north-korean-nuclear-arsenal-to-60-warheads/" rel="noopener">Think tank raises estimate for North Korean nuclear arsenal to 60 warheads</a><br><span class="out">NK News / NK Pro · news</span></li></ul>
+      </details>
     </section>
     <section class="panel" id="vf-panel">
-      <h2>판독 결정 <span class="q">로컬</span></h2>
+      <details class="sfold" open data-fold="verdict">
+      <summary><h2>판독 결정 <span class="q">로컬</span></h2></summary>
       <p class="plain" style="border:1px solid var(--amber);border-radius:8px;padding:8px 10px;color:var(--amber);margin-bottom:8px">💾 <b>1-클릭 저장은 서버 모드에서</b>: <code style="color:var(--cyan)">node src/serve.js</code> 실행 → 열리는 <code style="color:var(--cyan)">http://127.0.0.1:8787</code> 에서 <b>서버에 저장</b> 버튼이 나타납니다. (지금 보는 정적 파일은 브라우저 보안상 디스크 저장 불가 — 아래 내보내기→CLI만 가능)</p>
       <p class="plain">타임라인·매체 색인의 <b>전환</b> 버튼으로 자동 추출 <b>관측·주장</b>의 검증/미검증을 결정합니다. 결정은 이 브라우저(localStorage)에 저장되며, 내보낸 JSON을 <code>node src/review.js apply verify-decisions.json</code>으로 데이터에 반영한 뒤 재생성하세요.</p>
       <p class="plain" style="margin:8px 0">미적용 결정: <b id="vf-count" style="color:var(--amber)">0</b>건</p>
@@ -6091,9 +6115,11 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
         <button class="chip" id="vf-export">결정 내보내기</button>
         <button class="chip" id="vf-reset">초기화</button>
       </div>
+      </details>
     </section>
     <section class="panel queue">
-      <h2>검증 큐 <span class="q">1415건</span></h2>
+      <details class="sfold" open data-fold="queue">
+      <summary><h2>검증 큐 <span class="q">1415건</span></h2></summary>
       <ul><li><span class="why">미등록 엔터티</span>Kangson Enrichment Facility
     </li>
 <li><span class="why">미등록 엔터티</span>Possible Additional Enrichment Facility
@@ -8925,6 +8951,7 @@ details.tlyear .tlc{font-family:var(--mono);font-size:.74rem;color:var(--faint)}
 <li><span class="why">미등록 엔터티</span>북한으로선 핵을 포기하는 것이 쉽지 않을 것으로 보인다
     </li></ul>
       <p class="plain" style="margin-top:8px">자동 추출 중 미등록·저신뢰 항목 — 판독관 승인 후 그래프 반영</p>
+      </details>
     </section>
   </aside>
 </main>
@@ -34216,6 +34243,28 @@ document.querySelectorAll('[data-fclass]').forEach((el)=>{
     document.querySelectorAll('[data-fclass-panel]').forEach((p)=>{p.hidden=p.getAttribute('data-fclass-panel')!==id;});
   });
 });
+// 개요 우측 컬럼 패널 접기 — 접은 것만 기억한다(기본은 펼침이므로 목록이 비면 원래 모습).
+// 다시 생성해도 결정이 남도록 localStorage 를 쓰되, 막히면 조용히 기본값으로 돈다.
+(function(){
+  const KEY='overviewFoldClosed';
+  const folds=document.querySelectorAll('[data-viewpane="overview"] details.sfold');
+  if(!folds.length)return;
+  let closed=new Set();
+  try{const raw=localStorage.getItem(KEY);if(raw)closed=new Set(JSON.parse(raw));}catch(e){}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...closed]));}catch(e){}};
+  folds.forEach((d)=>{
+    const k=d.getAttribute('data-fold');
+    if(closed.has(k))d.open=false;
+    // open 을 코드로 바꿔도 toggle 이 나므로 저장은 이 한 곳에서만 한다.
+    d.addEventListener('toggle',()=>{ if(d.open)closed.delete(k); else closed.add(k); save(); });
+  });
+  document.querySelectorAll('[data-sfold-all]').forEach((b)=>{
+    b.addEventListener('click',()=>{
+      const open=b.getAttribute('data-sfold-all')==='open';
+      folds.forEach((d)=>{d.open=open;});
+    });
+  });
+})();
 </script>
 <script>
 (function(){
