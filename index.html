@@ -22615,15 +22615,15 @@ html{scroll-padding-top:calc(var(--top-inset,0px) + 8px)}
         <div class="tr-kick">TRADE DATA ANALYSIS</div>
         <h2>무역 데이터 분석</h2>
         <p>UN Comtrade 무역·금융 공개데이터를 그래프·기계학습으로 분석한 이중용도 물자 조달 네트워크.
-          출처: procurement_watch(OSINT_DPRK_Nuclear) · 2006–2024년.
+          출처: procurement_watch(OSINT_DPRK_Nuclear) · <!-- L:ch.period -->2006–2025<!-- /L -->년.
           <b>산출은 분석관을 위한 리드이며 거래 증거가 아니다.</b></p>
       </div>
 
       <div class="tr-stats">
-        <div class="tr-stat"><b>5,631</b><span>노드 (회사·인물·선박·조직 + 국가·품목)</span></div>
-        <div class="tr-stat"><b>5,178</b><span>관계 (엣지, 무역·제재 통합)</span></div>
-        <div class="tr-stat"><b>226</b><span>제재 지정</span></div>
-        <div class="tr-stat"><b>0.903</b><span>미래지정 예측 AUC</span></div>
+        <div class="tr-stat"><b><!-- L:graph.nodes -->5,831<!-- /L --></b><span>노드 (회사·인물·선박·조직 + 국가·품목)</span></div>
+        <div class="tr-stat"><b><!-- L:graph.edges -->19,691<!-- /L --></b><span>관계 (엣지, 무역·제재 통합)</span></div>
+        <div class="tr-stat"><b><!-- L:graph.designated -->226<!-- /L --></b><span>제재 지정</span></div>
+        <div class="tr-stat"><b><!-- L:graph.auc_temporal -->0.9469<!-- /L --></b><span>미래지정 예측 AUC (시간분할)</span></div>
       </div>
 
       <div class="tr-grid">
@@ -22633,9 +22633,9 @@ html{scroll-padding-top:calc(var(--top-inset,0px) + 8px)}
           <h3>이중 채널 분석</h3>
           <p>대북 직접수출(D)과 중국 관문수입(C)을 다른 가중치로 나눠 본다.</p>
           <ul>
-            <li>채널 D ×1.0 신고 실측 · C ×0.3 통로 추론</li>
-            <li>비중국 직접수출 14.9%: 독일·인도·홍콩 (2006–2024)</li>
-            <li>발산 4/31 — 신고공백↔관문유입 = 우회·환적 징후</li>
+            <li>채널 D ×<!-- L:ch.w_direct -->1.0<!-- /L --> 신고 실측 · C ×<!-- L:ch.w_conduit -->0.3<!-- /L --> 통로 추론</li>
+            <li>비중국 직접수출 <!-- L:ch.nonchina_share -->9.6%<!-- /L -->: <!-- L:ch.nonchina_top3 -->독일·인도·태국<!-- /L --> (<!-- L:ch.period -->2006–2025<!-- /L -->)</li>
+            <li>발산 <!-- L:ch.evasion_ratio -->5/18<!-- /L --> — 신고공백↔관문유입 = 우회·환적 징후</li>
           </ul>
           <div class="tr-acts">
             <a class="tr-open" href="#" data-src="embed_procurement_channels.html" data-title="이중 채널 분석">열기 →</a>
@@ -22650,10 +22650,12 @@ html{scroll-padding-top:calc(var(--top-inset,0px) + 8px)}
           <p>핵활동 시점 <b>이전의 조달</b>을 소급 재구성해 조사 우선순위로 등급화. 리드이지 증거가 아니다.</p>
           <ul>
             <li><b>다시점 교차 검증</b> — 축마다 여러 사건 시점(캠페인+핵실험)을 돌려 서로 다른 관측연도로 반복을 센다</li>
+            <li><b>격상·검토에는 증거가 있어야 한다</b> — 그 해 수입의 이상(z ≥ <!-- L:triage.anomaly_z -->3<!-- /L -->)이나
+              공정 번들 정합. 사전확률만 높은 품목은 상시 감시로 둔다(정본 <!-- L:fx.n_axes -->7<!-- /L -->축 리드 <!-- L:fx.n_leads -->339<!-- /L -->건)</li>
             <li><b>공정 시약 번들 정합</b> <span class="tr-tag">물질수지</span> 상품 시약도 공정 역할
-              세트로 함께 관측되면 상향(11건)</li>
-            <li><b>핵실험 사건축</b> 2~6차 시험 앞 조달 — 격상 19건 중 <b>이상 유래는 25%</b>,
-          66건은 사전확률 유래로 표시</li>
+              세트가 같은 해 ±1년에 함께 이상이면 <span style="white-space:nowrap">상향(<!-- L:fx.bundle_up -->1<!-- /L -->건)</span></li>
+            <li><b>핵실험 사건축</b> 2~6차 시험 앞 조달 — 격상·검토 <!-- L:tests.n_up -->11<!-- /L -->건 중 <b>이상 유래 <!-- L:tests.drv.anom_share -->100%<!-- /L --></b>
+              (격상 <!-- L:tests.n_esc -->3<!-- /L -->건 · 상시 감시 <!-- L:tests.n_watch -->0<!-- /L -->건)</li>
           </ul>
           <div class="tr-acts">
             <a class="tr-open" href="#" data-src="embed_forensic_triage.html" data-title="포렌식 조달 트리아지">열기 →</a>
@@ -22668,7 +22670,7 @@ html{scroll-padding-top:calc(var(--top-inset,0px) + 8px)}
           <p>제재 지정과 무역 관계를 한 그래프로 묶어 입체로 회전하며 본다.</p>
           <ul>
             <li>회사·인물·선박·조직 + 국가·품목 노드 통합</li>
-            <li>경로 관측 21,134건(원산국 13 · 2006–2024) 전량 적재</li>
+            <li>경로 관측 <!-- L:graph.route_obs -->102,069<!-- /L -->건(원산국 <!-- L:graph.route_origins -->225<!-- /L --> · <!-- L:route.period -->2006–2025<!-- /L -->) 전량 적재</li>
             <li>엣지를 층위별 색으로 — 제재망·관할·직접수출·관문·경로</li>
             <li>좌표: GNN 임베딩(PCA 3D) / 3D 스프링</li>
             <li>드래그 회전 · 휠 줌 · 클릭 상세 · 검색</li>
@@ -22686,6 +22688,7 @@ html{scroll-padding-top:calc(var(--top-inset,0px) + 8px)}
           <ul>
             <li>우려 거래자 — 제재 지정에서 북한까지의 경로</li>
             <li>채널 D 실선 · C 점선(중국 관문 경유)</li>
+            <li>원산국→중국 관문 경로 — 상대국 전체 <!-- L:graph.route_origins -->225<!-- /L -->곳에서 복원</li>
             <li>트리아지 티어별 · 핵연료주기 시설별</li>
           </ul>
           <div class="tr-acts">
